@@ -11,6 +11,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/joho/godotenv"
 	"xd-b-guide/internal/amap"
 	"xd-b-guide/internal/graph"
 	"xd-b-guide/internal/handler"
@@ -21,6 +23,16 @@ import (
 var webFiles embed.FS
 
 func main() {
+	// 这里显式加载 .env 的原因：
+	// 1) 团队成员通常通过 `just run` 或 `go run` 直接启动，不会手动 `source .env`
+	// 2) 如果不自动加载，AMAP_API_KEY / AMAP_JS_API_KEY 会为空，导致室外路线退化和地图不显示
+	// 3) godotenv.Load 不会覆盖已存在的系统环境变量，便于线上/CI 用真实环境变量覆盖本地配置
+	if err := godotenv.Load(); err != nil {
+		log.Printf("[配置] 未读取到 .env（如果使用系统环境变量可忽略）：%v", err)
+	} else {
+		log.Printf("[配置] 已加载 .env")
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

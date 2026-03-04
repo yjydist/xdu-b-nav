@@ -1,5 +1,6 @@
-server
+# 仅忽略仓库根目录下的编译产物，
+# 不能写成 `server`，否则会误伤 `cmd/server` 源码目录，导致 git add 失败。
+/server
 *.bak
 .env
 .DS_Store
-.env
