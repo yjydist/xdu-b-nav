@@ -18,6 +18,9 @@ type LocationPoint struct {
 	Latitude    float64 `json:"lat"`
 	Longitude   float64 `json:"lng"`
 	Enabled     bool    `json:"enabled"`
+	// UpdatedAt 记录最近一次通过刷新脚本校准坐标的时间。
+	// 使用字符串（RFC3339）而非 time.Time，目的是保持 JSON 可读性和跨语言兼容性。
+	UpdatedAt string `json:"updated_at,omitempty"`
 }
 
 // LocationConfig 对应 config/locations.json 的根结构。
