@@ -21,10 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const mapContainer = document.getElementById('map-container');
 
     // 地图相关变量
-    let map = null;           // 地图实例
-    let walkingRoute = null;  // 路径规划实例
-    let markers = [];         // 标记点数组
-    let polyline = null;      // 路线多边形
+    let map = null;                // 地图实例
+    let walkingRoute = null;       // 步行路径规划实例
+    let markers = [];              // 标记点数组
+    let polyline = null;           // 兜底直线（路径失败时使用）
+    let isAMapReady = false;       // 标记高德脚本是否已加载完成
+    let pendingOutdoorResult = null; // 记录“地图尚未就绪时”的最新室外结果，脚本加载后自动重绘
 
     // 初始化：加载配置、起点列表、教室列表
     loadAMapConfig();
@@ -99,14 +101,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     securityJsCode: config.amap_security_code || ''
                 };
 
-                // 动态加载高德地图脚本
+                // 动态加载高德地图脚本。
+                // 为什么动态加载：
+                // 1) key 从后端配置接口返回，避免硬编码在仓库里；
+                // 2) key 缺失时前端依旧可运行（仅文字路线降级），不会整页报错。
                 const script = document.getElementById('amap-script');
                 script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.amap_js_api_key}`;
                 
                 // 等待脚本加载完成后初始化地图
                 script.onload = function() {
                     console.log('高德地图 API 加载成功');
+                    isAMapReady = true;
                     initMap();
+
+                    // 若用户在脚本加载完成前已点过“规划路径”，这里自动补画路线，
+                    // 避免出现“后端有结果但地图空白”的体验问题。
+                    if (pendingOutdoorResult) {
+                        renderOutdoorMap(pendingOutdoorResult);
+                        pendingOutdoorResult = null;
+                    }
                 };
                 
                 script.onerror = function() {
@@ -114,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             } else {
                 console.warn('未配置高德 JS API Key，地图功能不可用');
+                mapContainer.innerHTML = '<div class="map-fallback">未配置 AMAP_JS_API_KEY，当前仅展示文字路线</div>';
             }
         } catch (error) {
             console.error('加载地图配置失败:', error);
@@ -332,8 +346,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const startPoint = getStartLocationCoord(result.outdoor.from);
         const endPoint = [108.8509, 34.1582]; // B 楼中心
 
-        if (typeof AMap === 'undefined' || !startPoint) {
-            // 地图 API 未加载或没有坐标，只显示文字
+        if (!isAMapReady || typeof AMap === 'undefined' || !map || !startPoint) {
+            // 这里不直接报错，而是缓存结果并等待脚本就绪后自动重绘。
+            // 为什么要这样做：用户可能在页面刚加载时就点击规划，此时脚本可能尚未完成加载。
+            pendingOutdoorResult = result;
             return;
         }
 
@@ -360,8 +376,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         walkingRoute = new AMap.Walking({
             map: map,
-            panel: 'outdoor-content',  // 将详细指引输出到指定容器
-            showTraffic: false         // 不显示路况
+            // 不使用 panel，把文字步骤统一用后端结果渲染，
+            // 避免“高德面板内容”和“自定义步骤”互相覆盖导致看起来像“路线没显示”。
+            showTraffic: false
         });
 
         // 搜索路径
