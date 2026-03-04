@@ -14,7 +14,8 @@ import (
 
 // AMapClient 高德地图 API 客户端
 type AMapClient struct {
-	APIKey string
+	APIKey        string
+	locationStore *LocationStore
 }
 
 // Location 地理位置
@@ -156,18 +157,66 @@ var bBuildingCenter = Location{
 // NewAMapClient 创建高德地图客户端
 func NewAMapClient() *AMapClient {
 	apiKey := os.Getenv("AMAP_API_KEY")
+
+	// 地点配置文件路径支持环境变量覆盖，便于后续脚本/环境切换。
+	// 默认放在 config/locations.json，保持“配置与代码分离”。
+	locationPath := os.Getenv("LOCATION_CONFIG_PATH")
+	if locationPath == "" {
+		locationPath = "config/locations.json"
+	}
+
+	store, err := loadLocationStore(locationPath)
+	if err != nil {
+		// 配置不可用时回退到内置默认值，保证服务可启动。
+		// 之所以不直接失败：避免线上因为单个配置文件问题导致整体不可用。
+		log.Printf("[配置] 读取地点配置失败，使用内置默认值: %v", err)
+		store = buildDefaultLocationStore()
+	} else {
+		log.Printf("[配置] 已加载地点配置: %s (points=%d)", locationPath, len(store.Config.Points))
+	}
+
 	return &AMapClient{
-		APIKey: apiKey,
+		APIKey:        apiKey,
+		locationStore: store,
 	}
 }
 
 // GetStartLocations 获取所有起点列表
 func (c *AMapClient) GetStartLocations() []StartLocation {
-	return startLocations
+	starts := make([]StartLocation, 0)
+	if c.locationStore == nil {
+		return startLocations
+	}
+
+	for _, p := range c.locationStore.Config.Points {
+		if !p.Enabled || p.Type != "start" {
+			continue
+		}
+		starts = append(starts, StartLocation{
+			Name:     p.DisplayName,
+			Region:   p.Region,
+			FullName: p.FullName,
+		})
+	}
+
+	return starts
 }
 
 // FindStartLocation 查找起点位置
 func (c *AMapClient) FindStartLocation(name string) (*Location, error) {
+	// 优先从地点配置中查找。
+	// 这样运行时完全由本地坐标驱动，不依赖名称检索，避免同名地点歧义。
+	if c.locationStore != nil {
+		if point, ok := c.locationStore.StartByDisplay[name]; ok {
+			return &Location{
+				Name:      point.DisplayName,
+				Latitude:  point.Latitude,
+				Longitude: point.Longitude,
+				Address:   point.FullName,
+			}, nil
+		}
+	}
+
 	// 查找配置
 	for _, start := range startLocations {
 		if start.Name == name {
@@ -339,8 +388,8 @@ func (c *AMapClient) FindRouteToBuilding(startName string) (*Location, *WalkingR
 		return nil, nil, fmt.Errorf("查找起点失败：%w", err)
 	}
 
-	// 规划到 B 楼中心的路线
-	route, err := c.WalkingRoute(startLoc, &bBuildingCenter)
+	// 规划到 B 楼中心的路线（目标点优先走地点配置）
+	route, err := c.WalkingRoute(startLoc, c.GetBBuildingLocation())
 	if err != nil {
 		return nil, nil, fmt.Errorf("路径规划失败：%w", err)
 	}
@@ -350,11 +399,33 @@ func (c *AMapClient) FindRouteToBuilding(startName string) (*Location, *WalkingR
 
 // GetExitLocations 获取 B 楼所有出口位置
 func (c *AMapClient) GetExitLocations() []Location {
-	return bBuildingExits
+	if c.locationStore == nil || len(c.locationStore.ExitPoints) == 0 {
+		return bBuildingExits
+	}
+
+	result := make([]Location, 0, len(c.locationStore.ExitPoints))
+	for _, p := range c.locationStore.ExitPoints {
+		result = append(result, Location{
+			Name:      p.ID,
+			Latitude:  p.Latitude,
+			Longitude: p.Longitude,
+			Address:   p.FullName,
+		})
+	}
+	return result
 }
 
 // GetBBuildingLocation 获取 B 楼中心位置
 func (c *AMapClient) GetBBuildingLocation() *Location {
+	if c.locationStore != nil && c.locationStore.Destination != nil {
+		d := c.locationStore.Destination
+		return &Location{
+			Name:      d.DisplayName,
+			Latitude:  d.Latitude,
+			Longitude: d.Longitude,
+			Address:   d.FullName,
+		}
+	}
 	return &bBuildingCenter
 }
 

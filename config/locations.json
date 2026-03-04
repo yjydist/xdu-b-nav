@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "campus": "西安电子科技大学南校区",
+  "points": [
+    { "id": "DX11", "type": "start", "region": "丁香公寓", "display_name": "丁香公寓 11 号楼", "full_name": "西安电子科技大学南校区丁香公寓11号楼", "lat": 34.1612, "lng": 108.8485, "enabled": true },
+    { "id": "DX12", "type": "start", "region": "丁香公寓", "display_name": "丁香公寓 12 号楼", "full_name": "西安电子科技大学南校区丁香公寓12号楼", "lat": 34.1614, "lng": 108.8488, "enabled": true },
+    { "id": "DX13", "type": "start", "region": "丁香公寓", "display_name": "丁香公寓 13 号楼", "full_name": "西安电子科技大学南校区丁香公寓13号楼", "lat": 34.1616, "lng": 108.8491, "enabled": true },
+    { "id": "DX14", "type": "start", "region": "丁香公寓", "display_name": "丁香公寓 14 号楼", "full_name": "西安电子科技大学南校区丁香公寓14号楼", "lat": 34.1618, "lng": 108.8494, "enabled": true },
+    { "id": "DX15", "type": "start", "region": "丁香公寓", "display_name": "丁香公寓 15 号楼", "full_name": "西安电子科技大学南校区丁香公寓15号楼", "lat": 34.1620, "lng": 108.8497, "enabled": true },
+
+    { "id": "HT05", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 5 号楼", "full_name": "西安电子科技大学南校区海棠公寓5号楼", "lat": 34.1595, "lng": 108.8520, "enabled": true },
+    { "id": "HT06", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 6 号楼", "full_name": "西安电子科技大学南校区海棠公寓6号楼", "lat": 34.1598, "lng": 108.8522, "enabled": true },
+    { "id": "HT07", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 7 号楼", "full_name": "西安电子科技大学南校区海棠公寓7号楼", "lat": 34.1601, "lng": 108.8524, "enabled": true },
+    { "id": "HT08", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 8 号楼", "full_name": "西安电子科技大学南校区海棠公寓8号楼", "lat": 34.1604, "lng": 108.8526, "enabled": true },
+    { "id": "HT09", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 9 号楼", "full_name": "西安电子科技大学南校区海棠公寓9号楼", "lat": 34.1607, "lng": 108.8528, "enabled": true },
+    { "id": "HT10", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 10 号楼", "full_name": "西安电子科技大学南校区海棠公寓10号楼", "lat": 34.1610, "lng": 108.8530, "enabled": true },
+    { "id": "HT18", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 18 号楼", "full_name": "西安电子科技大学南校区海棠公寓18号楼", "lat": 34.1625, "lng": 108.8535, "enabled": true },
+    { "id": "HT20", "type": "start", "region": "海棠公寓", "display_name": "海棠公寓 20 号楼", "full_name": "西安电子科技大学南校区海棠公寓20号楼", "lat": 34.1628, "lng": 108.8538, "enabled": true },
+
+    { "id": "ZY01", "type": "start", "region": "竹园公寓", "display_name": "竹园公寓 1 号楼", "full_name": "西安电子科技大学南校区竹园公寓1号楼", "lat": 34.1565, "lng": 108.8490, "enabled": true },
+    { "id": "ZY02", "type": "start", "region": "竹园公寓", "display_name": "竹园公寓 2 号楼", "full_name": "西安电子科技大学南校区竹园公寓2号楼", "lat": 34.1568, "lng": 108.8493, "enabled": true },
+    { "id": "ZY03", "type": "start", "region": "竹园公寓", "display_name": "竹园公寓 3 号楼", "full_name": "西安电子科技大学南校区竹园公寓3号楼", "lat": 34.1571, "lng": 108.8496, "enabled": true },
+    { "id": "ZY04", "type": "start", "region": "竹园公寓", "display_name": "竹园公寓 4 号楼", "full_name": "西安电子科技大学南校区竹园公寓4号楼", "lat": 34.1574, "lng": 108.8499, "enabled": true },
+
+    { "id": "E1", "type": "entrance", "region": "B楼", "display_name": "E1", "full_name": "西安电子科技大学南校区B楼南楼东端出口(101/105附近)", "lat": 34.1580, "lng": 108.8500, "enabled": true },
+    { "id": "E2", "type": "entrance", "region": "B楼", "display_name": "E2", "full_name": "西安电子科技大学南校区B楼南楼106附近出口", "lat": 34.1581, "lng": 108.8503, "enabled": true },
+    { "id": "E3", "type": "entrance", "region": "B楼", "display_name": "E3", "full_name": "西安电子科技大学南校区B楼南楼107附近出口", "lat": 34.1582, "lng": 108.8506, "enabled": true },
+    { "id": "E4", "type": "entrance", "region": "B楼", "display_name": "E4", "full_name": "西安电子科技大学南校区B楼南楼318/320附近出口", "lat": 34.1583, "lng": 108.8512, "enabled": true },
+    { "id": "E5", "type": "entrance", "region": "B楼", "display_name": "E5", "full_name": "西安电子科技大学南校区B楼南楼西端出口(422侧)", "lat": 34.1584, "lng": 108.8518, "enabled": true },
+
+    { "id": "B_BUILDING", "type": "destination", "region": "B楼", "display_name": "B楼南楼", "full_name": "西安电子科技大学南校区B楼南楼", "lat": 34.1582, "lng": 108.8509, "enabled": true }
+  ]
+}
