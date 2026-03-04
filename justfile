@@ -81,6 +81,16 @@ api-test:
 # 完整测试
 full-test: build test api-test
 
+# 路由回归测试（重点验证室外时距与室内节点链）
+route-regression:
+    @echo "运行路由回归测试..."
+    @./server > /tmp/xd-regression.log 2>&1 &
+    @sleep 2
+    @curl -s --noproxy localhost -X POST http://127.0.0.1:8080/api/route -H "Content-Type: application/json" -d '{"start":"丁香公寓 11 号楼","destination":"B301"}' > /tmp/xd-route-regression.json
+    @python3 -c "import json,sys; data=json.load(open('/tmp/xd-route-regression.json','r',encoding='utf-8')); out=data.get('outdoor',{}); dist=out.get('distance',0); dur=out.get('duration',0); path=data.get('path',[]); ok=data.get('success') and 50<=dist<=3000 and 60<=dur<=2400 and len(path)>=2; print(('✓ 回归通过: 距离 %s 米, 耗时 %s 秒, 节点数 %s' % (dist,dur,len(path))) if ok else ('✗ 回归失败: success=%s distance=%s duration=%s path_nodes=%s error=%s' % (data.get('success'),dist,dur,len(path),data.get('error_message')))); sys.exit(0 if ok else 1)"
+    @pkill -f "./server" >/dev/null 2>&1 || true
+    @echo "✓ 路由回归测试完成"
+
 # 打开浏览器
 open:
     @echo "打开浏览器..."
