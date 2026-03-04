@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	"xd-b-guide/internal/amap"
 )
 
@@ -24,6 +25,13 @@ type toolConfig struct {
 }
 
 func main() {
+	// 这里主动加载 .env，原因是该脚本通常由命令行直接触发，
+	// 大多数场景不会先执行 `source .env`，导致 AMAP_API_KEY 读取失败。
+	// 与服务端启动逻辑保持一致后，开发体验会更稳定，减少“命令本身可用但环境未导入”的误判。
+	if err := godotenv.Load(); err != nil {
+		fmt.Printf("[提示] 未读取到 .env（如果使用系统环境变量可忽略）: %v\n", err)
+	}
+
 	cfg := parseFlags()
 
 	if os.Getenv("AMAP_API_KEY") == "" {
