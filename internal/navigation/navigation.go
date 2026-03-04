@@ -308,11 +308,11 @@ func (n *Navigator) describeAction(from, to string, fromNode, toNode *graph.Node
 	case fromType == "stair" && toType == "room":
 		// 出楼梯时也使用“Bxxx 和 Byyy 之间的楼梯, Fn”格式，
 		// 目的是让“上/下楼后落点位置”更直观，避免用户只看到 ST 编号。
-		return "出楼梯", fmt.Sprintf("从%s出来，到达 %s", n.describeStairText(fromNode), to)
+		return "出楼梯", fmt.Sprintf("从 %s 出来，到达 %s", n.describeStairText(fromNode), to)
 	case fromType == "room" && toType == "stair":
 		// 按用户要求固定文案格式：
 		// “Bnxx 和 Bnyy 之间的楼梯, Fn”。
-		return "进楼梯", fmt.Sprintf("进入%s准备上下楼", n.describeStairText(toNode))
+		return "进楼梯", fmt.Sprintf("进入 %s 准备上下楼", n.describeStairText(toNode))
 	case fromType == "room" && toType == "room":
 		if fromNode.Floor == toNode.Floor {
 			return "直行", fmt.Sprintf("沿走廊从 %s (%s) 走到 %s (%s)", from, fromNode.Label, to, toNode.Label)
@@ -328,7 +328,10 @@ func (n *Navigator) describeAction(from, to string, fromNode, toNode *graph.Node
 // 2) “附近教室”是用户在楼内真实可观察的参照物；
 // 3) 当图数据调整时，文案会自动跟随边关系更新，避免手工文案过时。
 func (n *Navigator) describeEntranceText(entranceNode *graph.Node) string {
-	rooms := n.connectedRooms(entranceNode.ID, entranceNode.Floor)
+	// 入口节点历史数据里 floor 常常固定为 1，
+	// 但实际边可能连接到其它楼层房间（如当前图中 E5 -> B426）。
+	// 若强制按楼层过滤会拿不到参照房间，因此入口文案采用“跨层容忍”策略。
+	rooms := n.inferReferenceRoomsAnyFloor(entranceNode.ID)
 	if len(rooms) >= 2 {
 		return fmt.Sprintf("从%s和%s附近的出入口进入大楼", rooms[0], rooms[1])
 	}
@@ -343,26 +346,7 @@ func (n *Navigator) describeEntranceText(entranceNode *graph.Node) string {
 // 为什么做二次推断：部分楼梯节点在某层可能只直接连到一个教室，
 // 这时仅靠一跳邻接不够，需要向外再看一层房间邻居来补齐“两个参照教室”。
 func (n *Navigator) describeStairText(stairNode *graph.Node) string {
-	rooms := n.connectedRooms(stairNode.ID, stairNode.Floor)
-
-	if len(rooms) < 2 {
-		// 补齐第二个教室参照：从已连接教室再找同层相邻教室。
-		for _, roomID := range rooms {
-			for neighborID := range n.Graph.AdjList[roomID] {
-				neighbor, ok := n.Graph.NodeMap[neighborID]
-				if !ok || neighbor.Type != "room" || neighbor.Floor != stairNode.Floor {
-					continue
-				}
-				if !contains(rooms, neighborID) {
-					rooms = append(rooms, neighborID)
-					break
-				}
-			}
-			if len(rooms) >= 2 {
-				break
-			}
-		}
-	}
+	rooms := n.inferReferenceRooms(stairNode.ID, stairNode.Floor)
 
 	sort.Strings(rooms)
 	if len(rooms) >= 2 {
@@ -386,6 +370,72 @@ func (n *Navigator) connectedRooms(nodeID string, floor int) []string {
 			rooms = append(rooms, neighborID)
 		}
 	}
+	sort.Strings(rooms)
+	return rooms
+}
+
+// inferReferenceRooms 为“楼梯/入口文案”推断两个最有参考意义的教室。
+// 设计原因：
+// 1) 图上部分入口/楼梯只直接连到一个教室，用户难以定位；
+// 2) 通过再扩展一层同层教室邻居，可以稳定得到“两个参照教室”；
+// 3) 该方法适用于入口和楼梯，避免两套逻辑不一致。
+func (n *Navigator) inferReferenceRooms(nodeID string, floor int) []string {
+	rooms := n.connectedRooms(nodeID, floor)
+	if len(rooms) >= 2 {
+		return rooms
+	}
+
+	for _, roomID := range rooms {
+		for neighborID := range n.Graph.AdjList[roomID] {
+			neighbor, ok := n.Graph.NodeMap[neighborID]
+			if !ok || neighbor.Type != "room" || neighbor.Floor != floor {
+				continue
+			}
+			if !contains(rooms, neighborID) {
+				rooms = append(rooms, neighborID)
+				break
+			}
+		}
+		if len(rooms) >= 2 {
+			break
+		}
+	}
+
+	sort.Strings(rooms)
+	return rooms
+}
+
+// inferReferenceRoomsAnyFloor 为入口文案推断参照教室（不限制楼层）。
+// 为什么需要该函数：当前历史图数据中入口节点楼层值与连边房间楼层可能不一致，
+// 如果沿用按楼层过滤会导致入口文案退化为抽象标签，不利于现场辨识。
+func (n *Navigator) inferReferenceRoomsAnyFloor(nodeID string) []string {
+	rooms := make([]string, 0)
+	for neighborID := range n.Graph.AdjList[nodeID] {
+		neighbor, ok := n.Graph.NodeMap[neighborID]
+		if !ok || neighbor.Type != "room" {
+			continue
+		}
+		rooms = append(rooms, neighborID)
+	}
+
+	if len(rooms) < 2 {
+		for _, roomID := range rooms {
+			for neighborID := range n.Graph.AdjList[roomID] {
+				neighbor, ok := n.Graph.NodeMap[neighborID]
+				if !ok || neighbor.Type != "room" {
+					continue
+				}
+				if !contains(rooms, neighborID) {
+					rooms = append(rooms, neighborID)
+					break
+				}
+			}
+			if len(rooms) >= 2 {
+				break
+			}
+		}
+	}
+
 	sort.Strings(rooms)
 	return rooms
 }

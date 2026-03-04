@@ -131,6 +131,23 @@ input:focus, select:focus {
     border: 1px solid #e0e0e0;
 }
 
+/* 地图降级提示：当未配置 JS Key 或脚本加载失败时显示 */
+.map-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #5a6383;
+    font-size: 0.9rem;
+    background: repeating-linear-gradient(
+        45deg,
+        #f7f8fc,
+        #f7f8fc 10px,
+        #eef1fb 10px,
+        #eef1fb 20px
+    );
+}
+
 .outdoor-steps {
     max-height: 200px;
     overflow-y: auto;
@@ -219,6 +236,40 @@ input:focus, select:focus {
     opacity: 0.9;
     margin-top: 10px;
     word-break: break-all;
+}
+
+/*
+ * 完整节点序列展示区。
+ * 设计原因：用户需要逐节点核对路线是否“跳点”，
+ * 因此使用独立信息块与步骤文案分离，避免视觉混淆。
+ */
+.path-node-box {
+    margin-top: 12px;
+    padding: 12px;
+    background: #f3f6ff;
+    border: 1px solid #dbe4ff;
+    border-radius: 8px;
+}
+
+.path-node-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2f3a6b;
+    margin-bottom: 8px;
+}
+
+.path-node-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.path-node {
+    font-size: 0.82rem;
+    color: #34406e;
+    background: #e9eeff;
+    border-radius: 999px;
+    padding: 4px 10px;
 }
 
 .loading, .error {

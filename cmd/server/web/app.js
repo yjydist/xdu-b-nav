@@ -310,6 +310,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
             });
+
+            // 这里额外展示“完整经过节点序列”。
+            // 为什么需要单独展示：
+            // 1) 用户反馈“路线看起来跳点”，仅靠自然语言步骤不易核对算法路径；
+            // 2) 直接展示 result.path 可让人工校验每一个节点是否按预期经过；
+            // 3) 当图数据调整时，可快速发现路径是否异常（例如缺边或权重失衡）。
+            if (result.path && result.path.length > 0) {
+                const nodeListHtml = result.path
+                    .map((node, idx) => `<span class="path-node">${idx + 1}. ${escapeHtml(node)}</span>`)
+                    .join('');
+
+                indoorHTML += `
+                    <div class="path-node-box">
+                        <div class="path-node-title">完整经过节点</div>
+                        <div class="path-node-list">${nodeListHtml}</div>
+                    </div>
+                `;
+            }
+
             indoorContent.innerHTML = indoorHTML;
             document.getElementById('indoor-route').classList.remove('hidden');
         } else {
@@ -320,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pathSummary.innerHTML = `
             <h4>总权重</h4>
             <div class="total-weight">${result.total_weight}</div>
-            <p class="path-nodes">入口：${escapeHtml(result.outdoor?.nearest_exit || 'N/A')}</p>
+            <p class="path-nodes">入口：${escapeHtml(result.outdoor?.nearest_exit || 'N/A')} ｜ 节点数：${(result.path || []).length}</p>
         `;
     }
 
