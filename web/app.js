@@ -106,7 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 1) key 从后端配置接口返回，避免硬编码在仓库里；
                 // 2) key 缺失时前端依旧可运行（仅文字路线降级），不会整页报错。
                 const script = document.getElementById('amap-script');
-                script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.amap_js_api_key}`;
+                // 这里显式追加 plugin 参数的原因：
+                // 1) 部分环境下仅加载基础 JS API，不会自动注入 Walking 构造器；
+                // 2) 先在 URL 上声明插件，可显著降低“AMap.Walking is not a constructor”的概率；
+                // 3) 即使插件参数未生效，后面仍有 AMap.plugin 二次兜底，双保险保证稳定。
+                script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.amap_js_api_key}&plugin=AMap.Walking`;
                 
                 // 等待脚本加载完成后初始化地图
                 script.onload = function() {
@@ -388,28 +392,90 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         markers.push(endMarker);
 
-        // 使用高德步行路径规划
-        if (walkingRoute) {
-            walkingRoute.clear();
-        }
-        
-        walkingRoute = new AMap.Walking({
-            map: map,
-            // 不使用 panel，把文字步骤统一用后端结果渲染，
-            // 避免“高德面板内容”和“自定义步骤”互相覆盖导致看起来像“路线没显示”。
-            showTraffic: false
-        });
-
-        // 搜索路径
-        walkingRoute.search(startPoint, endPoint, function(status, routeResult) {
-            if (status === 'complete') {
-                // 路径规划成功，调整地图视野
-                fitMapBounds([startPoint, endPoint]);
-            } else {
-                // 路径规划失败，画一条直线连接两点
+        // 使用高德步行路径规划。
+        // 关键修复点：不直接假设 AMap.Walking 已存在，
+        // 必须先确保插件已加载，否则会抛出 “AMap.Walking is not a constructor”。
+        ensureWalkingService(function(err) {
+            if (err || !walkingRoute) {
+                // 插件不可用时退化为直线，保证页面仍可用而不是直接报错。
                 drawSimpleLine(startPoint, endPoint);
+                return;
             }
+
+            // 先清空旧路线，避免多次规划时叠线。
+            walkingRoute.clear();
+
+            // 搜索路径
+            walkingRoute.search(startPoint, endPoint, function(status) {
+                if (status === 'complete') {
+                    // 路径规划成功，调整地图视野
+                    fitMapBounds([startPoint, endPoint]);
+                } else {
+                    // 路径规划失败，画一条直线连接两点
+                    drawSimpleLine(startPoint, endPoint);
+                }
+            });
         });
+    }
+
+    /**
+     * 确保步行插件可用并创建 walkingRoute 实例。
+     * 为什么需要这个函数：
+     * 1) 高德 JS API 在不同加载时机下，AMap.Walking 可能尚未挂载；
+     * 2) 直接 new AMap.Walking 会在插件缺失时抛异常，导致整条导航流程中断；
+     * 3) 统一封装“检测 -> 动态加载 -> 创建实例”逻辑，避免多个调用点重复踩坑。
+     */
+    function ensureWalkingService(callback) {
+        if (typeof callback !== 'function') {
+            return;
+        }
+
+        if (!isAMapReady || typeof AMap === 'undefined' || !map) {
+            callback(new Error('地图未就绪'));
+            return;
+        }
+
+        // 已有实例且可用时直接复用，减少重复创建。
+        if (walkingRoute && typeof walkingRoute.search === 'function') {
+            callback(null);
+            return;
+        }
+
+        // 内部小函数：真正创建步行实例。
+        function buildWalkingInstance() {
+            try {
+                if (typeof AMap.Walking !== 'function') {
+                    callback(new Error('Walking 插件未挂载'));
+                    return;
+                }
+
+                walkingRoute = new AMap.Walking({
+                    map: map,
+                    // 不使用 panel，把文字步骤统一用后端结果渲染，
+                    // 避免“高德面板内容”和“自定义步骤”互相覆盖导致看起来像“路线没显示”。
+                    showTraffic: false
+                });
+                callback(null);
+            } catch (e) {
+                callback(e instanceof Error ? e : new Error('创建 Walking 实例失败'));
+            }
+        }
+
+        // 先尝试直接创建（适用于 plugin 参数已生效场景）。
+        if (typeof AMap.Walking === 'function') {
+            buildWalkingInstance();
+            return;
+        }
+
+        // 再走插件动态加载兜底（最关键的稳定性保障）。
+        if (typeof AMap.plugin === 'function') {
+            AMap.plugin(['AMap.Walking'], function() {
+                buildWalkingInstance();
+            });
+            return;
+        }
+
+        callback(new Error('当前 AMap 版本不支持 plugin 动态加载'));
     }
 
     /**
