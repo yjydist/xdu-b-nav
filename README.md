@@ -66,22 +66,39 @@ cp .env.example .env
 - 只配置 `AMAP_API_KEY`：后端使用真实数据，前端只显示文字路线
 - 同时配置两种 Key：完整功能（地图显示 + 路线绘制）
 
-**配置宿舍楼位置：**
+**配置地点与坐标（推荐）**
 
-编辑 `internal/amap/amap.go` 中的 `dormitoryLocations` 变量，修改为您学校的实际位置：
+项目改为“配置驱动坐标”模式：
 
-```go
-var dormitoryLocations = map[string]Dormitory{
-    "宿舍 A 楼": {
-        Name: "宿舍 A 楼",
-        Location: Location{
-            Latitude:  31.1785,  // 纬度
-            Longitude: 121.5210, // 经度
-            Address:   "您的学校宿舍 A 楼",
-        },
-    },
-    // 添加更多宿舍楼...
+- 运行时直接读取 `config/locations.json` 的经纬度进行室外路径规划
+- 前端显示短名称（`display_name`），地理检索使用完整名称（`full_name`）
+- 避免运行时名称歧义导致地点漂移
+
+示例字段：
+
+```json
+{
+  "id": "DX12",
+  "type": "start",
+  "display_name": "丁香公寓 12 号楼",
+  "full_name": "西安电子科技大学南校区丁香公寓12号楼",
+  "lat": 34.1614,
+  "lng": 108.8488,
+  "enabled": true
 }
+```
+
+如果你调整了 `full_name`（例如为了命中更精准地点），可以用刷新脚本批量/单点更新坐标：
+
+```bash
+# 预览刷新（不写文件）
+just locations-refresh-dry
+
+# 刷新全部并写回 config/locations.json
+just locations-refresh
+
+# 仅刷新单点（示例）
+just locations-refresh-id DX12
 ```
 
 ### 2. 运行服务器

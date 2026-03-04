@@ -91,6 +91,21 @@ route-regression:
     @pkill -f "./server" >/dev/null 2>&1 || true
     @echo "✓ 路由回归测试完成"
 
+# 刷新所有地点坐标（会写回 config/locations.json）
+locations-refresh:
+    @echo "刷新所有地点坐标..."
+    go run ./cmd/tools/refresh-locations -all=true
+
+# 预览刷新（不写入），用于人工核对 full_name 是否命中正确地点
+locations-refresh-dry:
+    @echo "预览刷新地点坐标（dry-run）..."
+    go run ./cmd/tools/refresh-locations -all=true -dry-run=true
+
+# 刷新单个地点（示例：just locations-refresh-id DX12）
+locations-refresh-id id:
+    @echo "刷新单个地点: {{id}}"
+    go run ./cmd/tools/refresh-locations -id {{id}}
+
 # 打开浏览器
 open:
     @echo "打开浏览器..."
