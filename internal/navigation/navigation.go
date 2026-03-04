@@ -297,16 +297,22 @@ func (n *Navigator) describeAction(from, to string, fromNode, toNode *graph.Node
 
 	switch {
 	case fromType == "entrance":
-		return "进入", fmt.Sprintf("从%s进入大楼", fromNode.Label)
+		// 入口文案改为“某些教室附近的出入口”，
+		// 这样用户在一楼找入口时能直接对照附近教室，不必理解抽象的 E1/E2 编号。
+		return "进入", n.describeEntranceText(fromNode)
 	case fromType == "stair" && toType == "stair":
 		if toNode.Floor > fromNode.Floor {
 			return "上楼", fmt.Sprintf("上楼梯到 %d 层", toNode.Floor)
 		}
 		return "下楼", fmt.Sprintf("下楼梯到 %d 层", toNode.Floor)
 	case fromType == "stair" && toType == "room":
-		return "出楼梯", fmt.Sprintf("从楼梯出来 (%s)，到达 %s", fromNode.Label, to)
+		// 出楼梯时也使用“Bxxx 和 Byyy 之间的楼梯, Fn”格式，
+		// 目的是让“上/下楼后落点位置”更直观，避免用户只看到 ST 编号。
+		return "出楼梯", fmt.Sprintf("从%s出来，到达 %s", n.describeStairText(fromNode), to)
 	case fromType == "room" && toType == "stair":
-		return "进楼梯", fmt.Sprintf("进入楼梯间 (%s) 准备上下楼", toNode.Label)
+		// 按用户要求固定文案格式：
+		// “Bnxx 和 Bnyy 之间的楼梯, Fn”。
+		return "进楼梯", fmt.Sprintf("进入%s准备上下楼", n.describeStairText(toNode))
 	case fromType == "room" && toType == "room":
 		if fromNode.Floor == toNode.Floor {
 			return "直行", fmt.Sprintf("沿走廊从 %s (%s) 走到 %s (%s)", from, fromNode.Label, to, toNode.Label)
@@ -314,6 +320,83 @@ func (n *Navigator) describeAction(from, to string, fromNode, toNode *graph.Node
 	}
 
 	return "移动", fmt.Sprintf("从 %s 到 %s", from, to)
+}
+
+// describeEntranceText 生成入口可读文案。
+// 为什么要动态计算：
+// 1) 入口编号（E1/E2）对用户不直观；
+// 2) “附近教室”是用户在楼内真实可观察的参照物；
+// 3) 当图数据调整时，文案会自动跟随边关系更新，避免手工文案过时。
+func (n *Navigator) describeEntranceText(entranceNode *graph.Node) string {
+	rooms := n.connectedRooms(entranceNode.ID, entranceNode.Floor)
+	if len(rooms) >= 2 {
+		return fmt.Sprintf("从%s和%s附近的出入口进入大楼", rooms[0], rooms[1])
+	}
+	if len(rooms) == 1 {
+		return fmt.Sprintf("从%s附近的出入口进入大楼", rooms[0])
+	}
+	return fmt.Sprintf("从%s进入大楼", entranceNode.Label)
+}
+
+// describeStairText 生成楼梯可读文案，目标格式：
+// “Bxxx 和 Byyy 之间的楼梯, Fn”。
+// 为什么做二次推断：部分楼梯节点在某层可能只直接连到一个教室，
+// 这时仅靠一跳邻接不够，需要向外再看一层房间邻居来补齐“两个参照教室”。
+func (n *Navigator) describeStairText(stairNode *graph.Node) string {
+	rooms := n.connectedRooms(stairNode.ID, stairNode.Floor)
+
+	if len(rooms) < 2 {
+		// 补齐第二个教室参照：从已连接教室再找同层相邻教室。
+		for _, roomID := range rooms {
+			for neighborID := range n.Graph.AdjList[roomID] {
+				neighbor, ok := n.Graph.NodeMap[neighborID]
+				if !ok || neighbor.Type != "room" || neighbor.Floor != stairNode.Floor {
+					continue
+				}
+				if !contains(rooms, neighborID) {
+					rooms = append(rooms, neighborID)
+					break
+				}
+			}
+			if len(rooms) >= 2 {
+				break
+			}
+		}
+	}
+
+	sort.Strings(rooms)
+	if len(rooms) >= 2 {
+		return fmt.Sprintf("%s 和 %s 之间的楼梯, F%d", rooms[0], rooms[1], stairNode.Floor)
+	}
+	if len(rooms) == 1 {
+		return fmt.Sprintf("%s 附近的楼梯, F%d", rooms[0], stairNode.Floor)
+	}
+	return fmt.Sprintf("F%d 楼梯", stairNode.Floor)
+}
+
+// connectedRooms 获取指定节点同层直连教室（按 ID 排序）。
+func (n *Navigator) connectedRooms(nodeID string, floor int) []string {
+	rooms := make([]string, 0)
+	for neighborID := range n.Graph.AdjList[nodeID] {
+		neighbor, ok := n.Graph.NodeMap[neighborID]
+		if !ok {
+			continue
+		}
+		if neighbor.Type == "room" && neighbor.Floor == floor {
+			rooms = append(rooms, neighborID)
+		}
+	}
+	sort.Strings(rooms)
+	return rooms
+}
+
+func contains(list []string, target string) bool {
+	for _, item := range list {
+		if item == target {
+			return true
+		}
+	}
+	return false
 }
 
 // GetAllRooms 获取所有房间
