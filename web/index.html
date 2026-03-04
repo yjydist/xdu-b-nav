@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B 楼导航系统</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 高德地图 JS API 配置 -->
+    <!-- 安全密钥和 Key 通过后端 /api/config 接口动态获取 -->
+    <script type="text/javascript" id="amap-script"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏫 B 楼导航系统</h1>
+            <p class="subtitle">从宿舍到教室的最短路径规划</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <form id="route-form">
+                    <div class="form-group">
+                        <label for="start">起点（宿舍楼号）</label>
+                        <select id="start" name="start" required>
+                            <option value="">请选择起点</option>
+                        </select>
+                        <small class="hint">请选择您的出发地点</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="destination">目的地（B 楼教室号）</label>
+                        <select id="destination" name="destination" required>
+                            <option value="">请选择教室</option>
+                        </select>
+                        <small class="hint">请选择您要去的教室</small>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        🗺️ 规划路径
+                    </button>
+                </form>
+            </section>
+
+            <section id="result-section" class="result-section hidden">
+                <h2>📍 导航路线</h2>
+                
+                <div id="outdoor-route" class="route-card">
+                    <h3>🚶 室外路线</h3>
+                    <div id="map-container" class="map-container"></div>
+                    <div id="outdoor-content" class="outdoor-steps"></div>
+                </div>
+                
+                <div id="indoor-route" class="route-card">
+                    <h3>🏢 室内路线</h3>
+                    <div id="indoor-content"></div>
+                </div>
+                
+                <div id="path-summary" class="summary-card"></div>
+            </section>
+
+            <section id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>正在规划路径...</p>
+            </section>
+
+            <section id="error" class="error hidden">
+                <p id="error-message"></p>
+            </section>
+        </main>
+
+        <footer>
+            <p>B 楼导航系统 © 2024</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
