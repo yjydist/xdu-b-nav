@@ -204,8 +204,11 @@ func (c *AMapClient) GetStartLocations() []StartLocation {
 
 // FindStartLocation 查找起点位置
 func (c *AMapClient) FindStartLocation(name string) (*Location, error) {
-	// 优先从地点配置中查找。
-	// 这样运行时完全由本地坐标驱动，不依赖名称检索，避免同名地点歧义。
+	// 运行时只允许“配置驱动坐标”，不再做地理编码兜底。
+	// 为什么这样设计：
+	// 1) 校园内导航点位固定，名称检索会受到同名地点/搜索策略影响而漂移；
+	// 2) 路径稳定性优先，必须保证同一输入得到可复现的坐标与路线；
+	// 3) 名称变更应通过 refresh-locations 脚本更新配置，而不是运行时临时检索。
 	if c.locationStore != nil {
 		if point, ok := c.locationStore.StartByDisplay[name]; ok {
 			return &Location{
@@ -217,36 +220,7 @@ func (c *AMapClient) FindStartLocation(name string) (*Location, error) {
 		}
 	}
 
-	// 查找配置
-	for _, start := range startLocations {
-		if start.Name == name {
-			if coords, ok := dormCoordinates[name]; ok {
-				return &Location{
-					Name:      name,
-					Latitude:  coords[0],
-					Longitude: coords[1],
-					Address:   start.FullName,
-				}, nil
-			}
-		}
-	}
-
-	// 配置中没有，尝试地理编码（使用完整名称）
-	if c.APIKey != "" {
-		// 构建完整地址
-		fullAddress := "西安电子科技大学" + name
-		loc, err := c.Geocode(fullAddress)
-		if err == nil {
-			return loc, nil
-		}
-	}
-
-	// 返回默认位置（B 楼附近）
-	return &Location{
-		Latitude:  34.1580,
-		Longitude: 108.8490,
-		Address:   "西安电子科技大学" + name,
-	}, nil
+	return nil, fmt.Errorf("未在地点配置中找到起点: %s，请先在 config/locations.json 配置或通过刷新脚本更新", name)
 }
 
 // Geocode 地理编码
