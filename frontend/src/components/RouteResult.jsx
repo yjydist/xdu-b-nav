@@ -59,10 +59,10 @@ function RouteResult({ result }) {
         // 配置安全密钥
         if (configData.amap_js_api_key && configData.amap_js_api_key !== '你的 JS_API_Key_填在这里') {
           window._AMapSecurityConfig = {
-            securityJsCode: data.amap_security_code || '',
+            securityJsCode: configData.amap_security_code || '',
           };
           // 动态加载高德地图脚本
-          loadAMapScript(data.amap_js_api_key);
+          loadAMapScript(configData.amap_js_api_key);
         }
       } catch (err) {
         console.error('加载地图配置失败:', err);
