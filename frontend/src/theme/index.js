@@ -30,9 +30,10 @@ const theme = createTheme({
     },
   },
   // 字体排版：使用本地 JetBrains Maple Mono 字体
-  // 该字体同时支持中英文
+  // 该字体同时支持中英文，默认字重 600
   typography: {
     fontFamily: '"JetBrains Maple Mono", monospace',
+    fontWeight: 600,
     h1: {
       fontSize: '2rem',
       fontWeight: 600,
