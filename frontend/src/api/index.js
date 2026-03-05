@@ -81,3 +81,16 @@ export async function fetchConfig() {
   }
   return response.json();
 }
+
+/**
+ * 获取所有地点的坐标映射，供前端地图使用
+ * 返回格式：{ "起点名称": [lng, lat], "B 楼": [lng, lat], ... }
+ * @returns {Promise<Object>} 坐标映射数据
+ */
+export async function fetchCoordinates() {
+  const response = await fetch(`${API_BASE}/coordinates`);
+  if (!response.ok) {
+    throw new Error('加载坐标映射失败');
+  }
+  return response.json();
+}

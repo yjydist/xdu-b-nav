@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B 楼导航系统</title>
+    <!-- 高德地图 JS API 配置 -->
+    <!-- 安全密钥和 Key 通过后端 /api/config 接口动态获取 -->
+    <script type="text/javascript" id="amap-script"></script>
+    <!-- 引入本地 JetBrains Maple Mono 字体 -->
+    <style>
+      body {
+        font-family: 'JetBrains Maple Mono', monospace !important;
+        font-weight: 600 !important;
+      }
+      * {
+        font-family: 'JetBrains Maple Mono', monospace !important;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-Regular-CLjpkTAf.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-Medium-C5TyJLiu.ttf') format('truetype');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-SemiBold-BRLrN1ww.ttf') format('truetype');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-Bold-C4WyW9Mi.ttf') format('truetype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-Light-B46iuboC.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-Thin-Pkf2mST8.ttf') format('truetype');
+        font-weight: 100;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-ExtraLight-B1yvCQvc.ttf') format('truetype');
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/assets/JetBrainsMapleMono-ExtraBold-jQeOvKPc.ttf') format('truetype');
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-fxeQgRk1.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

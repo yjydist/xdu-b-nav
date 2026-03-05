@@ -195,6 +195,20 @@ func (h *Handler) StartsHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// CoordinatesHandler 返回所有地点的坐标映射，供前端地图使用
+// 返回格式：{ "起点名称": [lng, lat], "B 楼": [lng, lat], ... }
+func (h *Handler) CoordinatesHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		h.sendError(w, "不支持的请求方法", http.StatusMethodNotAllowed)
+		return
+	}
+	coords := h.amapClient.GetCoordinates()
+	log.Printf("[API] 获取坐标映射，共 %d 个", len(coords))
+	h.sendJSON(w, map[string]interface{}{
+		"coordinates": coords,
+	})
+}
+
 // ConfigHandler 返回前端配置信息（高德 JS API Key 等）
 // 这样前端可以动态获取配置，不需要硬编码在 HTML 中
 func (h *Handler) ConfigHandler(w http.ResponseWriter, r *http.Request) {

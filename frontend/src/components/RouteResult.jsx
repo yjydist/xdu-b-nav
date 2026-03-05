@@ -17,29 +17,7 @@ import {
   DoorFront,
   ArrowForward,
 } from '@mui/icons-material';
-import { fetchConfig } from '../api';
-
-/**
- * 起点坐标映射表（模块级别缓存，避免重复创建）
- * 用于根据起点名称获取对应的坐标
- */
-const START_COORDS = {
-  '丁香公寓 11 号楼': [108.828544, 34.124211],
-  '丁香公寓 12 号楼': [108.82826, 34.123248],
-  '丁香公寓 13 号楼': [108.828786, 34.12281],
-  '丁香公寓 14 号楼': [108.829974, 34.122157],
-  '丁香公寓 15 号楼': [108.830731, 34.121887],
-  '海棠公寓 5 号楼': [108.835705, 34.128765],
-  '海棠公寓 6 号楼': [108.83465, 34.129238],
-  '海棠公寓 7 号楼': [108.832966, 34.129886],
-  '海棠公寓 8 号楼': [108.832377, 34.129856],
-  '海棠公寓 9 号楼': [108.832045, 34.129344],
-  '海棠公寓 10 号楼': [108.83246, 34.129166],
-  '竹园公寓 1 号楼': [108.840996, 34.126463],
-  '竹园公寓 2 号楼': [108.840072, 34.126925],
-  '竹园公寓 3 号楼': [108.839272, 34.127251],
-  '竹园公寓 4 号楼': [108.838337, 34.127653],
-};
+import { fetchConfig, fetchCoordinates } from '../api';
 
 /**
  * 获取步骤图标组件（模块级别定义）
@@ -55,29 +33,31 @@ const getStepIcon = (action) => {
 };
 
 /**
- * B 楼中心坐标
- */
-const B_BUILDING_CENTER = [108.831946, 34.126019];
-
-/**
  * 路线结果组件
  * 显示室外路线（地图）和室内导航步骤
  * @param {Object} result - 导航结果数据
  */
 function RouteResult({ result }) {
   const [config, setConfig] = useState(null);
+  const [coordinates, setCoordinates] = useState({});
   const [isAMapReady, setIsAMapReady] = useState(false);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
-  // 加载地图配置
+  // 加载地图配置和坐标映射
   useEffect(() => {
     async function loadConfig() {
       try {
-        const data = await fetchConfig();
-        setConfig(data);
+        // 并行加载配置和坐标
+        const [configData, coordsData] = await Promise.all([
+          fetchConfig(),
+          fetchCoordinates(),
+        ]);
+        setConfig(configData);
+        setCoordinates(coordsData.coordinates || {});
+        
         // 配置安全密钥
-        if (data.amap_js_api_key && data.amap_js_api_key !== '你的 JS_API_Key_填在这里') {
+        if (configData.amap_js_api_key && configData.amap_js_api_key !== '你的 JS_API_Key_填在这里') {
           window._AMapSecurityConfig = {
             securityJsCode: data.amap_security_code || '',
           };
@@ -107,8 +87,9 @@ function RouteResult({ result }) {
     if (!isAMapReady || !mapRef.current || !result.outdoor) return;
 
     const initMap = () => {
-      // 地图中心点设为 B 楼（使用常量）
-      const center = B_BUILDING_CENTER;
+      // 从 API 获取的坐标中查找 B 楼中心坐标
+      const bBuildingCoords = Object.entries(coordinates).find(([name]) => name.includes('B 楼'));
+      const center = bBuildingCoords ? bBuildingCoords[1] : [108.831946, 34.126019];
       
       // 创建地图实例
       mapInstanceRef.current = new window.AMap.Map(mapRef.current, {
@@ -118,7 +99,7 @@ function RouteResult({ result }) {
       });
 
       // 添加起点和终点标记
-      const startCoord = getStartCoord(result.outdoor.from);
+      const startCoord = coordinates[result.outdoor.from];
       if (startCoord) {
         new window.AMap.Marker({
           position: startCoord,
@@ -127,25 +108,27 @@ function RouteResult({ result }) {
         });
       }
 
-      new window.AMap.Marker({
-        position: B_BUILDING_CENTER,
-        title: 'B 楼南楼',
-        label: {
-          content: '🏫 B 楼',
-          direction: 'top',
-          offset: new window.AMap.Pixel(0, -10),
-        },
-        map: mapInstanceRef.current,
-      });
+      if (bBuildingCoords) {
+        new window.AMap.Marker({
+          position: bBuildingCoords[1],
+          title: 'B 楼南楼',
+          label: {
+            content: '🏫 B 楼',
+            direction: 'top',
+            offset: new window.AMap.Pixel(0, -10),
+          },
+          map: mapInstanceRef.current,
+        });
+      }
 
       // 规划步行路线
-      if (startCoord) {
+      if (startCoord && bBuildingCoords) {
         const walking = new window.AMap.Walking({
           map: mapInstanceRef.current,
           showTraffic: false,
         });
 
-        walking.search(startCoord, B_BUILDING_CENTER, (status) => {
+        walking.search(startCoord, bBuildingCoords[1], (status) => {
           if (status === 'complete') {
             mapInstanceRef.current.setFitView();
           }
@@ -157,10 +140,7 @@ function RouteResult({ result }) {
     if (window.AMap) {
       initMap();
     }
-  }, [isAMapReady, result]);
-
-  // 获取起点坐标（使用模块级别缓存的坐标映射表）
-  const getStartCoord = (name) => START_COORDS[name] || null;
+  }, [isAMapReady, result, coordinates]);
 
   return (
     <Box>

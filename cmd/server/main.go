@@ -2,9 +2,7 @@ package main
 
 import (
 	"context"
-	"embed"
 	"fmt"
-	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -18,9 +16,6 @@ import (
 	"xd-b-guide/internal/handler"
 	"xd-b-guide/internal/navigation"
 )
-
-//go:embed web
-var webFiles embed.FS
 
 func main() {
 	// 这里显式加载 .env 的原因：
@@ -65,13 +60,7 @@ func main() {
 	mux.HandleFunc("/api/exits", handler.CORS(h.ExitsHandler))
 	mux.HandleFunc("/api/starts", handler.CORS(h.StartsHandler))
 	mux.HandleFunc("/api/config", handler.CORS(h.ConfigHandler))
-
-	// 静态文件
-	webFS, err := fs.Sub(webFiles, "web")
-	if err != nil {
-		log.Fatalf("加载 web 文件失败：%v", err)
-	}
-	mux.Handle("/", http.FileServer(http.FS(webFS)))
+	mux.HandleFunc("/api/coordinates", handler.CORS(h.CoordinatesHandler))
 
 	srv := &http.Server{
 		Addr:         ":" + port,
@@ -90,6 +79,7 @@ func main() {
 		fmt.Println("  GET  /api/exits - 获取所有出口信息")
 		fmt.Println("  GET  /api/starts - 获取所有起点列表")
 		fmt.Println("  GET  /api/config - 获取前端配置（高德 JS API Key）")
+		fmt.Println("  GET  /api/coordinates - 获取坐标映射（前端地图用）")
 
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("服务器启动失败：%v", err)

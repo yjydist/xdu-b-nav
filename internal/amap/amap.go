@@ -193,6 +193,31 @@ func (c *AMapClient) GetStartLocations() []StartLocation {
 	return starts
 }
 
+// GetCoordinates 获取所有可用的坐标映射，用于前端地图展示
+// 返回格式：{ "起点名称": [lng, lat], "B 楼": [lng, lat], ... }
+func (c *AMapClient) GetCoordinates() map[string][]float64 {
+	coords := make(map[string][]float64)
+	if c.locationStore == nil {
+		return coords
+	}
+
+	for _, p := range c.locationStore.Config.Points {
+		if !p.Enabled {
+			continue
+		}
+		// 起点使用 display_name 作为 key
+		if p.Type == "start" {
+			coords[p.DisplayName] = []float64{p.Longitude, p.Latitude}
+		}
+		// 目的地（B 楼）
+		if p.Type == "destination" {
+			coords[p.DisplayName] = []float64{p.Longitude, p.Latitude}
+		}
+	}
+
+	return coords
+}
+
 // FindStartLocation 查找起点位置
 func (c *AMapClient) FindStartLocation(name string) (*Location, error) {
 	// 运行时只允许“配置驱动坐标”，不再做地理编码兜底。
