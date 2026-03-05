@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState } from 'react';
 import {
   Box,
   FormControl,
@@ -14,13 +14,13 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 
 /**
  * 导航表单组件
- * 使用 memo 包装避免不必要的重渲染
+ * 用于选择起点和目的地
  * @param {Array} starts - 起点列表（已按区域分组）
  * @param {Array} rooms - 教室列表（已按楼层分组）
  * @param {Function} onNavigate - 导航回调函数
  * @param {boolean} disabled - 是否禁用表单
  */
-const RouteForm = memo(function RouteForm({ starts, rooms, onNavigate, disabled }) {
+function RouteForm({ starts, rooms, onNavigate, disabled }) {
   const [start, setStart] = useState('');
   const [destination, setDestination] = useState('');
   const [error, setError] = useState('');

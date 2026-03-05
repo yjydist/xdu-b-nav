@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Typography,
@@ -61,11 +61,10 @@ const B_BUILDING_CENTER = [108.831946, 34.126019];
 
 /**
  * 路线结果组件
- * 使用 memo 包装避免不必要的重渲染
  * 显示室外路线（地图）和室内导航步骤
  * @param {Object} result - 导航结果数据
  */
-const RouteResult = memo(function RouteResult({ result }) {
+function RouteResult({ result }) {
   const [config, setConfig] = useState(null);
   const [isAMapReady, setIsAMapReady] = useState(false);
   const mapRef = useRef(null);
