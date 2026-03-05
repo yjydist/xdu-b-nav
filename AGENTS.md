@@ -38,11 +38,11 @@ Prefer `just` first (`justfile`). Use `just --list` to see all commands.
 - 打开浏览器: `just open`
 - 清理构建产物: `just clean`
 
-### Frontend Commands
-- 前端安装依赖: `cd frontend && npm install`
-- 前端开发运行: `cd frontend && npm run dev`
-- 前端构建: `cd frontend && npm run build`
-- 前端预览构建: `cd frontend && npm run preview`
+### Frontend Commands (使用 Bun)
+- 前端安装依赖: `cd frontend && bun install`
+- 前端开发运行: `cd frontend && bun run dev`
+- 前端构建: `cd frontend && bun run build`
+- 前端预览构建: `cd frontend && bun run preview`
 
 ### Format / Lint
 - 格式化: `just fmt` or `go fmt ./...`
