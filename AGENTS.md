@@ -149,7 +149,38 @@ Checked:
 Status: none found in this repository.
 If added later, those files become higher-priority supplements.
 
-## 10) Pre-merge Checklist
+## 10) 开发规范
+
+### 10.1 交流规范
+- 所有对话、解释、提问一律使用**中文**
+
+### 10.2 代码规范
+- 所有新增或修改的代码，必须附加**详细的中文注释**
+- 注释要解释"为什么这样做"，而不只是"做了什么"
+- 关键逻辑、复杂算法、重要配置都必须有注释
+
+### 10.3 开发节奏
+- 拿到需求后，首先将整个开发任务**拆分成多个有序的 TODO**，按顺序列出
+- 每次只完成**一个 TODO**，完成后暂停等待确认，不要一次性实现所有功能
+- TODO 粒度要适中：一个 TODO 对应一次有意义的 git commit
+
+### 10.4 Git 规范
+- 每完成一个 TODO，立即执行 `git add` 和 `git commit`
+- commit 前先用 `git status` 确认改动范围是否符合预期
+- commit message 格式：第一行写总结性概括（直接描述做了什么，不要加 TODO 前缀），换行后用 Conventional Commits 列出具体变更
+
+### 10.5 Git 分支工作流
+采用双主线驱动配合临时分支的模型：
+
+| 分支 | 用途 | 规则 |
+|------|------|------|
+| `main` | 生产环境稳定发布分支 | 绝对禁止直接开发，仅接受 dev 或 hotfix 合并 |
+| `dev` | 开发主线分支 | 所有新功能和日常修复最终都必须合并到这里 |
+| `feature/` | 从 dev 创建的新功能分支 | 完成开发后合并回 dev |
+| `fix/` | 从 dev 创建的修复分支 | 完成开发后合并回 dev |
+| `hotfix/` | 从 main 创建的紧急修复 | 必须同时合并到 main 和 dev |
+
+## 11) Pre-merge Checklist
 - [ ] `go fmt ./...`
 - [ ] `go test ./... -v`（或受影响包至少通过）
 - [ ] API 关键路径手动冒烟验证
