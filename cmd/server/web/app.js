@@ -106,7 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 1) key 从后端配置接口返回，避免硬编码在仓库里；
                 // 2) key 缺失时前端依旧可运行（仅文字路线降级），不会整页报错。
                 const script = document.getElementById('amap-script');
-                script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.amap_js_api_key}`;
+                // 这里显式追加 plugin 参数的原因：
+                // 1) 部分环境下仅加载基础 JS API，不会自动注入 Walking 构造器；
+                // 2) 先在 URL 上声明插件，可显著降低“AMap.Walking is not a constructor”的概率；
+                // 3) 即使插件参数未生效，后面仍有 AMap.plugin 二次兜底，双保险保证稳定。
+                script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.amap_js_api_key}&plugin=AMap.Walking`;
                 
                 // 等待脚本加载完成后初始化地图
                 script.onload = function() {
@@ -145,10 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // 创建地图实例，中心点设为 B 楼南楼
+        // 坐标来源：高德地图官方坐标拾取工具手动校准（site.md）
         map = new AMap.Map('map-container', {
-            zoom: 16,                    // 缩放级别
-            center: [108.8509, 34.1582], // 西电南校区 B 楼中心
-            viewMode: '2D'               // 2D 模式
+            zoom: 16,
+            center: [108.831946, 34.126019], // 西安电子科技大学南校区 B 楼
+            viewMode: '2D'
         });
     }
 
@@ -157,12 +162,15 @@ document.addEventListener('DOMContentLoaded', function() {
      * 从后端 API 获取所有可选的起点，按区域分组显示
      */
     async function loadStartLocations() {
+        console.log('[调试] 开始加载起点列表...');
         try {
             const response = await fetch('/api/starts');
+            console.log('[调试] 起点 API 响应状态:', response.status);
             if (!response.ok) {
                 throw new Error('加载起点列表失败');
             }
             const data = await response.json();
+            console.log('[调试] 起点数据:', data);
             
             if (data.starts && data.starts.length > 0) {
                 // 按区域分组：丁香公寓、海棠公寓、竹园公寓
@@ -180,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
+                console.log('[调试] 分组后的起点:', groups);
                 
                 // 创建带分组的选项
                 for (const [region, locations] of Object.entries(groups)) {
@@ -193,11 +202,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             optgroup.appendChild(option);
                         });
                         startSelect.appendChild(optgroup);
+                        console.log('[调试] 添加区域:', region, '数量:', locations.length);
                     }
                 }
+                console.log('[调试] 起点列表加载完成，总计:', startSelect.options.length, '个选项');
+            } else {
+                console.warn('[调试] 起点数据为空');
             }
         } catch (error) {
-            console.error('加载起点列表失败:', error);
+            console.error('[调试] 加载起点列表失败:', error);
         }
     }
 
@@ -206,12 +219,15 @@ document.addEventListener('DOMContentLoaded', function() {
      * 从后端 API 获取所有 B 楼教室，按楼层分组显示
      */
     async function loadRooms() {
+        console.log('[调试] 开始加载教室列表...');
         try {
             const response = await fetch('/api/rooms');
+            console.log('[调试] 教室 API 响应状态:', response.status);
             if (!response.ok) {
                 throw new Error('加载教室列表失败');
             }
             const data = await response.json();
+            console.log('[调试] 教室数据:', data);
             
             if (data.rooms && data.rooms.length > 0) {
                 // 按楼层分组
@@ -223,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     floors[floor].push(room);
                 });
+                console.log('[调试] 按楼层分组:', floors);
                 
                 // 按楼层排序创建选项
                 Object.keys(floors).sort().forEach(floor => {
@@ -235,10 +252,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         optgroup.appendChild(option);
                     });
                     destinationSelect.appendChild(optgroup);
+                    console.log('[调试] 添加楼层:', floor, '数量:', floors[floor].length);
                 });
+                console.log('[调试] 教室列表加载完成，总计:', destinationSelect.options.length, '个选项');
+            } else {
+                console.warn('[调试] 教室数据为空');
             }
         } catch (error) {
-            console.error('加载教室列表失败:', error);
+            console.error('[调试] 加载教室列表失败:', error);
         }
     }
 
@@ -361,9 +382,9 @@ document.addEventListener('DOMContentLoaded', function() {
             polyline = null;
         }
 
-        // 获取起点坐标
+        // 获取起点坐标（来自 site.md 手动校准的坐标）
         const startPoint = getStartLocationCoord(result.outdoor.from);
-        const endPoint = [108.8509, 34.1582]; // B 楼中心
+        const endPoint = [108.831946, 34.126019]; // B 楼中心坐标（site.md 手动校准）
 
         if (!isAMapReady || typeof AMap === 'undefined' || !map || !startPoint) {
             // 这里不直接报错，而是缓存结果并等待脚本就绪后自动重绘。
@@ -383,33 +404,120 @@ document.addEventListener('DOMContentLoaded', function() {
         // 添加终点标记
         const endMarker = new AMap.Marker({
             position: endPoint,
-            title: 'B 楼南楼',
-            map: map
+            title: 'B 楼南楼（终点）',
+            map: map,
+            label: {
+                content: '🏫 B 楼',
+                direction: 'top',
+                offset: new AMap.Pixel(0, -10)
+            }
         });
         markers.push(endMarker);
 
-        // 使用高德步行路径规划
-        if (walkingRoute) {
-            walkingRoute.clear();
-        }
+        // 使用高德步行路径规划。
+        // 关键修复点：不直接假设 AMap.Walking 已存在，
+        // 必须先确保插件已加载，否则会抛出 "AMap.Walking is not a constructor"。
+        console.log('[调试] 步行路径规划 - 起点:', startPoint, '终点:', endPoint);
         
-        walkingRoute = new AMap.Walking({
-            map: map,
-            // 不使用 panel，把文字步骤统一用后端结果渲染，
-            // 避免“高德面板内容”和“自定义步骤”互相覆盖导致看起来像“路线没显示”。
-            showTraffic: false
-        });
-
-        // 搜索路径
-        walkingRoute.search(startPoint, endPoint, function(status, routeResult) {
-            if (status === 'complete') {
-                // 路径规划成功，调整地图视野
-                fitMapBounds([startPoint, endPoint]);
-            } else {
-                // 路径规划失败，画一条直线连接两点
+        ensureWalkingService(function(err) {
+            if (err || !walkingRoute) {
+                // 插件不可用时退化为直线，保证页面仍可用而不是直接报错。
+                console.log('[调试] Walking 插件不可用，使用直线');
                 drawSimpleLine(startPoint, endPoint);
+                return;
             }
+
+            // 先清空旧路线，避免多次规划时叠线。
+            walkingRoute.clear();
+
+            // 搜索路径
+            walkingRoute.search(startPoint, endPoint, function(status, routeResult) {
+                console.log('[调试] Walking 搜索状态:', status);
+                
+                // Walking 返回的数据结构是 routeResult.routes[] (复数)
+                // Walking 插件会自动在地图上绘制路线，我们只需要清除直线即可
+                const hasRoute = routeResult && routeResult.routes && routeResult.routes.length > 0;
+                
+                console.log('[调试] hasRoute:', hasRoute);
+                
+                if (status === 'complete' && hasRoute) {
+                    console.log('[调试] Walking 路线成功，清除直线');
+                    // 路径规划成功，Walking 插件会自动在地图上绘制路线
+                    // 清除可能存在的直线
+                    if (polyline) {
+                        polyline.setMap(null);
+                        polyline = null;
+                    }
+                    // 调整地图视野
+                    fitMapBounds([startPoint, endPoint]);
+                } else {
+                    console.log('[调试] Walking 路线失败，绘制直线');
+                    // 路径规划失败，绘制直线
+                    drawSimpleLine(startPoint, endPoint);
+                    fitMapBounds([startPoint, endPoint]);
+                }
+            });
         });
+    }
+
+    /**
+     * 确保步行插件可用并创建 walkingRoute 实例。
+     * 为什么需要这个函数：
+     * 1) 高德 JS API 在不同加载时机下，AMap.Walking 可能尚未挂载；
+     * 2) 直接 new AMap.Walking 会在插件缺失时抛异常，导致整条导航流程中断；
+     * 3) 统一封装“检测 -> 动态加载 -> 创建实例”逻辑，避免多个调用点重复踩坑。
+     */
+    function ensureWalkingService(callback) {
+        if (typeof callback !== 'function') {
+            return;
+        }
+
+        if (!isAMapReady || typeof AMap === 'undefined' || !map) {
+            callback(new Error('地图未就绪'));
+            return;
+        }
+
+        // 已有实例且可用时直接复用，减少重复创建。
+        if (walkingRoute && typeof walkingRoute.search === 'function') {
+            callback(null);
+            return;
+        }
+
+        // 内部小函数：真正创建步行实例。
+        function buildWalkingInstance() {
+            try {
+                if (typeof AMap.Walking !== 'function') {
+                    callback(new Error('Walking 插件未挂载'));
+                    return;
+                }
+
+                walkingRoute = new AMap.Walking({
+                    map: map,
+                    // 不使用 panel，把文字步骤统一用后端结果渲染，
+                    // 避免“高德面板内容”和“自定义步骤”互相覆盖导致看起来像“路线没显示”。
+                    showTraffic: false
+                });
+                callback(null);
+            } catch (e) {
+                callback(e instanceof Error ? e : new Error('创建 Walking 实例失败'));
+            }
+        }
+
+        // 先尝试直接创建（适用于 plugin 参数已生效场景）。
+        if (typeof AMap.Walking === 'function') {
+            buildWalkingInstance();
+            return;
+        }
+
+        // 再走插件动态加载兜底（最关键的稳定性保障）。
+        if (typeof AMap.plugin === 'function') {
+            AMap.plugin(['AMap.Walking'], function() {
+                buildWalkingInstance();
+            });
+            return;
+        }
+
+        callback(new Error('当前 AMap 版本不支持 plugin 动态加载'));
     }
 
     /**
@@ -481,23 +589,21 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function getStartLocationCoord(name) {
         const coords = {
-            '丁香公寓 11 号楼': [108.8485, 34.1612],
-            '丁香公寓 12 号楼': [108.8488, 34.1614],
-            '丁香公寓 13 号楼': [108.8491, 34.1616],
-            '丁香公寓 14 号楼': [108.8494, 34.1618],
-            '丁香公寓 15 号楼': [108.8497, 34.1620],
-            '海棠公寓 5 号楼': [108.8520, 34.1595],
-            '海棠公寓 6 号楼': [108.8522, 34.1598],
-            '海棠公寓 7 号楼': [108.8524, 34.1601],
-            '海棠公寓 8 号楼': [108.8526, 34.1604],
-            '海棠公寓 9 号楼': [108.8528, 34.1607],
-            '海棠公寓 10 号楼': [108.8530, 34.1610],
-            '海棠公寓 18 号楼': [108.8535, 34.1625],
-            '海棠公寓 20 号楼': [108.8538, 34.1628],
-            '竹园公寓 1 号楼': [108.8490, 34.1565],
-            '竹园公寓 2 号楼': [108.8493, 34.1568],
-            '竹园公寓 3 号楼': [108.8496, 34.1571],
-            '竹园公寓 4 号楼': [108.8499, 34.1574],
+            '丁香公寓 11 号楼': [108.828544, 34.124211],
+            '丁香公寓 12 号楼': [108.82826, 34.123248],
+            '丁香公寓 13 号楼': [108.828786, 34.12281],
+            '丁香公寓 14 号楼': [108.829974, 34.122157],
+            '丁香公寓 15 号楼': [108.830731, 34.121887],
+            '海棠公寓 5 号楼': [108.835705, 34.128765],
+            '海棠公寓 6 号楼': [108.83465, 34.129238],
+            '海棠公寓 7 号楼': [108.832966, 34.129886],
+            '海棠公寓 8 号楼': [108.832377, 34.129856],
+            '海棠公寓 9 号楼': [108.832045, 34.129344],
+            '海棠公寓 10 号楼': [108.83246, 34.129166],
+            '竹园公寓 1 号楼': [108.840996, 34.126463],
+            '竹园公寓 2 号楼': [108.840072, 34.126925],
+            '竹园公寓 3 号楼': [108.839272, 34.127251],
+            '竹园公寓 4 号楼': [108.838337, 34.127653],
         };
         return coords[name] || null;
     }

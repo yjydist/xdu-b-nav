@@ -14,7 +14,8 @@ import (
 
 // AMapClient 高德地图 API 客户端
 type AMapClient struct {
-	APIKey string
+	APIKey        string
+	locationStore *LocationStore
 }
 
 // Location 地理位置
@@ -136,16 +137,7 @@ var dormCoordinates = map[string][2]float64{
 	"竹园公寓 4 号楼": {34.1574, 108.8499},
 }
 
-// B 楼南楼出口位置（西电南校区 - 修正后的坐标）
-var bBuildingExits = []Location{
-	{Name: "E1", Latitude: 34.1580, Longitude: 108.8500, Address: "西安电子科技大学 B 楼南楼东端出口 (101/105 附近)"},
-	{Name: "E2", Latitude: 34.1581, Longitude: 108.8503, Address: "西安电子科技大学 B 楼南楼 106 附近出口"},
-	{Name: "E3", Latitude: 34.1582, Longitude: 108.8506, Address: "西安电子科技大学 B 楼南楼 107 附近出口"},
-	{Name: "E4", Latitude: 34.1583, Longitude: 108.8512, Address: "西安电子科技大学 B 楼南楼 318/320 附近出口"},
-	{Name: "E5", Latitude: 34.1584, Longitude: 108.8518, Address: "西安电子科技大学 B 楼南楼西端出口 (422 侧)"},
-}
-
-// B 楼中心位置
+// B 楼中心位置（已废弃，优先使用 config/locations.json 中的 B_BUILDING 坐标）
 var bBuildingCenter = Location{
 	Name:      "B 楼南楼",
 	Latitude:  34.1582,
@@ -156,48 +148,70 @@ var bBuildingCenter = Location{
 // NewAMapClient 创建高德地图客户端
 func NewAMapClient() *AMapClient {
 	apiKey := os.Getenv("AMAP_API_KEY")
+
+	// 地点配置文件路径支持环境变量覆盖，便于后续脚本/环境切换。
+	// 默认放在 config/locations.json，保持“配置与代码分离”。
+	locationPath := os.Getenv("LOCATION_CONFIG_PATH")
+	if locationPath == "" {
+		locationPath = "config/locations.json"
+	}
+
+	store, err := loadLocationStore(locationPath)
+	if err != nil {
+		// 配置不可用时回退到内置默认值，保证服务可启动。
+		// 之所以不直接失败：避免线上因为单个配置文件问题导致整体不可用。
+		log.Printf("[配置] 读取地点配置失败，使用内置默认值: %v", err)
+		store = buildDefaultLocationStore()
+	} else {
+		log.Printf("[配置] 已加载地点配置: %s (points=%d)", locationPath, len(store.Config.Points))
+	}
+
 	return &AMapClient{
-		APIKey: apiKey,
+		APIKey:        apiKey,
+		locationStore: store,
 	}
 }
 
 // GetStartLocations 获取所有起点列表
 func (c *AMapClient) GetStartLocations() []StartLocation {
-	return startLocations
+	starts := make([]StartLocation, 0)
+	if c.locationStore == nil {
+		return startLocations
+	}
+
+	for _, p := range c.locationStore.Config.Points {
+		if !p.Enabled || p.Type != "start" {
+			continue
+		}
+		starts = append(starts, StartLocation{
+			Name:     p.DisplayName,
+			Region:   p.Region,
+			FullName: p.FullName,
+		})
+	}
+
+	return starts
 }
 
 // FindStartLocation 查找起点位置
 func (c *AMapClient) FindStartLocation(name string) (*Location, error) {
-	// 查找配置
-	for _, start := range startLocations {
-		if start.Name == name {
-			if coords, ok := dormCoordinates[name]; ok {
-				return &Location{
-					Name:      name,
-					Latitude:  coords[0],
-					Longitude: coords[1],
-					Address:   start.FullName,
-				}, nil
-			}
+	// 运行时只允许“配置驱动坐标”，不再做地理编码兜底。
+	// 为什么这样设计：
+	// 1) 校园内导航点位固定，名称检索会受到同名地点/搜索策略影响而漂移；
+	// 2) 路径稳定性优先，必须保证同一输入得到可复现的坐标与路线；
+	// 3) 名称变更应通过 refresh-locations 脚本更新配置，而不是运行时临时检索。
+	if c.locationStore != nil {
+		if point, ok := c.locationStore.StartByDisplay[name]; ok {
+			return &Location{
+				Name:      point.DisplayName,
+				Latitude:  point.Latitude,
+				Longitude: point.Longitude,
+				Address:   point.FullName,
+			}, nil
 		}
 	}
 
-	// 配置中没有，尝试地理编码（使用完整名称）
-	if c.APIKey != "" {
-		// 构建完整地址
-		fullAddress := "西安电子科技大学" + name
-		loc, err := c.Geocode(fullAddress)
-		if err == nil {
-			return loc, nil
-		}
-	}
-
-	// 返回默认位置（B 楼附近）
-	return &Location{
-		Latitude:  34.1580,
-		Longitude: 108.8490,
-		Address:   "西安电子科技大学" + name,
-	}, nil
+	return nil, fmt.Errorf("未在地点配置中找到起点: %s，请先在 config/locations.json 配置或通过刷新脚本更新", name)
 }
 
 // Geocode 地理编码
@@ -339,8 +353,8 @@ func (c *AMapClient) FindRouteToBuilding(startName string) (*Location, *WalkingR
 		return nil, nil, fmt.Errorf("查找起点失败：%w", err)
 	}
 
-	// 规划到 B 楼中心的路线
-	route, err := c.WalkingRoute(startLoc, &bBuildingCenter)
+	// 规划到 B 楼中心的路线（目标点优先走地点配置）
+	route, err := c.WalkingRoute(startLoc, c.GetBBuildingLocation())
 	if err != nil {
 		return nil, nil, fmt.Errorf("路径规划失败：%w", err)
 	}
@@ -349,12 +363,24 @@ func (c *AMapClient) FindRouteToBuilding(startName string) (*Location, *WalkingR
 }
 
 // GetExitLocations 获取 B 楼所有出口位置
+// 已废弃：室外导航不使用入口坐标，入口是室内拓扑图概念（b_graph.jsonc）
+// 保留此函数返回空数组，避免编译错误
 func (c *AMapClient) GetExitLocations() []Location {
-	return bBuildingExits
+	return []Location{}
 }
 
 // GetBBuildingLocation 获取 B 楼中心位置
 func (c *AMapClient) GetBBuildingLocation() *Location {
+	if c.locationStore != nil && c.locationStore.Destination != nil {
+		d := c.locationStore.Destination
+		return &Location{
+			Name:      d.DisplayName,
+			Latitude:  d.Latitude,
+			Longitude: d.Longitude,
+			Address:   d.FullName,
+		}
+	}
+	// 回退到硬编码默认值（仅当 config/locations.json 缺失时）
 	return &bBuildingCenter
 }
 
