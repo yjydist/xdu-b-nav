@@ -35,6 +35,13 @@ const theme = createTheme({
     fontFamily: '"JetBrains Maple Mono", monospace',
     fontWeight: 600,
     fontFeatureSettings: '"cv01" on, "cv09" on, "cv18" on',
+    fontVariantNumeric: 'tabular-nums',
+    // 全局样式应用到所有组件
+    allVariants: {
+      fontFamily: '"JetBrains Maple Mono", monospace',
+      fontWeight: 600,
+      fontFeatureSettings: '"cv01" on, "cv09" on, "cv18" on',
+    },
     h1: {
       fontSize: '2rem',
       fontWeight: 600,
