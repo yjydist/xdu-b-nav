@@ -29,9 +29,10 @@ const theme = createTheme({
       secondary: '#49454F',
     },
   },
-  // 字体排版：使用 Roboto (MUI 默认)
+  // 字体排版：使用 JetBrains Mono + Maple Mono NF CN
+  // JetBrains Mono 作为主要等宽字体，Maple Mono NF CN 用于中文显示
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"JetBrains Mono", "Maple Mono NF CN", "Noto Sans SC", monospace',
     h1: {
       fontSize: '2rem',
       fontWeight: 600,
