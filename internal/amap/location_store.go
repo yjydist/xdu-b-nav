@@ -47,12 +47,12 @@ type LocationStore struct {
 func loadLocationStore(path string) (*LocationStore, error) {
 	raw, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("读取地点配置失败: %w", err)
+		return nil, fmt.Errorf("读取地点配置失败：%w", err)
 	}
 
 	var cfg LocationConfig
 	if err := json.Unmarshal(raw, &cfg); err != nil {
-		return nil, fmt.Errorf("解析地点配置失败: %w", err)
+		return nil, fmt.Errorf("解析地点配置失败：%w", err)
 	}
 
 	store := &LocationStore{
@@ -91,7 +91,7 @@ func loadLocationStore(path string) (*LocationStore, error) {
 }
 
 // buildDefaultLocationStore 构建兼容旧逻辑的默认配置。
-// 该回退仅用于“配置文件缺失/损坏”场景，保证服务仍可启动。
+// 该回退仅用于"配置文件缺失/损坏"场景，保证服务仍可启动。
 func buildDefaultLocationStore() *LocationStore {
 	store := &LocationStore{
 		ByID:           make(map[string]LocationPoint),
@@ -118,25 +118,13 @@ func buildDefaultLocationStore() *LocationStore {
 		store.StartByDisplay[p.DisplayName] = p
 	}
 
-	for _, e := range bBuildingExits {
-		p := LocationPoint{
-			ID:          e.Name,
-			Type:        "entrance",
-			Region:      "B楼",
-			DisplayName: e.Name,
-			FullName:    e.Address,
-			Latitude:    e.Latitude,
-			Longitude:   e.Longitude,
-			Enabled:     true,
-		}
-		store.ByID[p.ID] = p
-		store.ExitPoints = append(store.ExitPoints, p)
-	}
+	// 注意：不再创建 entrance 类型点位
+	// 入口（E1-E5）是室内拓扑图概念，由 b_graph.jsonc 维护，室外导航不关心
 
 	d := LocationPoint{
 		ID:          "B_BUILDING",
 		Type:        "destination",
-		Region:      "B楼",
+		Region:      "B 楼",
 		DisplayName: bBuildingCenter.Name,
 		FullName:    bBuildingCenter.Address,
 		Latitude:    bBuildingCenter.Latitude,

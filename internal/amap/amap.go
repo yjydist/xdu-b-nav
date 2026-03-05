@@ -137,16 +137,7 @@ var dormCoordinates = map[string][2]float64{
 	"竹园公寓 4 号楼": {34.1574, 108.8499},
 }
 
-// B 楼南楼出口位置（西电南校区 - 修正后的坐标）
-var bBuildingExits = []Location{
-	{Name: "E1", Latitude: 34.1580, Longitude: 108.8500, Address: "西安电子科技大学 B 楼南楼东端出口 (101/105 附近)"},
-	{Name: "E2", Latitude: 34.1581, Longitude: 108.8503, Address: "西安电子科技大学 B 楼南楼 106 附近出口"},
-	{Name: "E3", Latitude: 34.1582, Longitude: 108.8506, Address: "西安电子科技大学 B 楼南楼 107 附近出口"},
-	{Name: "E4", Latitude: 34.1583, Longitude: 108.8512, Address: "西安电子科技大学 B 楼南楼 318/320 附近出口"},
-	{Name: "E5", Latitude: 34.1584, Longitude: 108.8518, Address: "西安电子科技大学 B 楼南楼西端出口 (422 侧)"},
-}
-
-// B 楼中心位置
+// B 楼中心位置（已废弃，优先使用 config/locations.json 中的 B_BUILDING 坐标）
 var bBuildingCenter = Location{
 	Name:      "B 楼南楼",
 	Latitude:  34.1582,
@@ -372,21 +363,10 @@ func (c *AMapClient) FindRouteToBuilding(startName string) (*Location, *WalkingR
 }
 
 // GetExitLocations 获取 B 楼所有出口位置
+// 已废弃：室外导航不使用入口坐标，入口是室内拓扑图概念（b_graph.jsonc）
+// 保留此函数返回空数组，避免编译错误
 func (c *AMapClient) GetExitLocations() []Location {
-	if c.locationStore == nil || len(c.locationStore.ExitPoints) == 0 {
-		return bBuildingExits
-	}
-
-	result := make([]Location, 0, len(c.locationStore.ExitPoints))
-	for _, p := range c.locationStore.ExitPoints {
-		result = append(result, Location{
-			Name:      p.ID,
-			Latitude:  p.Latitude,
-			Longitude: p.Longitude,
-			Address:   p.FullName,
-		})
-	}
-	return result
+	return []Location{}
 }
 
 // GetBBuildingLocation 获取 B 楼中心位置
@@ -400,6 +380,7 @@ func (c *AMapClient) GetBBuildingLocation() *Location {
 			Address:   d.FullName,
 		}
 	}
+	// 回退到硬编码默认值（仅当 config/locations.json 缺失时）
 	return &bBuildingCenter
 }
 
