@@ -29,10 +29,10 @@ const theme = createTheme({
       secondary: '#49454F',
     },
   },
-  // 字体排版：使用 JetBrains Mono + Maple Mono NF CN
-  // JetBrains Mono 作为主要等宽字体，Maple Mono NF CN 用于中文显示
+  // 字体排版：使用本地 JetBrains Maple Mono 字体
+  // 该字体同时支持中英文
   typography: {
-    fontFamily: '"JetBrains Mono", "Maple Mono NF CN", "Noto Sans SC", monospace',
+    fontFamily: '"JetBrains Maple Mono", monospace',
     h1: {
       fontSize: '2rem',
       fontWeight: 600,

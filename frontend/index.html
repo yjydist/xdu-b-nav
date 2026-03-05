@@ -7,18 +7,65 @@
     <!-- 高德地图 JS API 配置 -->
     <!-- 安全密钥和 Key 通过后端 /api/config 接口动态获取 -->
     <script type="text/javascript" id="amap-script"></script>
-    <!-- 引入 JetBrains Mono 字体 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
-    />
-    <!-- 引入 Maple Mono NF CN 字体 (Nerd Font 版本) -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Maple+Mono+NF+CN:wght@300;400;500;600;700&display=swap"
-    />
+    <!-- 引入本地 JetBrains Maple Mono 字体 -->
+    <style>
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-Regular.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-Medium.ttf') format('truetype');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-SemiBold.ttf') format('truetype');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-Bold.ttf') format('truetype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-Light.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-Thin.ttf') format('truetype');
+        font-weight: 100;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-ExtraLight.ttf') format('truetype');
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'JetBrains Maple Mono';
+        src: url('/src/assets/fonts/JetBrainsMapleMono-ExtraBold.ttf') format('truetype');
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
