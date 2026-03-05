@@ -34,6 +34,7 @@ const theme = createTheme({
   typography: {
     fontFamily: '"JetBrains Maple Mono", monospace',
     fontWeight: 600,
+    fontFeatureSettings: '"cv01" on, "cv09" on, "cv18" on',
     h1: {
       fontSize: '2rem',
       fontWeight: 600,
