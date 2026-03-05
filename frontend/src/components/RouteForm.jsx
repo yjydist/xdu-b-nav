@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import {
   Box,
   FormControl,
@@ -14,13 +14,13 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 
 /**
  * 导航表单组件
- * 用于选择起点和目的地
+ * 使用 memo 包装避免不必要的重渲染
  * @param {Array} starts - 起点列表（已按区域分组）
  * @param {Array} rooms - 教室列表（已按楼层分组）
  * @param {Function} onNavigate - 导航回调函数
  * @param {boolean} disabled - 是否禁用表单
  */
-function RouteForm({ starts, rooms, onNavigate, disabled }) {
+const RouteForm = memo(function RouteForm({ starts, rooms, onNavigate, disabled }) {
   const [start, setStart] = useState('');
   const [destination, setDestination] = useState('');
   const [error, setError] = useState('');
@@ -63,10 +63,12 @@ function RouteForm({ starts, rooms, onNavigate, disabled }) {
         <Select
           labelId="start-label"
           id="start"
+          name="start"
           value={start}
           label="起点（宿舍楼号）"
           onChange={(e) => setStart(e.target.value)}
           disabled={disabled}
+          autoComplete="address-level1"
         >
           {starts.map((group) => (
             <MenuItem key={group.region} value="" disabled sx={{ fontWeight: 600 }}>
@@ -92,10 +94,12 @@ function RouteForm({ starts, rooms, onNavigate, disabled }) {
         <Select
           labelId="destination-label"
           id="destination"
+          name="destination"
           value={destination}
           label="目的地（B 楼教室号）"
           onChange={(e) => setDestination(e.target.value)}
           disabled={disabled}
+          autoComplete="off"
         >
           {rooms.map((group) => (
             <MenuItem key={group.floor} value="" disabled sx={{ fontWeight: 600 }}>

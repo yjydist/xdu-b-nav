@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import {
   Container,
   Box,
@@ -12,7 +12,7 @@ import {
 import Header from './components/Header';
 import RouteForm from './components/RouteForm';
 import RouteResult from './components/RouteResult';
-import { fetchStarts, fetchRooms } from './api';
+import { fetchStarts, fetchRooms, fetchRoute } from './api';
 
 /**
  * 应用根组件
@@ -84,15 +84,14 @@ function App() {
     loadData();
   }, []);
 
-  // 处理导航请求
-  const handleNavigate = async (start, destination) => {
+  // 处理导航请求 - 使用 useCallback 稳定引用
+  const handleNavigate = useCallback(async (start, destination) => {
     setIsNavigating(true);
     setError(null);
     setRouteResult(null);
 
     try {
-      // 动态导入路由函数，避免循环依赖
-      const { fetchRoute } = await import('./api');
+      // 静态导入 API 函数（优化：避免动态导入的性能开销）
       const result = await fetchRoute(start, destination);
       setRouteResult(result);
     } catch (err) {
@@ -101,7 +100,7 @@ function App() {
     } finally {
       setIsNavigating(false);
     }
-  };
+  }, []);
 
   // 加载中显示
   if (loading) {

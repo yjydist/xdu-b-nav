@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import {
   Box,
   Typography,
@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import {
   DirectionsWalk,
-  MeetingRoom,
   Stairs,
   DoorFront,
   ArrowForward,
@@ -21,11 +20,52 @@ import {
 import { fetchConfig } from '../api';
 
 /**
+ * 起点坐标映射表（模块级别缓存，避免重复创建）
+ * 用于根据起点名称获取对应的坐标
+ */
+const START_COORDS = {
+  '丁香公寓 11 号楼': [108.828544, 34.124211],
+  '丁香公寓 12 号楼': [108.82826, 34.123248],
+  '丁香公寓 13 号楼': [108.828786, 34.12281],
+  '丁香公寓 14 号楼': [108.829974, 34.122157],
+  '丁香公寓 15 号楼': [108.830731, 34.121887],
+  '海棠公寓 5 号楼': [108.835705, 34.128765],
+  '海棠公寓 6 号楼': [108.83465, 34.129238],
+  '海棠公寓 7 号楼': [108.832966, 34.129886],
+  '海棠公寓 8 号楼': [108.832377, 34.129856],
+  '海棠公寓 9 号楼': [108.832045, 34.129344],
+  '海棠公寓 10 号楼': [108.83246, 34.129166],
+  '竹园公寓 1 号楼': [108.840996, 34.126463],
+  '竹园公寓 2 号楼': [108.840072, 34.126925],
+  '竹园公寓 3 号楼': [108.839272, 34.127251],
+  '竹园公寓 4 号楼': [108.838337, 34.127653],
+};
+
+/**
+ * 获取步骤图标组件（模块级别定义）
+ * @param {string} action - 动作描述
+ * @returns {Component} 图标组件
+ */
+const getStepIcon = (action) => {
+  if (action.includes('进入') || action.includes('出')) return DoorFront;
+  if (action.includes('上楼')) return Stairs;
+  if (action.includes('下楼')) return Stairs;
+  if (action.includes('直行') || action.includes('移动')) return ArrowForward;
+  return DirectionsWalk;
+};
+
+/**
+ * B 楼中心坐标
+ */
+const B_BUILDING_CENTER = [108.831946, 34.126019];
+
+/**
  * 路线结果组件
+ * 使用 memo 包装避免不必要的重渲染
  * 显示室外路线（地图）和室内导航步骤
  * @param {Object} result - 导航结果数据
  */
-function RouteResult({ result }) {
+const RouteResult = memo(function RouteResult({ result }) {
   const [config, setConfig] = useState(null);
   const [isAMapReady, setIsAMapReady] = useState(false);
   const mapRef = useRef(null);
@@ -68,8 +108,8 @@ function RouteResult({ result }) {
     if (!isAMapReady || !mapRef.current || !result.outdoor) return;
 
     const initMap = () => {
-      // 地图中心点设为 B 楼
-      const center = [108.831946, 34.126019];
+      // 地图中心点设为 B 楼（使用常量）
+      const center = B_BUILDING_CENTER;
       
       // 创建地图实例
       mapInstanceRef.current = new window.AMap.Map(mapRef.current, {
@@ -89,7 +129,7 @@ function RouteResult({ result }) {
       }
 
       new window.AMap.Marker({
-        position: [108.831946, 34.126019],
+        position: B_BUILDING_CENTER,
         title: 'B 楼南楼',
         label: {
           content: '🏫 B 楼',
@@ -106,7 +146,7 @@ function RouteResult({ result }) {
           showTraffic: false,
         });
 
-        walking.search(startCoord, [108.831946, 34.126019], (status) => {
+        walking.search(startCoord, B_BUILDING_CENTER, (status) => {
           if (status === 'complete') {
             mapInstanceRef.current.setFitView();
           }
@@ -120,36 +160,8 @@ function RouteResult({ result }) {
     }
   }, [isAMapReady, result]);
 
-  // 获取起点坐标
-  function getStartCoord(name) {
-    const coords = {
-      '丁香公寓 11 号楼': [108.828544, 34.124211],
-      '丁香公寓 12 号楼': [108.82826, 34.123248],
-      '丁香公寓 13 号楼': [108.828786, 34.12281],
-      '丁香公寓 14 号楼': [108.829974, 34.122157],
-      '丁香公寓 15 号楼': [108.830731, 34.121887],
-      '海棠公寓 5 号楼': [108.835705, 34.128765],
-      '海棠公寓 6 号楼': [108.83465, 34.129238],
-      '海棠公寓 7 号楼': [108.832966, 34.129886],
-      '海棠公寓 8 号楼': [108.832377, 34.129856],
-      '海棠公寓 9 号楼': [108.832045, 34.129344],
-      '海棠公寓 10 号楼': [108.83246, 34.129166],
-      '竹园公寓 1 号楼': [108.840996, 34.126463],
-      '竹园公寓 2 号楼': [108.840072, 34.126925],
-      '竹园公寓 3 号楼': [108.839272, 34.127251],
-      '竹园公寓 4 号楼': [108.838337, 34.127653],
-    };
-    return coords[name] || null;
-  }
-
-  // 获取步骤图标
-  const getStepIcon = (action) => {
-    if (action.includes('进入') || action.includes('出')) return DoorFront;
-    if (action.includes('上楼')) return Stairs;
-    if (action.includes('下楼')) return Stairs;
-    if (action.includes('直行') || action.includes('移动')) return ArrowForward;
-    return DirectionsWalk;
-  };
+  // 获取起点坐标（使用模块级别缓存的坐标映射表）
+  const getStartCoord = (name) => START_COORDS[name] || null;
 
   return (
     <Box>
