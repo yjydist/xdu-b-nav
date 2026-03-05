@@ -14,15 +14,19 @@
 ```
 xd-b-guide/
 ├── cmd/server/          # 主程序入口
-│   ├── main.go
-│   └── web/             # 前端静态文件
+│   └── main.go
 ├── internal/
 │   ├── graph/           # 图数据结构和加载
 │   ├── navigation/      # 导航算法
 │   ├── amap/            # 高德地图 API
 │   └── handler/         # HTTP 处理器
-├── web/                 # 前端文件 (开发用)
-├── b_graph.jsonc        # B 楼室内图数据
+├── frontend/            # Vite + React 前端项目
+│   ├── src/
+│   └── package.json
+├── config/              # 配置文件
+│   ├── b_graph.jsonc    # 室内拓扑图数据
+│   └── locations.json   # 地点坐标配置
+├── justfile             # 命令工具配置
 └── go.mod
 ```
 
@@ -40,7 +44,7 @@ cp .env.example .env
 | 变量名 | 说明 | 默认值 |
 |--------|------|--------|
 | `PORT` | 服务器端口 | `8080` |
-| `GRAPH_PATH` | 图数据文件路径 | `b_graph.jsonc` |
+| `GRAPH_PATH` | 图数据文件路径 | `config/b_graph.jsonc` |
 | `AMAP_API_KEY` | 高德 Web 服务 API Key（后端路径规划） | 无（使用模拟数据） |
 | `AMAP_JS_API_KEY` | 高德 Web 端 JS API Key（前端地图显示） | 无（仅文字显示） |
 | `AMAP_SECURITY_CODE` | 高德 JS API 安全密钥 | 无 |
@@ -121,20 +125,22 @@ go build -o server ./cmd/server
 ./server
 ```
 
-### 3. 访问应用
+### 3. 运行前端（可选）
+
+前端使用 Bun + Vite 开发：
 
 ```bash
-# 开发模式
-go run ./cmd/server
-
-# 或者构建后运行
-go build -o server ./cmd/server
-./server
+cd frontend
+bun install      # 安装依赖
+bun run dev     # 开发模式运行
+bun run build   # 构建生产版本
 ```
 
-### 3. 访问应用
+前端默认在 http://localhost:5173，它会自动代理 API 请求到后端（8080 端口）。
 
-打开浏览器访问：http://localhost:8080
+### 4. 访问应用
+
+打开浏览器访问：http://localhost:8080（后端）或 http://localhost:5173（前端开发服务器）
 
 ## API 接口
 
@@ -194,7 +200,8 @@ go build -o server ./cmd/server
 ## 技术栈
 
 - **后端**：Go 1.21+
-- **前端**：HTML5, CSS3, JavaScript (原生)
+- **前端**：Vite 5 + React 18 + MUI (Material UI)
+- **包管理器**：Bun
 - **地图服务**：高德地图 API (可选)
 - **算法**：Dijkstra 最短路径算法
 - **命令工具**：just
@@ -257,11 +264,11 @@ just route-regression
 
 ### 添加新教室
 
-编辑 `b_graph.jsonc` 文件，在 `nodes` 数组中添加新节点，在 `edges` 数组中添加连接关系。
+编辑 `config/b_graph.jsonc` 文件，在 `nodes` 数组中添加新节点，在 `edges` 数组中添加连接关系。
 
 ### 修改权重
 
-在 `b_graph.jsonc` 的 `assumptions.costs` 中修改各类边的权重。
+在 `config/b_graph.jsonc` 的 `assumptions.costs` 中修改各类边的权重。
 
 ## License
 

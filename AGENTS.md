@@ -22,8 +22,7 @@ Scope: whole repository (`/Users/yjydist/Repo/xd-b-guide`).
   - `internal/navigation`: 路径算法与路线组装
   - `internal/handler`: HTTP 接口
 - Frontend:
-  - `frontend/`: Vite + React 前端项目
-  - `web/`: 旧版静态前端（逐步迁移）
+  - `frontend/`: Vite + React + MUI 前端项目
 
 ## 2) Build / Run / Test Commands
 Prefer `just` first (`justfile`). Use `just --list` to see all commands.
@@ -79,7 +78,7 @@ Use `.env` locally; never commit secrets.
 
 ### Config Files
 - `config/locations.json`: 起点/终点坐标配置（包含 `display_name` 用于前端展示，`full_name` 用于高德地理检索）
-- `b_graph.jsonc`: 室内拓扑图数据（位于项目根目录）
+- `config/b_graph.jsonc`: 室内拓扑图数据
 - `.env.example`: 环境变量示例文件
 
 ### Tools
@@ -88,7 +87,7 @@ Use `.env` locally; never commit secrets.
 ### Environment Variables
 Important vars:
 - `PORT` (default `8080`)
-- `GRAPH_PATH` (default `b_graph.jsonc`)
+- `GRAPH_PATH` (default `config/b_graph.jsonc`)
 - `AMAP_API_KEY` (后端 Web 服务 API)
 - `AMAP_JS_API_KEY` (前端 JS 地图 key)
 - `AMAP_SECURITY_CODE` (前端 JS 安全码)
