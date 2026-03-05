@@ -70,14 +70,9 @@ function RouteForm({ starts, rooms, onNavigate, disabled }) {
           disabled={disabled}
           autoComplete="address-level1"
         >
-          {starts.map((group) => (
-            <MenuItem key={group.region} value="" disabled sx={{ fontWeight: 600 }}>
-              {group.region}
-            </MenuItem>
-          ))}
           {starts.flatMap((group) =>
             group.items.map((loc) => (
-              <MenuItem key={loc.name} value={loc.name} sx={{ pl: 4 }}>
+              <MenuItem key={loc.name} value={loc.name}>
                 {loc.name}
               </MenuItem>
             ))
@@ -101,14 +96,9 @@ function RouteForm({ starts, rooms, onNavigate, disabled }) {
           disabled={disabled}
           autoComplete="off"
         >
-          {rooms.map((group) => (
-            <MenuItem key={group.floor} value="" disabled sx={{ fontWeight: 600 }}>
-              {group.floor}楼
-            </MenuItem>
-          ))}
           {rooms.flatMap((group) =>
             group.items.map((room) => (
-              <MenuItem key={room} value={room} sx={{ pl: 4 }}>
+              <MenuItem key={room} value={room}>
                 {room}
               </MenuItem>
             ))
