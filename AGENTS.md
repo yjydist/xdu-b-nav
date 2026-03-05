@@ -2,9 +2,18 @@
 Practical guidance for coding agents in this repository.
 Scope: whole repository (`/Users/yjydist/Repo/xd-b-guide`).
 
+## 关于本文档
+
+本文档是 AI 编程助手的指导文件，具有以下特点：
+- **启动时读取**：每次会话开始时，AI 会自动读取此文件获取项目上下文
+- **手动更新**：本文档需要开发者手动维护，当项目结构或规范变化时及时更新
+- **优先级**：本文档的规则高于 AI 的默认行为，但低于用户的直接指令
+
+---
+
 ## 1) Project Overview
-- Language: Go (`go 1.21`)
-- Type: Go backend + static frontend (HTML/CSS/JS)
+- Language: Go (`go 1.21`) + React 18 + Vite 5
+- Type: Go backend + React frontend (前后端分离)
 - Domain: 校园导航（室外高德 API + 室内图最短路）
 - Entry: `cmd/server/main.go`
 - Core packages:
@@ -13,22 +22,27 @@ Scope: whole repository (`/Users/yjydist/Repo/xd-b-guide`).
   - `internal/navigation`: 路径算法与路线组装
   - `internal/handler`: HTTP 接口
 - Frontend:
-  - `web/index.html`
-  - `web/app.js`
-  - `web/style.css`
+  - `frontend/`: Vite + React 前端项目
+  - `web/`: 旧版静态前端（逐步迁移）
 
 ## 2) Build / Run / Test Commands
 Prefer `just` first (`justfile`). Use `just --list` to see all commands.
 
 ### Build / Run / Stop
-- 开发运行: `just run` or `go run ./cmd/server`
-- 构建: `just build` or `go build -o server ./cmd/server`
-- 二进制运行: `just start` or `./server`
+- 后端开发运行: `just run` or `go run ./cmd/server`
+- 后端构建: `just build` or `go build -o server ./cmd/server`
+- 后端二进制运行: `just start` or `./server`
 - 停止: `just stop` (pkill -f "./server")
 - 重启: `just restart`
 - 开发模式: `just dev` (uses `air` if installed, falls back to `go run`)
 - 打开浏览器: `just open`
 - 清理构建产物: `just clean`
+
+### Frontend Commands
+- 前端安装依赖: `cd frontend && npm install`
+- 前端开发运行: `cd frontend && npm run dev`
+- 前端构建: `cd frontend && npm run build`
+- 前端预览构建: `cd frontend && npm run preview`
 
 ### Format / Lint
 - 格式化: `just fmt` or `go fmt ./...`
@@ -65,7 +79,11 @@ Use `.env` locally; never commit secrets.
 
 ### Config Files
 - `config/locations.json`: 起点/终点坐标配置（包含 `display_name` 用于前端展示，`full_name` 用于高德地理检索）
-- `b_graph.jsonc`: 室内拓扑图数据
+- `b_graph.jsonc`: 室内拓扑图数据（位于项目根目录）
+- `.env.example`: 环境变量示例文件
+
+### Tools
+- `cmd/tools/refresh-locations`: 坐标刷新工具，用于更新 `config/locations.json` 中的地点坐标
 
 ### Environment Variables
 Important vars:
@@ -85,6 +103,7 @@ Notes:
 - 配置文件读取: `internal/amap/location_store.go`
 - 图数据加载: `internal/graph/graph.go`
 - 导航算法: `internal/navigation/navigation.go`
+- 坐标刷新工具: `cmd/tools/refresh-locations/main.go`
 
 ## 4) Go Code Style
 Follow existing code style first.
@@ -115,10 +134,13 @@ Follow existing code style first.
 - 禁止输出密钥、令牌等敏感信息。
 
 ## 5) Frontend Conventions
-- 保持原生 JS（不引入重框架，除非明确要求）。
-- 文本渲染需做转义（`escapeHtml`）。
+- 使用 Vite + React 构建前端项目。
+- 使用 MUI (Material UI) 实现 Material Design 3 风格。
+- 文本渲染需做转义（防止 XSS 攻击）。
 - 地图逻辑保持模块化：`initMap`、`renderOutdoorMap`。
 - 地图不可用时保留可用的文字路线降级。
+- 组件文件使用 PascalCase 命名（如 `RouteForm.jsx`）。
+- 样式优先使用 MUI 组件，其次使用 CSS-in-JS。
 
 ## 6) Routing Logic Expectations
 - 室外：起点 -> B 楼目标（高德步行路径）。
@@ -135,10 +157,12 @@ Follow existing code style first.
 ## 8) Git / Change Management
 - 变更要小而聚焦，不做无关重构。
 - 禁止提交敏感文件：`.env`、密钥、token。
-- 禁止提交构建产物：`server`、日志、备份文件。
+- 禁止提交构建产物：`./server`（项目根目录的二进制）、日志、备份文件。
 - 修改后至少跑受影响包测试。
 - 修改 API 协议时需确认前端兼容。
 - 关键路由改动后执行 `just route-regression` 验证。
+
+<!-- synced: 2026-03-05 -->
 
 ## 9) Cursor/Copilot Rule Files Check
 Checked:
@@ -174,11 +198,27 @@ If added later, those files become higher-priority supplements.
 
 | 分支 | 用途 | 规则 |
 |------|------|------|
-| `main` | 生产环境稳定发布分支 | 绝对禁止直接开发，仅接受 dev 或 hotfix 合并 |
-| `dev` | 开发主线分支 | 所有新功能和日常修复最终都必须合并到这里 |
-| `feature/` | 从 dev 创建的新功能分支 | 完成开发后合并回 dev |
-| `fix/` | 从 dev 创建的修复分支 | 完成开发后合并回 dev |
-| `hotfix/` | 从 main 创建的紧急修复 | 必须同时合并到 main 和 dev |
+| `main` | 生产环境稳定发布分支 | 绝对禁止直接开发，仅接受 dev 或 hotfix 合并，每次合并后必须打 Tag |
+| `dev` | 开发主线分支 | 所有新功能和日常修复最终都必须合并到这里，禁止直接提交 |
+| `feature/` | 从 dev 创建的新功能分支 | 完成开发后合并回 dev 并删除 |
+| `fix/` | 从 dev 创建的日常 Bug 修复分支 | 完成开发后合并回 dev 并删除 |
+| `hotfix/` | 从 main 创建的紧急修复分支 | 必须同时合并到 main 和 dev，合并后必须在 main 上打补丁 Tag |
+| `refactor/` | 从 dev 创建的代码重构分支 | 完成开发后合并回 dev 并删除 |
+| `chore/` | 从 dev 创建的构建配置/依赖更新/CI 等杂项分支 | 完成开发后合并回 dev 并删除 |
+| `docs/` | 从 dev 创建的文档更新分支 | 完成开发后合并回 dev 并删除 |
+
+#### 版本发布流程
+1. 确认 `dev` 已通过测试
+2. 将 `dev` 合并到 `main`
+3. 在合并节点执行 `git tag -a v<x.y.z> -m "release: v<x.y.z>"`
+4. 执行 `git push origin main --tags`
+
+#### 绝对禁止事项
+- 禁止直接在 `main` 或 `dev` 上提交代码
+- 禁止将 `feature/` / `fix/` 等临时分支直接合并到 `main`
+- 禁止从 `dev` 创建 `hotfix/` 分支
+- 禁止 `hotfix/` 只合并到 `main` 而遗漏 `dev`
+- 无充分理由禁止使用 `git push -f`
 
 ## 11) Pre-merge Checklist
 - [ ] `go fmt ./...`
