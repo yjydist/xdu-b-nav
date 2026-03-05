@@ -11,10 +11,10 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"xd-b-guide/internal/amap"
-	"xd-b-guide/internal/graph"
-	"xd-b-guide/internal/handler"
-	"xd-b-guide/internal/navigation"
+	"xdu-b-nav/internal/amap"
+	"xdu-b-nav/internal/graph"
+	"xdu-b-nav/internal/handler"
+	"xdu-b-nav/internal/navigation"
 )
 
 func main() {

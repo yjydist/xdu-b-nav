@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"xd-b-guide/internal/amap"
-	"xd-b-guide/internal/navigation"
+	"xdu-b-nav/internal/amap"
+	"xdu-b-nav/internal/navigation"
 )
 
 type Handler struct {

@@ -1,4 +1,4 @@
-module xd-b-guide
+module xdu-b-nav
 
 go 1.21
 

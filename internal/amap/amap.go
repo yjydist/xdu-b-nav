@@ -224,7 +224,7 @@ func (c *AMapClient) FindStartLocation(name string) (*Location, error) {
 	// 为什么这样设计：
 	// 1) 校园内导航点位固定，名称检索会受到同名地点/搜索策略影响而漂移；
 	// 2) 路径稳定性优先，必须保证同一输入得到可复现的坐标与路线；
-	// 3) 名称变更应通过 refresh-locations 脚本更新配置，而不是运行时临时检索。
+	// 3) 名称变更应手动编辑 config/locations.json，而不是运行时临时检索。
 	if c.locationStore != nil {
 		if point, ok := c.locationStore.StartByDisplay[name]; ok {
 			return &Location{

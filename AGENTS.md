@@ -1,6 +1,6 @@
 # AGENTS.md
 Practical guidance for coding agents in this repository.
-Scope: whole repository (`/Users/yjydist/Repo/xd-b-guide`).
+Scope: whole repository (`/Users/yjydist/Repo/xdu-b-nav`).
 
 ## 关于本文档
 
@@ -30,11 +30,8 @@ Prefer `just` first (`justfile`). Use `just --list` to see all commands.
 ### Build / Run / Stop
 - 后端开发运行: `just run` or `go run ./cmd/server`
 - 后端构建: `just build` or `go build -o server ./cmd/server`
-- 后端二进制运行: `just start` or `./server`
 - 停止: `just stop` (pkill -f "./server")
-- 重启: `just restart`
 - 开发模式: `just dev` (uses `air` if installed, falls back to `go run`)
-- 打开浏览器: `just open`
 - 清理构建产物: `just clean`
 
 ### Frontend Commands (使用 Bun)
@@ -50,16 +47,9 @@ Prefer `just` first (`justfile`). Use `just --list` to see all commands.
 ### Dependencies
 - `just deps` or `go mod tidy`
 
-### Location Coordinate Commands
-- 刷新全部坐标: `just locations-refresh` (会写回 `config/locations.json`)
-- 预览刷新（不写文件）: `just locations-refresh-dry`
-- 刷新单个地点: `just locations-refresh-id <id>` (例: `just locations-refresh-id DX12`)
-
 ### Tests
-- 全量: `just test` or `go test ./... -v`
-- 简略: `just test-short` or `go test ./...`
+- 单元测试: `just test` or `go test ./... -v` (Go 单元测试)
 - 路由回归测试: `just route-regression` (验证室外距离/耗时/路径节点链)
-- 完整测试: `just full-test` (build + test + api-test)
 
 ### Single package test
 - `go test ./internal/graph -v`

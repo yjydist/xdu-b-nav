@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-	"xd-b-guide/internal/amap"
-	"xd-b-guide/internal/graph"
+	"xdu-b-nav/internal/amap"
+	"xdu-b-nav/internal/graph"
 )
 
 // PathStep 路径步骤

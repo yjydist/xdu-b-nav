@@ -2,7 +2,7 @@ package navigation
 
 import (
 	"testing"
-	"xd-b-guide/internal/graph"
+	"xdu-b-nav/internal/graph"
 )
 
 func TestFindShortestPath(t *testing.T) {

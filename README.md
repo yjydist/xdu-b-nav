@@ -1,6 +1,6 @@
-# B 楼导航系统
+# xdu-b-nav
 
-一个基于 Go 的室内导航系统，提供从宿舍到 B 楼教室的最短路径规划。
+西电 B 楼导航系统，基于 Go + React 的室内外导航应用。
 
 ## 功能特点
 
@@ -12,7 +12,7 @@
 ## 项目结构
 
 ```
-xd-b-guide/
+xdu-b-nav/
 ├── cmd/server/          # 主程序入口
 │   └── main.go
 ├── internal/
@@ -90,19 +90,6 @@ cp .env.example .env
   "lng": 108.8488,
   "enabled": true
 }
-```
-
-如果你调整了 `full_name`（例如为了命中更精准地点），可以用刷新脚本批量/单点更新坐标：
-
-```bash
-# 预览刷新（不写文件）
-just locations-refresh-dry
-
-# 刷新全部并写回 config/locations.json
-just locations-refresh
-
-# 仅刷新单点（示例）
-just locations-refresh-id DX12
 ```
 
 ### 2. 运行服务器
