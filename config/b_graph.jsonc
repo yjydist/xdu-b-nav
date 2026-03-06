@@ -1,16 +1,4 @@
 {
-    "schema": "campus-routing-graph/v1",
-    "building": "B楼南楼",
-    "assumptions": {
-        "east_is_left_on_map": true,
-        "stair_indexing": "东到西编号递增（东边编号最小）",
-        "costs": {
-            "stair_between_floors": 20,
-            "room_to_room_adjacent_same_floor": 30,
-            "stair_to_room_adjacent_same_floor": 8,
-            "exit_to_adjacent_node": 8
-        }
-    },
     "nodes": [
         {
             "id": "E1",
