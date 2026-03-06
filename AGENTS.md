@@ -1,217 +1,221 @@
 # AGENTS.md
-Practical guidance for coding agents in this repository.
-Scope: whole repository (`/Users/yjydist/Repo/xdu-b-nav`).
 
-## 关于本文档
+`xdu-b-nav` 仓库智能体执行规范（唯一真源）。
 
-本文档是 AI 编程助手的指导文件，具有以下特点：
-- **启动时读取**：每次会话开始时，AI 会自动读取此文件获取项目上下文
-- **手动更新**：本文档需要开发者手动维护，当项目结构或规范变化时及时更新
-- **优先级**：本文档的规则高于 AI 的默认行为，但低于用户的直接指令
+## 0. 文档定位与优先级
+- 本文件是仓库内开发规范的唯一真源（single source of truth）。
+- 任何会话都不能只在开始时读取一次本文件，必须按“重读触发器”持续重读。
+- 规则冲突处理优先级（从高到低）：
+  1. 用户当前指令
+  2. 系统/安全约束
+  3. Cursor/Copilot 规则
+  4. AGENTS.md
+  5. 默认行为
 
----
+## 1. 规则文件发现结果（仓库本地）
+已检查以下位置：
+- `AGENTS.md`：存在
+- `.cursor/rules/`：不存在
+- `.cursorrules`：不存在
+- `.github/copilot-instructions.md`：不存在
 
-## 1) Project Overview
-- Language: Go (`go 1.21`) + React 18 + Vite 5
-- Type: Go backend + React frontend (前后端分离)
-- Domain: 校园导航（室外高德 API + 室内图最短路）
-- Entry: `cmd/server/main.go`
-- Core packages:
-  - `internal/amap`: 高德 Web 服务 API 集成
-  - `internal/graph`: 图数据加载与查询
-  - `internal/navigation`: 路径算法与路线组装
-  - `internal/handler`: HTTP 接口
-- Frontend:
-  - `frontend/`: Vite + React + MUI 前端项目
+维护要求：
+- 若未来新增上述 Cursor/Copilot 规则文件，必须先更新本文件再执行开发任务。
 
-## 2) Build / Run / Test Commands
-Prefer `just` first (`justfile`). Use `just --list` to see all commands.
+## 2. 项目范围与技术栈
+- 后端：Go 1.21（模块 `xdu-b-nav`）
+- 前端：Vite 5 + React 18 + MUI
+- 包管理器：Bun（前端）
+- 命令入口：`justfile`
+- 地图服务：高德 API（可选，未配置时有降级逻辑）
+- 图配置：`config/b_graph.jsonc`
 
-### Build / Run / Stop
-- 后端开发运行: `just run` or `go run ./cmd/server`
-- 后端构建: `just build` or `go build -o server ./cmd/server`
-- 停止: `just stop` (pkill -f "./server")
-- 开发模式: `just dev` (uses `air` if installed, falls back to `go run`)
-- 清理构建产物: `just clean`
+## 3. 目录结构与职责
+- `cmd/server/main.go`：服务启动、环境变量加载、路由注册、优雅停机
+- `internal/graph`：图结构、JSONC 读取、邻接表构建
+- `internal/navigation`：Dijkstra 最短路与室内外路径拼接
+- `internal/amap`：高德接口封装与地点坐标存储
+- `internal/handler`：HTTP Handler、参数校验、JSON 响应
+- `config/b_graph.jsonc`：楼内节点/边权重定义
+- `config/locations.json`：室外起点与出口坐标
+- `frontend/src/api`：前端 API 请求封装
+- `frontend/src/components`：前端页面组件
 
-### Frontend Commands (使用 Bun)
-- 前端安装依赖: `cd frontend && bun install`
-- 前端开发运行: `cd frontend && bun run dev`
-- 前端构建: `cd frontend && bun run build`
-- 前端预览构建: `cd frontend && bun run preview`
+## 4. 环境准备
+后端依赖：
+```bash
+go mod tidy
+```
 
-### Format / Lint
-- 格式化: `just fmt` or `go fmt ./...`
-- 目前无专用 linter 配置；如新增，建议 `golangci-lint`。
+前端依赖：
+```bash
+cd frontend
+bun install
+```
 
-### Dependencies
-- `just deps` or `go mod tidy`
+可选环境变量：
+```bash
+cp .env.example .env
+```
 
-### Tests
-- 单元测试: `just test` or `go test ./... -v` (Go 单元测试)
-- 路由回归测试: `just route-regression` (验证室外距离/耗时/路径节点链)
+## 5. 构建 / 运行 / 格式化 / 测试命令基线
+优先使用 `just`：
+```bash
+just build      # go build -o server ./cmd/server
+just run        # go run ./cmd/server
+just test       # go test ./... -v
+just fmt        # go fmt ./...
+just dev        # air 存在时用 air，否则 go run
+just api-test   # 启动服务并执行 API 烟测 + 回归检查
+```
 
-### Single package test
-- `go test ./internal/graph -v`
-- `go test ./internal/navigation -v`
+直接命令：
+```bash
+go build -o server ./cmd/server
+go run ./cmd/server
+go fmt ./...
+go test ./... -v
+```
 
-### Single test function
-- `go test ./internal/navigation -run TestFindShortestPath -v`
-- `go test ./internal/graph -run TestLoadGraph -v`
+前端命令：
+```bash
+cd frontend
+bun run dev
+bun run build
+bun run preview
+```
 
-### API smoke test
-- `just api-test`
-- 需要服务已运行在 `localhost:8080`
+## 6. 单元测试命令（重点）
+单包：
+```bash
+go test ./internal/graph -v
+go test ./internal/navigation -v
+```
 
-## 3) Environment / Configuration
-Use `.env` locally; never commit secrets.
+单函数：
+```bash
+go test ./internal/graph -run TestLoadGraph -v
+go test ./internal/navigation -run TestFindBestRoute -v
+```
 
-### Config Files
-- `config/locations.json`: 起点/终点坐标配置（包含 `display_name` 用于前端展示，`full_name` 用于高德地理检索）
-- `config/b_graph.jsonc`: 室内拓扑图数据
-- `.env.example`: 环境变量示例文件
+正则多函数：
+```bash
+go test ./internal/navigation -run "TestFindShortestPath|TestFindBestRoute" -v
+go test ./internal/graph -run "TestLoadGraph|TestGetFloor" -v
+```
 
-### Tools
-- `cmd/tools/refresh-locations`: 坐标刷新工具，用于更新 `config/locations.json` 中的地点坐标
+执行策略：
+- 先跑受影响包/函数，再跑 `go test ./... -v`。
+- 仓库当前无独立 linter；`go fmt ./...` 是基础格式门禁。
 
-### Environment Variables
-Important vars:
-- `PORT` (default `8080`)
-- `GRAPH_PATH` (default `config/b_graph.jsonc`)
-- `AMAP_API_KEY` (后端 Web 服务 API)
-- `AMAP_JS_API_KEY` (前端 JS 地图 key)
-- `AMAP_SECURITY_CODE` (前端 JS 安全码)
+## 7. 代码风格事实（基于当前仓库实现）
+### 7.1 Go 代码
+- 导入顺序：标准库 -> 第三方 -> 本仓库内部包（内部包路径使用 `xdu-b-nav/...`）。
+- 命名：
+  - 导出标识符使用 PascalCase（如 `FindBestRoute`）。
+  - 非导出标识符使用 camelCase（如 `buildPathSteps`）。
+  - 错误变量统一使用 `err`。
+- 类型使用：
+  - API 返回优先使用稳定 struct 定义。
+  - JSON 字段命名保持 snake_case 兼容现有接口（如 `error_message`、`total_weight`）。
+- 错误处理：
+  - 内部逻辑返回 error，不使用 panic。
+  - 包装错误时提供上下文（`fmt.Errorf("...: %w", err)`）。
+  - Handler 先校验再返回错误，使用正确 HTTP 状态码。
+- HTTP/JSON 约定：
+  - 设置 `Content-Type: application/json`。
+  - 显式拒绝不支持的 HTTP 方法。
+  - 错误响应保持 `{ "success": false, "error_message": "..." }` 结构。
 
-Notes:
-- 后端通过 `os.Getenv` 读取配置。
-- 前端通过 `/api/config` 获取地图配置。
-- JS key 缺失时前端应降级为文字路线展示。
+### 7.2 前端代码
+- 使用函数组件 + Hooks。
+- 状态尽量就近管理，共享状态再提升。
+- API 请求统一放在 `frontend/src/api`，组件层避免分散直接请求。
+- 组件名 PascalCase，变量/函数 camelCase。
+- 对加载态、错误态、成功态提供明确 UI 反馈。
 
-### Key Code Locations
-- 主入口: `cmd/server/main.go`
-- 配置文件读取: `internal/amap/location_store.go`
-- 图数据加载: `internal/graph/graph.go`
-- 导航算法: `internal/navigation/navigation.go`
-- 坐标刷新工具: `cmd/tools/refresh-locations/main.go`
+## 8. 图数据契约
+`config/b_graph.jsonc` 当前核心依赖：
+- `nodes`
+- `edges`
 
-## 4) Go Code Style
-Follow existing code style first.
+约束：
+- `edges[].w` 直接作为边权重。
+- 节点 ID 必须唯一。
+- 每条边的两端都必须在 `nodes` 中存在。
+- 保证关键路径连通，避免导航断路。
 
-### Formatting / imports
-- 必须 `go fmt`。
-- imports 按标准库/第三方/本地包分组（遵循 `go fmt`）。
+节点 ID 语义：
+- `Bxxx`：房间/教室（如 `B301`）
+- `S_ST{n}_F{m}`：楼梯（如 `S_ST2_F5`）
+- `E{n}`：入口/出口（如 `E1`）
 
-### Naming
-- 文件名小写、语义化：`graph.go`, `navigation.go`。
-- 导出标识符 PascalCase，非导出 camelCase。
-- 动作函数用动词前缀：`FindBestRoute`, `LoadGraph`。
+## 9. 开发节奏规范（内置版）
+- 全程中文沟通（分析、提问、总结、代码说明）。
+- 新增/修改代码时，对非显然逻辑优先写中文注释，重点解释“为什么”。
+- 接到任务后先拆 TODO，再按顺序执行。
+- 复杂任务默认小步推进，避免一次性大改。
+- 提交前必须检查变更范围与目标分支是否匹配。
 
-### Types
-- 请求/响应结构体靠近 handler。
-- 第三方 API 响应结构体放 `internal/amap`。
-- 外部返回格式不稳定时才使用 `interface{}`。
+## 10. Git 分支与发布规范（内置版）
+长期分支：
+- `main`：生产稳定分支
+- `dev`：开发主线分支
 
-### Error handling
-- 统一包装错误上下文：`fmt.Errorf("...: %w", err)`。
-- handler 使用统一 JSON 错误返回（`sendError`）。
-- 先做输入校验（method、必填、格式）。
-- 不要对用户输入导致的问题使用 panic。
+常规分支（必须从 `dev` 拉取并回合到 `dev`）：
+- `feature/*`
+- `fix/*`
+- `refactor/*`
+- `chore/*`
+- `docs/*`
 
-### Logging
-- 用 `log.Printf` 输出运行日志。
-- 使用短上下文标签：`[API]`, `[导航请求]`, `[高德 API]`。
-- 禁止输出密钥、令牌等敏感信息。
+紧急分支：
+- `hotfix/*` 必须从 `main` 创建，并同时合并回 `main` 和 `dev`。
 
-## 5) Frontend Conventions
-- 使用 Vite + React 构建前端项目。
-- 使用 MUI (Material UI) 实现 Material Design 3 风格。
-- 文本渲染需做转义（防止 XSS 攻击）。
-- 地图逻辑保持模块化：`initMap`、`renderOutdoorMap`。
-- 地图不可用时保留可用的文字路线降级。
-- 组件文件使用 PascalCase 命名（如 `RouteForm.jsx`）。
-- 样式优先使用 MUI 组件，其次使用 CSS-in-JS。
+发布流程：
+- `dev` 合并到 `main` 后，在 `main` 打版本 tag。
 
-## 6) Routing Logic Expectations
-- 室外：起点 -> B 楼目标（高德步行路径）。
-- 室内：从候选入口中选到目的地最短路径。
-- 室内算法：Dijkstra on `b_graph.jsonc`。
-- 修改边权时保持语义一致并验证路径合理性。
+明确禁止：
+- 直接在 `main` 上进行功能开发提交。
+- 将 `feature/*` 或 `fix/*` 直接合并到 `main`。
+- 从 `dev` 创建 `hotfix/*`。
+- 未经明确授权的强制推送。
 
-## 7) Data File Rules (`b_graph.jsonc`)
-- 作为室内拓扑 source-of-truth。
-- 保持 ID 稳定：`E*`, `S_ST*_F*`, `B***`。
-- label 改动要谨慎（影响人类可读指引）。
-- 调整边/权重后需跑测试并抽样验证路线。
+## 11. AGENTS 强制重读与更新机制（必须执行）
+### 11.1 重读触发器
+在以下时机必须重读 `AGENTS.md`：
+- 会话开始时
+- 执行 `git switch` / `git pull` / `git merge` / `git rebase` 后
+- 执行 `commit` / `merge` / `push` 前
+- 用户明确提出“规范有更新”或“请重读 AGENTS.md”时
+- 长会话每 8-10 轮进行一次一致性重读
 
-## 8) Git / Change Management
-- 变更要小而聚焦，不做无关重构。
-- 禁止提交敏感文件：`.env`、密钥、token。
-- 禁止提交构建产物：`./server`（项目根目录的二进制）、日志、备份文件。
-- 修改后至少跑受影响包测试。
-- 修改 API 协议时需确认前端兼容。
-- 关键路由改动后执行 `just route-regression` 验证。
+### 11.2 更新触发器
+出现以下任一情况，必须更新 `AGENTS.md`：
+- 用户新增流程约束、命名规则、提交规范、发布规范
+- 发现本文件与仓库实际命令/结构/契约不一致
+- 新增了 Cursor/Copilot 规则文件
 
-<!-- synced: 2026-03-05 -->
+触发后动作（固定顺序）：
+1. 先更新 `AGENTS.md`
+2. 再在回复中明确声明：`已更新并重读 AGENTS.md，后续按新规则执行`
 
-## 9) Cursor/Copilot Rule Files Check
-Checked:
-- `.cursor/rules/`
-- `.cursorrules`
-- `.github/copilot-instructions.md`
+## 12. Agent 执行清单
+改动前：
+- 阅读受影响模块与现有实现模式。
+- 检查是否涉及 API 契约、配置契约、数据契约。
+- 若任务复杂，先给出 TODO 拆解再实施。
 
-Status: none found in this repository.
-If added later, those files become higher-priority supplements.
+改动后：
+- 先跑针对性测试（包/函数级），再跑更大范围回归。
+- Go 改动后执行 `go fmt ./...`。
+- 汇报变更文件与验证命令。
 
-## 10) 开发规范
+提交前：
+- 重读 `AGENTS.md`（强制）。
+- 确认分支类型与来源分支符合 Git 工作流规范。
+- 确认提交内容聚焦、无敏感信息（如 `.env`、密钥、凭证）。
 
-### 10.1 交流规范
-- 所有对话、解释、提问一律使用**中文**
-
-### 10.2 代码规范
-- 所有新增或修改的代码，必须附加**详细的中文注释**
-- 注释要解释"为什么这样做"，而不只是"做了什么"
-- 关键逻辑、复杂算法、重要配置都必须有注释
-
-### 10.3 开发节奏
-- 拿到需求后，首先将整个开发任务**拆分成多个有序的 TODO**，按顺序列出
-- 每次只完成**一个 TODO**，完成后暂停等待确认，不要一次性实现所有功能
-- TODO 粒度要适中：一个 TODO 对应一次有意义的 git commit
-
-### 10.4 Git 规范
-- 每完成一个 TODO，立即执行 `git add` 和 `git commit`
-- commit 前先用 `git status` 确认改动范围是否符合预期
-- commit message 格式：第一行写总结性概括（直接描述做了什么，不要加 TODO 前缀），换行后用 Conventional Commits 列出具体变更
-
-### 10.5 Git 分支工作流
-采用双主线驱动配合临时分支的模型：
-
-| 分支 | 用途 | 规则 |
-|------|------|------|
-| `main` | 生产环境稳定发布分支 | 绝对禁止直接开发，仅接受 dev 或 hotfix 合并，每次合并后必须打 Tag |
-| `dev` | 开发主线分支 | 所有新功能和日常修复最终都必须合并到这里，禁止直接提交 |
-| `feature/` | 从 dev 创建的新功能分支 | 完成开发后合并回 dev 并删除 |
-| `fix/` | 从 dev 创建的日常 Bug 修复分支 | 完成开发后合并回 dev 并删除 |
-| `hotfix/` | 从 main 创建的紧急修复分支 | 必须同时合并到 main 和 dev，合并后必须在 main 上打补丁 Tag |
-| `refactor/` | 从 dev 创建的代码重构分支 | 完成开发后合并回 dev 并删除 |
-| `chore/` | 从 dev 创建的构建配置/依赖更新/CI 等杂项分支 | 完成开发后合并回 dev 并删除 |
-| `docs/` | 从 dev 创建的文档更新分支 | 完成开发后合并回 dev 并删除 |
-
-#### 版本发布流程
-1. 确认 `dev` 已通过测试
-2. 将 `dev` 合并到 `main`
-3. 在合并节点执行 `git tag -a v<x.y.z> -m "release: v<x.y.z>"`
-4. 执行 `git push origin main --tags`
-
-#### 绝对禁止事项
-- 禁止直接在 `main` 或 `dev` 上提交代码
-- 禁止将 `feature/` / `fix/` 等临时分支直接合并到 `main`
-- 禁止从 `dev` 创建 `hotfix/` 分支
-- 禁止 `hotfix/` 只合并到 `main` 而遗漏 `dev`
-- 无充分理由禁止使用 `git push -f`
-
-## 11) Pre-merge Checklist
-- [ ] `go fmt ./...`
-- [ ] `go test ./... -v`（或受影响包至少通过）
-- [ ] API 关键路径手动冒烟验证
-- [ ] 未暂存 `.env` 与二进制/备份文件
-- [ ] 文档与配置说明已更新
+## 13. 一致性维护说明
+- 当 README、justfile、代码行为发生变化且影响开发流程时，需同步更新本文件。
+- 若本文件与实际不一致，以“先修正文档再执行”作为默认策略。
