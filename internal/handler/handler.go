@@ -5,10 +5,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 	"xdu-b-nav/internal/amap"
 	"xdu-b-nav/internal/navigation"
 )
+
+var destinationPattern = regexp.MustCompile(`^B\d{3}$`)
 
 type Handler struct {
 	navigator  *navigation.Navigator
@@ -88,8 +91,8 @@ func (h *Handler) RouteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 验证目的地格式（应该是 B 开头加数字）
-	if !strings.HasPrefix(req.Destination, "B") {
+	// 验证目的地格式（B + 3 位数字，如 B301）
+	if !destinationPattern.MatchString(req.Destination) {
 		h.sendError(w, "目的地格式错误，应该是教室号（如 B301）", http.StatusBadRequest)
 		return
 	}
@@ -156,7 +159,10 @@ func (h *Handler) ExitsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	exits := h.navigator.Graph.GetExits()
-	exitLocations := h.amapClient.GetExitLocations()
+	exitLocationMap := map[string]amap.Location{}
+	if h.amapClient != nil {
+		exitLocationMap = h.amapClient.GetExitLocationMap()
+	}
 
 	type ExitInfo struct {
 		ID        string  `json:"id"`
@@ -165,16 +171,25 @@ func (h *Handler) ExitsHandler(w http.ResponseWriter, r *http.Request) {
 		Longitude float64 `json:"longitude"`
 	}
 
-	exitInfos := make([]ExitInfo, len(exits))
-	for i, exit := range exits {
-		exitInfos[i] = ExitInfo{
-			ID: exit,
+	exitInfos := make([]ExitInfo, 0, len(exits))
+	for _, exitID := range exits {
+		info := ExitInfo{ID: exitID, Name: exitID}
+
+		if node, ok := h.navigator.Graph.GetNode(exitID); ok && node.Label != "" {
+			info.Name = node.Label
 		}
-		if i < len(exitLocations) {
-			exitInfos[i].Name = exitLocations[i].Address
-			exitInfos[i].Latitude = exitLocations[i].Latitude
-			exitInfos[i].Longitude = exitLocations[i].Longitude
+
+		if loc, ok := exitLocationMap[exitID]; ok {
+			if loc.Address != "" {
+				info.Name = loc.Address
+			} else if loc.Name != "" {
+				info.Name = loc.Name
+			}
+			info.Latitude = loc.Latitude
+			info.Longitude = loc.Longitude
 		}
+
+		exitInfos = append(exitInfos, info)
 	}
 
 	log.Printf("[API] 获取出口列表，共 %d 个", len(exits))
