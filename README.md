@@ -176,13 +176,18 @@ bun run build   # 构建生产版本
 
 获取所有出口信息
 
-## 权重说明
+## 图数据约定
 
-室内导航的权重设置：
-- 上下楼（楼梯）：20
-- 教室 ↔ 教室（同层相邻）：30
-- 楼梯口 ↔ 教室（同层相邻）：8
-- 出口 ↔ 相邻节点：8
+`config/b_graph.jsonc` 只保留两类信息：
+- `nodes`：节点定义
+- `edges`：边定义（`w` 为边权重）
+
+节点 ID 约定：
+- `Bxxx`：教室/房间节点（例如 `B301`）
+- `S_ST{n}_F{m}`：第 `n` 个楼梯在第 `m` 层的楼梯口（例如 `S_ST2_F5`）
+- `E{n}`：建筑出口节点（例如 `E1`）
+
+权重由 `edges` 中每条边的 `w` 直接定义，不再额外维护统一权重配置。
 
 ## 技术栈
 
@@ -255,7 +260,7 @@ just route-regression
 
 ### 修改权重
 
-在 `config/b_graph.jsonc` 的 `assumptions.costs` 中修改各类边的权重。
+在 `config/b_graph.jsonc` 的 `edges` 数组中，直接修改对应边的 `w`。
 
 ## License
 
