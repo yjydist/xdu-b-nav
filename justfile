@@ -61,7 +61,7 @@ api-test:
     @curl -s http://localhost:8080/api/starts | python3 -c "import sys,json;d=json.load(sys.stdin);r=d.get('starts',[]);print(f'  {len(r)} 个起点')"
     @echo ""
     @echo "4. 前端配置 /api/config:"
-    @curl -s http://localhost:8080/api/config | python3 -c "import sys,json;d=json.load(sys.stdin);print(f'  js_api_key: {\"已配置\" if d.get(\"amap_js_key\") else \"未配置\"}')"
+    @curl -s http://localhost:8080/api/config | python3 -c "import sys,json;d=json.load(sys.stdin);print(f'  js_api_key: {\"已配置\" if d.get(\"amap_js_api_key\") else \"未配置\"}')"
     @echo ""
     @echo "5. 坐标映射 /api/coordinates:"
     @curl -s http://localhost:8080/api/coordinates | python3 -c "import sys,json;d=json.load(sys.stdin);r=d.get('coordinates',[]);print(f'  {len(r)} 个坐标点')"

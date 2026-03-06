@@ -35,7 +35,16 @@ func main() {
 
 	graphPath := os.Getenv("GRAPH_PATH")
 	if graphPath == "" {
-		graphPath = "b_graph.jsonc"
+		// 默认优先使用根目录 graph.json（更简洁），
+		// 为了兼容当前仓库结构，若不存在则回退到 config/b_graph.jsonc。
+		graphPath = "graph.json"
+		if _, err := os.Stat(graphPath); err != nil {
+			legacyPath := "config/b_graph.jsonc"
+			if _, legacyErr := os.Stat(legacyPath); legacyErr == nil {
+				log.Printf("[配置] 未找到默认图文件 %s，回退到 %s", graphPath, legacyPath)
+				graphPath = legacyPath
+			}
+		}
 	}
 
 	g, err := graph.LoadGraph(graphPath)

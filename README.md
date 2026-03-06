@@ -44,7 +44,7 @@ cp .env.example .env
 | 变量名 | 说明 | 默认值 |
 |--------|------|--------|
 | `PORT` | 服务器端口 | `8080` |
-| `GRAPH_PATH` | 图数据文件路径 | `config/b_graph.jsonc` |
+| `GRAPH_PATH` | 图数据文件路径 | `graph.json`（不存在时回退 `config/b_graph.jsonc`） |
 | `AMAP_API_KEY` | 高德 Web 服务 API Key（后端路径规划） | 无（使用模拟数据） |
 | `AMAP_JS_API_KEY` | 高德 Web 端 JS API Key（前端地图显示） | 无（仅文字显示） |
 | `AMAP_SECURITY_CODE` | 高德 JS API 安全密钥 | 无 |
@@ -125,7 +125,13 @@ bun run build   # 构建生产版本
 
 前端默认在 http://localhost:5173，它会自动代理 API 请求到后端（8080 端口）。
 
-### 4. 访问应用
+### 4. 部署接入说明（生产）
+
+- 默认推荐：前端与 API 走同域，前端继续使用相对路径 `/api`。
+- 若采用反向代理（Nginx/Caddy 等），只需把 `/api` 转发到 Go 服务（如 `127.0.0.1:8080`）。
+- 若采用前后端分域直连，需要把 `frontend/src/api/index.js` 的 `API_BASE` 改为后端完整域名，并同步配置 CORS 白名单。
+
+### 5. 访问应用
 
 打开浏览器访问：http://localhost:8080（后端）或 http://localhost:5173（前端开发服务器）
 
@@ -233,7 +239,7 @@ go test ./... -v
 导航回归（推荐每次改动后执行）：
 
 ```bash
-just route-regression
+just api-test
 ```
 
 该回归会自动校验：

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -387,11 +388,35 @@ func (c *AMapClient) FindRouteToBuilding(startName string) (*Location, *WalkingR
 	return startLoc, route, nil
 }
 
-// GetExitLocations 获取 B 楼所有出口位置
-// 已废弃：室外导航不使用入口坐标，入口是室内拓扑图概念（b_graph.jsonc）
-// 保留此函数返回空数组，避免编译错误
+// GetExitLocationMap 获取出口坐标映射（key 为入口 ID，如 E1/E2）。
+// 之所以返回 map：避免按数组顺序对齐出口列表时出现错位。
+func (c *AMapClient) GetExitLocationMap() map[string]Location {
+	result := make(map[string]Location)
+	if c.locationStore == nil {
+		return result
+	}
+
+	for _, p := range c.locationStore.ExitPoints {
+		result[p.ID] = Location{
+			Name:      p.DisplayName,
+			Latitude:  p.Latitude,
+			Longitude: p.Longitude,
+			Address:   p.FullName,
+		}
+	}
+
+	return result
+}
+
+// GetExitLocations 获取 B 楼所有出口位置。
+// 保留该函数以兼容旧调用方，新代码优先使用 GetExitLocationMap。
 func (c *AMapClient) GetExitLocations() []Location {
-	return []Location{}
+	locationMap := c.GetExitLocationMap()
+	result := make([]Location, 0, len(locationMap))
+	for _, loc := range locationMap {
+		result = append(result, loc)
+	}
+	return result
 }
 
 // GetBBuildingLocation 获取 B 楼中心位置
@@ -412,61 +437,11 @@ func (c *AMapClient) GetBBuildingLocation() *Location {
 // haversine 计算两点之间的球面距离（米）
 func haversine(lat1, lon1, lat2, lon2 float64) float64 {
 	const R = 6371000
-	dLat := (lat2 - lat1) * 0.017453292519943295
-	dLon := (lon2 - lon1) * 0.017453292519943295
-	a := (1-mathCos(dLat))/2 + mathCos(lat1*0.017453292519943295)*mathCos(lat2*0.017453292519943295)*(1-mathCos(dLon))/2
-	c := 2 * mathAtan2(mathSqrt(a), mathSqrt(1-a))
+	dLat := (lat2 - lat1) * math.Pi / 180
+	dLon := (lon2 - lon1) * math.Pi / 180
+	lat1Rad := lat1 * math.Pi / 180
+	lat2Rad := lat2 * math.Pi / 180
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) + math.Cos(lat1Rad)*math.Cos(lat2Rad)*math.Sin(dLon/2)*math.Sin(dLon/2)
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 	return R * c
-}
-
-func mathCos(x float64) float64 {
-	for x < -3.141592653589793 {
-		x += 2 * 3.141592653589793
-	}
-	for x > 3.141592653589793 {
-		x -= 2 * 3.141592653589793
-	}
-	x2 := x * x
-	return 1 - x2/2 + x2*x2/24 - x2*x2*x2/720
-}
-
-func mathSqrt(x float64) float64 {
-	if x <= 0 {
-		return 0
-	}
-	z := x
-	for i := 0; i < 10; i++ {
-		z = (z + x/z) / 2
-	}
-	return z
-}
-
-func mathAtan2(y, x float64) float64 {
-	if x > 0 {
-		return mathAtan(y / x)
-	}
-	if x < 0 && y >= 0 {
-		return mathAtan(y/x) + 3.141592653589793
-	}
-	if x < 0 && y < 0 {
-		return mathAtan(y/x) - 3.141592653589793
-	}
-	if x == 0 && y > 0 {
-		return 3.141592653589793 / 2
-	}
-	if x == 0 && y < 0 {
-		return -3.141592653589793 / 2
-	}
-	return 0
-}
-
-func mathAtan(x float64) float64 {
-	if x > 1 {
-		return 3.141592653589793/2 - mathAtan(1/x)
-	}
-	if x < -1 {
-		return -3.141592653589793/2 - mathAtan(1/x)
-	}
-	x2 := x * x
-	return x - x*x2/3 + x*x2*x2/5 - x*x2*x2*x2/7
 }
