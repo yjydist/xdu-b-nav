@@ -14,6 +14,22 @@ import RouteForm from './components/RouteForm';
 import RouteResult from './components/RouteResult';
 import { fetchStarts, fetchRooms, fetchRoute } from './api';
 
+function extractFloorFromRoom(roomId) {
+  const match = /^B(\d+)$/.exec(roomId);
+  if (!match) {
+    return null;
+  }
+
+  const digits = match[1];
+  if (digits.length < 3) {
+    return null;
+  }
+
+  const floorDigits = digits.slice(0, digits.length - 2);
+  const floor = Number.parseInt(floorDigits, 10);
+  return Number.isNaN(floor) ? null : floor;
+}
+
 /**
  * 应用根组件
  * 负责整体布局和状态管理
@@ -62,7 +78,10 @@ function App() {
         if (roomsData.rooms) {
           const floors = {};
           roomsData.rooms.forEach(room => {
-            const floor = parseInt(room.substring(1, 2));
+            const floor = extractFloorFromRoom(room);
+            if (floor === null) {
+              return;
+            }
             if (!floors[floor]) {
               floors[floor] = [];
             }
