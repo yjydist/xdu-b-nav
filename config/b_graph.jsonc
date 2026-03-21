@@ -1,1351 +1,2216 @@
 {
-    "nodes": [
-        {
-            "id": "E1",
-            "type": "entrance",
-            "floor": 1,
-            "label": "东端出口 (近 101/105，一楼)"
-        },
-        {
-            "id": "E2",
-            "type": "entrance",
-            "floor": 1,
-            "label": "106 附近出口 (一楼)"
-        },
-        {
-            "id": "E3",
-            "type": "entrance",
-            "floor": 1,
-            "label": "107 附近出口 (一楼)"
-        },
-        {
-            "id": "E4",
-            "type": "entrance",
-            "floor": 1,
-            "label": "318/320 附近出口 (一楼)"
-        },
-        {
-            "id": "E5",
-            "type": "entrance",
-            "floor": 1,
-            "label": "西端出口 (近 422，一楼)"
-        },
-        {
-            "id": "S_ST1_F1",
-            "type": "stair",
-            "floor": 1,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 1F"
-        },
-        {
-            "id": "S_ST1_F2",
-            "type": "stair",
-            "floor": 2,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 2F"
-        },
-        {
-            "id": "S_ST1_F3",
-            "type": "stair",
-            "floor": 3,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 3F"
-        },
-        {
-            "id": "S_ST1_F4",
-            "type": "stair",
-            "floor": 4,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 4F"
-        },
-        {
-            "id": "S_ST1_F5",
-            "type": "stair",
-            "floor": 5,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 5F"
-        },
-        {
-            "id": "S_ST1_F6",
-            "type": "stair",
-            "floor": 6,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 6F"
-        },
-        {
-            "id": "S_ST1_F7",
-            "type": "stair",
-            "floor": 7,
-            "label": "大楼梯 (东侧主楼梯，近 101/201/301/401/501/601) 7F"
-        },
-        {
-            "id": "S_ST2_F1",
-            "type": "stair",
-            "floor": 1,
-            "label": "2 号楼梯 (近 206/306/406) 1F"
-        },
-        {
-            "id": "S_ST2_F2",
-            "type": "stair",
-            "floor": 2,
-            "label": "2 号楼梯 (近 206/306/406) 2F"
-        },
-        {
-            "id": "S_ST2_F3",
-            "type": "stair",
-            "floor": 3,
-            "label": "2 号楼梯 (近 206/306/406) 3F"
-        },
-        {
-            "id": "S_ST2_F4",
-            "type": "stair",
-            "floor": 4,
-            "label": "2 号楼梯 (近 206/306/406) 4F"
-        },
-        {
-            "id": "S_ST2_F5",
-            "type": "stair",
-            "floor": 5,
-            "label": "2 号楼梯 (近 206/306/406) 5F"
-        },
-        {
-            "id": "S_ST2_F6",
-            "type": "stair",
-            "floor": 6,
-            "label": "2 号楼梯 (近 206/306/406) 6F"
-        },
-        {
-            "id": "S_ST2_F7",
-            "type": "stair",
-            "floor": 7,
-            "label": "2 号楼梯 (近 206/306/406) 7F"
-        },
-        {
-            "id": "S_ST3_F1",
-            "type": "stair",
-            "floor": 1,
-            "label": "3 号楼梯 (近 211/311/411/507) 1F"
-        },
-        {
-            "id": "S_ST3_F2",
-            "type": "stair",
-            "floor": 2,
-            "label": "3 号楼梯 (近 211/311/411/507) 2F"
-        },
-        {
-            "id": "S_ST3_F3",
-            "type": "stair",
-            "floor": 3,
-            "label": "3 号楼梯 (近 211/311/411/507) 3F"
-        },
-        {
-            "id": "S_ST3_F4",
-            "type": "stair",
-            "floor": 4,
-            "label": "3 号楼梯 (近 211/311/411/507) 4F"
-        },
-        {
-            "id": "S_ST3_F5",
-            "type": "stair",
-            "floor": 5,
-            "label": "3 号楼梯 (近 211/311/411/507) 5F"
-        },
-        {
-            "id": "S_ST3_F6",
-            "type": "stair",
-            "floor": 6,
-            "label": "3 号楼梯 (近 211/311/411/507) 6F"
-        },
-        {
-            "id": "S_ST3_F7",
-            "type": "stair",
-            "floor": 7,
-            "label": "3 号楼梯 (近 211/311/411/507) 7F"
-        },
-        {
-            "id": "S_ST4_F1",
-            "type": "stair",
-            "floor": 1,
-            "label": "4 号楼梯 (近 216/314/414/510) 1F"
-        },
-        {
-            "id": "S_ST4_F2",
-            "type": "stair",
-            "floor": 2,
-            "label": "4 号楼梯 (近 216/314/414/510) 2F"
-        },
-        {
-            "id": "S_ST4_F3",
-            "type": "stair",
-            "floor": 3,
-            "label": "4 号楼梯 (近 216/314/414/510) 3F"
-        },
-        {
-            "id": "S_ST4_F4",
-            "type": "stair",
-            "floor": 4,
-            "label": "4 号楼梯 (近 216/314/414/510) 4F"
-        },
-        {
-            "id": "S_ST4_F5",
-            "type": "stair",
-            "floor": 5,
-            "label": "4 号楼梯 (近 216/314/414/510) 5F"
-        },
-        {
-            "id": "S_ST4_F6",
-            "type": "stair",
-            "floor": 6,
-            "label": "4 号楼梯 (近 216/314/414/510) 6F"
-        },
-        {
-            "id": "S_ST4_F7",
-            "type": "stair",
-            "floor": 7,
-            "label": "4 号楼梯 (近 216/314/414/510) 7F"
-        },
-        {
-            "id": "S_ST5_F1",
-            "type": "stair",
-            "floor": 1,
-            "label": "5 号楼梯 (近 315/415/516) 1F"
-        },
-        {
-            "id": "S_ST5_F2",
-            "type": "stair",
-            "floor": 2,
-            "label": "5 号楼梯 (近 315/415/516) 2F"
-        },
-        {
-            "id": "S_ST5_F3",
-            "type": "stair",
-            "floor": 3,
-            "label": "5 号楼梯 (近 315/415/516) 3F"
-        },
-        {
-            "id": "S_ST5_F4",
-            "type": "stair",
-            "floor": 4,
-            "label": "5 号楼梯 (近 315/415/516) 4F"
-        },
-        {
-            "id": "S_ST5_F5",
-            "type": "stair",
-            "floor": 5,
-            "label": "5 号楼梯 (近 315/415/516) 5F"
-        },
-        {
-            "id": "S_ST5_F6",
-            "type": "stair",
-            "floor": 6,
-            "label": "5 号楼梯 (近 315/415/516) 6F"
-        },
-        {
-            "id": "S_ST5_F7",
-            "type": "stair",
-            "floor": 7,
-            "label": "5 号楼梯 (近 315/415/516) 7F"
-        },
-        {
-            "id": "S_ST6_F1",
-            "type": "stair",
-            "floor": 1,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 1F"
-        },
-        {
-            "id": "S_ST6_F2",
-            "type": "stair",
-            "floor": 2,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 2F"
-        },
-        {
-            "id": "S_ST6_F3",
-            "type": "stair",
-            "floor": 3,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 3F"
-        },
-        {
-            "id": "S_ST6_F4",
-            "type": "stair",
-            "floor": 4,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 4F"
-        },
-        {
-            "id": "S_ST6_F5",
-            "type": "stair",
-            "floor": 5,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 5F"
-        },
-        {
-            "id": "S_ST6_F6",
-            "type": "stair",
-            "floor": 6,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 6F"
-        },
-        {
-            "id": "S_ST6_F7",
-            "type": "stair",
-            "floor": 7,
-            "label": "6 号楼梯 (西侧楼梯，近 421/608) 7F"
-        },
-        {
-            "id": "B101",
-            "type": "room",
-            "floor": 1,
-            "label": "101"
-        },
-        {
-            "id": "B105",
-            "type": "room",
-            "floor": 1,
-            "label": "变电所105"
-        },
-        {
-            "id": "B106",
-            "type": "room",
-            "floor": 1,
-            "label": "106"
-        },
-        {
-            "id": "B107",
-            "type": "room",
-            "floor": 1,
-            "label": "107"
-        },
-        {
-            "id": "B201",
-            "type": "room",
-            "floor": 2,
-            "label": "201"
-        },
-        {
-            "id": "B203",
-            "type": "room",
-            "floor": 2,
-            "label": "203"
-        },
-        {
-            "id": "B206",
-            "type": "room",
-            "floor": 2,
-            "label": "206"
-        },
-        {
-            "id": "B207",
-            "type": "room",
-            "floor": 2,
-            "label": "207"
-        },
-        {
-            "id": "B208",
-            "type": "room",
-            "floor": 2,
-            "label": "208"
-        },
-        {
-            "id": "B211",
-            "type": "room",
-            "floor": 2,
-            "label": "211"
-        },
-        {
-            "id": "B214",
-            "type": "room",
-            "floor": 2,
-            "label": "214"
-        },
-        {
-            "id": "B215",
-            "type": "room",
-            "floor": 2,
-            "label": "215"
-        },
-        {
-            "id": "B216",
-            "type": "room",
-            "floor": 2,
-            "label": "216"
-        },
-        {
-            "id": "B217",
-            "type": "room",
-            "floor": 2,
-            "label": "217"
-        },
-        {
-            "id": "B301",
-            "type": "room",
-            "floor": 3,
-            "label": "301"
-        },
-        {
-            "id": "B303",
-            "type": "room",
-            "floor": 3,
-            "label": "303"
-        },
-        {
-            "id": "B306",
-            "type": "room",
-            "floor": 3,
-            "label": "306"
-        },
-        {
-            "id": "B307",
-            "type": "room",
-            "floor": 3,
-            "label": "307"
-        },
-        {
-            "id": "B308",
-            "type": "room",
-            "floor": 3,
-            "label": "308"
-        },
-        {
-            "id": "B311",
-            "type": "room",
-            "floor": 3,
-            "label": "311"
-        },
-        {
-            "id": "B312",
-            "type": "room",
-            "floor": 3,
-            "label": "312"
-        },
-        {
-            "id": "B314",
-            "type": "room",
-            "floor": 3,
-            "label": "314"
-        },
-        {
-            "id": "B315",
-            "type": "room",
-            "floor": 3,
-            "label": "315"
-        },
-        {
-            "id": "B316",
-            "type": "room",
-            "floor": 3,
-            "label": "316"
-        },
-        {
-            "id": "B318",
-            "type": "room",
-            "floor": 3,
-            "label": "318(消防通道)"
-        },
-        {
-            "id": "B320",
-            "type": "room",
-            "floor": 3,
-            "label": "320"
-        },
-        {
-            "id": "B401",
-            "type": "room",
-            "floor": 4,
-            "label": "401教室"
-        },
-        {
-            "id": "B403",
-            "type": "room",
-            "floor": 4,
-            "label": "403"
-        },
-        {
-            "id": "B406",
-            "type": "room",
-            "floor": 4,
-            "label": "406"
-        },
-        {
-            "id": "B407",
-            "type": "room",
-            "floor": 4,
-            "label": "407"
-        },
-        {
-            "id": "B408",
-            "type": "room",
-            "floor": 4,
-            "label": "408"
-        },
-        {
-            "id": "B411",
-            "type": "room",
-            "floor": 4,
-            "label": "411"
-        },
-        {
-            "id": "B412",
-            "type": "room",
-            "floor": 4,
-            "label": "412"
-        },
-        {
-            "id": "B414",
-            "type": "room",
-            "floor": 4,
-            "label": "414"
-        },
-        {
-            "id": "B415",
-            "type": "room",
-            "floor": 4,
-            "label": "415"
-        },
-        {
-            "id": "B416",
-            "type": "room",
-            "floor": 4,
-            "label": "416"
-        },
-        {
-            "id": "B418",
-            "type": "room",
-            "floor": 4,
-            "label": "418"
-        },
-        {
-            "id": "B419",
-            "type": "room",
-            "floor": 4,
-            "label": "419"
-        },
-        {
-            "id": "B421",
-            "type": "room",
-            "floor": 4,
-            "label": "421"
-        },
-        {
-            "id": "B422",
-            "type": "room",
-            "floor": 4,
-            "label": "422"
-        },
-        {
-            "id": "B425",
-            "type": "room",
-            "floor": 4,
-            "label": "425"
-        },
-        {
-            "id": "B426",
-            "type": "room",
-            "floor": 4,
-            "label": "426"
-        },
-        {
-            "id": "B501",
-            "type": "room",
-            "floor": 5,
-            "label": "501"
-        },
-        {
-            "id": "B502",
-            "type": "room",
-            "floor": 5,
-            "label": "502"
-        },
-        {
-            "id": "B503",
-            "type": "room",
-            "floor": 5,
-            "label": "503"
-        },
-        {
-            "id": "B506",
-            "type": "room",
-            "floor": 5,
-            "label": "506"
-        },
-        {
-            "id": "B507",
-            "type": "room",
-            "floor": 5,
-            "label": "507"
-        },
-        {
-            "id": "B509",
-            "type": "room",
-            "floor": 5,
-            "label": "509"
-        },
-        {
-            "id": "B510",
-            "type": "room",
-            "floor": 5,
-            "label": "510"
-        },
-        {
-            "id": "B513",
-            "type": "room",
-            "floor": 5,
-            "label": "513"
-        },
-        {
-            "id": "B514",
-            "type": "room",
-            "floor": 5,
-            "label": "514"
-        },
-        {
-            "id": "B516",
-            "type": "room",
-            "floor": 5,
-            "label": "516"
-        },
-        {
-            "id": "B517",
-            "type": "room",
-            "floor": 5,
-            "label": "517"
-        },
-        {
-            "id": "B520",
-            "type": "room",
-            "floor": 5,
-            "label": "520"
-        },
-        {
-            "id": "B521",
-            "type": "room",
-            "floor": 5,
-            "label": "521"
-        },
-        {
-            "id": "B601",
-            "type": "room",
-            "floor": 6,
-            "label": "601"
-        },
-        {
-            "id": "B602",
-            "type": "room",
-            "floor": 6,
-            "label": "602"
-        },
-        {
-            "id": "B603",
-            "type": "room",
-            "floor": 6,
-            "label": "603"
-        },
-        {
-            "id": "B605",
-            "type": "room",
-            "floor": 6,
-            "label": "605"
-        },
-        {
-            "id": "B606",
-            "type": "room",
-            "floor": 6,
-            "label": "606"
-        },
-        {
-            "id": "B608",
-            "type": "room",
-            "floor": 6,
-            "label": "608"
-        },
-        {
-            "id": "B609",
-            "type": "room",
-            "floor": 6,
-            "label": "609"
-        },
-        {
-            "id": "B612",
-            "type": "room",
-            "floor": 6,
-            "label": "612"
-        },
-        {
-            "id": "B613",
-            "type": "room",
-            "floor": 6,
-            "label": "613"
-        },
-        {
-            "id": "B701",
-            "type": "room",
-            "floor": 7,
-            "label": "天台701"
-        },
-        {
-            "id": "B703",
-            "type": "room",
-            "floor": 7,
-            "label": "天台703"
-        },
-        {
-            "id": "B706",
-            "type": "room",
-            "floor": 7,
-            "label": "天台706"
-        },
-        {
-            "id": "B707",
-            "type": "room",
-            "floor": 7,
-            "label": "天台707"
-        }
-    ],
-    "edges": [
-        {
-            "a": "E1",
-            "b": "B101",
-            "w": 8
-        },
-        {
-            "a": "E1",
-            "b": "B105",
-            "w": 8
-        },
-        {
-            "a": "E2",
-            "b": "B106",
-            "w": 8
-        },
-        {
-            "a": "E3",
-            "b": "B107",
-            "w": 8
-        },
-        {
-            "a": "E4",
-            "b": "B320",
-            "w": 8
-        },
-        {
-            "a": "E5",
-            "b": "B426",
-            "w": 8
-        },
-        {
-            "a": "B101",
-            "b": "B105",
-            "w": 30
-        },
-        {
-            "a": "B105",
-            "b": "S_ST1_F1",
-            "w": 8
-        },
-        {
-            "a": "S_ST1_F1",
-            "b": "B106",
-            "w": 8
-        },
-        {
-            "a": "B106",
-            "b": "B107",
-            "w": 30
-        },
-        {
-            "a": "S_ST1_F2",
-            "b": "B201",
-            "w": 8
-        },
-        {
-            "a": "B201",
-            "b": "B203",
-            "w": 30
-        },
-        {
-            "a": "B203",
-            "b": "B206",
-            "w": 30
-        },
-        {
-            "a": "B206",
-            "b": "S_ST2_F2",
-            "w": 8
-        },
-        {
-            "a": "S_ST2_F2",
-            "b": "B207",
-            "w": 8
-        },
-        {
-            "a": "B207",
-            "b": "B208",
-            "w": 30
-        },
-        {
-            "a": "B208",
-            "b": "B211",
-            "w": 30
-        },
-        {
-            "a": "B211",
-            "b": "S_ST3_F2",
-            "w": 8
-        },
-        {
-            "a": "S_ST3_F2",
-            "b": "B214",
-            "w": 8
-        },
-        {
-            "a": "B214",
-            "b": "B215",
-            "w": 30
-        },
-        {
-            "a": "B215",
-            "b": "B216",
-            "w": 30
-        },
-        {
-            "a": "B216",
-            "b": "S_ST4_F2",
-            "w": 8
-        },
-        {
-            "a": "S_ST4_F2",
-            "b": "B217",
-            "w": 8
-        },
-        {
-            "a": "B215",
-            "b": "B216",
-            "w": 30
-        },
-        {
-            "a": "B216",
-            "b": "S_ST4_F2",
-            "w": 8
-        },
-        {
-            "a": "S_ST4_F2",
-            "b": "B217",
-            "w": 8
-        },
-        {
-            "a": "S_ST1_F3",
-            "b": "B301",
-            "w": 8
-        },
-        {
-            "a": "B301",
-            "b": "B303",
-            "w": 30
-        },
-        {
-            "a": "B303",
-            "b": "B306",
-            "w": 30
-        },
-        {
-            "a": "B306",
-            "b": "S_ST2_F3",
-            "w": 8
-        },
-        {
-            "a": "S_ST2_F3",
-            "b": "B307",
-            "w": 8
-        },
-        {
-            "a": "B307",
-            "b": "B308",
-            "w": 30
-        },
-        {
-            "a": "B308",
-            "b": "B311",
-            "w": 30
-        },
-        {
-            "a": "B311",
-            "b": "S_ST3_F3",
-            "w": 8
-        },
-        {
-            "a": "S_ST3_F3",
-            "b": "B312",
-            "w": 8
-        },
-        {
-            "a": "B312",
-            "b": "B314",
-            "w": 30
-        },
-        {
-            "a": "B314",
-            "b": "S_ST4_F3",
-            "w": 8
-        },
-        {
-            "a": "S_ST4_F3",
-            "b": "B315",
-            "w": 8
-        },
-        {
-            "a": "B315",
-            "b": "S_ST5_F3",
-            "w": 8
-        },
-        {
-            "a": "S_ST5_F3",
-            "b": "B316",
-            "w": 8
-        },
-        {
-            "a": "B316",
-            "b": "B318",
-            "w": 30
-        },
-        {
-            "a": "B318",
-            "b": "B320",
-            "w": 30
-        },
-        {
-            "a": "S_ST1_F4",
-            "b": "B401",
-            "w": 8
-        },
-        {
-            "a": "B401",
-            "b": "B403",
-            "w": 30
-        },
-        {
-            "a": "B403",
-            "b": "B406",
-            "w": 30
-        },
-        {
-            "a": "B406",
-            "b": "S_ST2_F4",
-            "w": 8
-        },
-        {
-            "a": "S_ST2_F4",
-            "b": "B407",
-            "w": 8
-        },
-        {
-            "a": "B407",
-            "b": "B408",
-            "w": 30
-        },
-        {
-            "a": "B408",
-            "b": "B411",
-            "w": 30
-        },
-        {
-            "a": "B411",
-            "b": "S_ST3_F4",
-            "w": 8
-        },
-        {
-            "a": "S_ST3_F4",
-            "b": "B412",
-            "w": 8
-        },
-        {
-            "a": "B412",
-            "b": "B414",
-            "w": 30
-        },
-        {
-            "a": "B414",
-            "b": "S_ST4_F4",
-            "w": 8
-        },
-        {
-            "a": "S_ST4_F4",
-            "b": "B415",
-            "w": 8
-        },
-        {
-            "a": "B415",
-            "b": "S_ST5_F4",
-            "w": 8
-        },
-        {
-            "a": "S_ST5_F4",
-            "b": "B416",
-            "w": 8
-        },
-        {
-            "a": "B416",
-            "b": "B418",
-            "w": 30
-        },
-        {
-            "a": "B418",
-            "b": "B419",
-            "w": 30
-        },
-        {
-            "a": "B419",
-            "b": "B421",
-            "w": 30
-        },
-        {
-            "a": "B421",
-            "b": "S_ST6_F4",
-            "w": 8
-        },
-        {
-            "a": "S_ST6_F4",
-            "b": "B422",
-            "w": 8
-        },
-        {
-            "a": "B422",
-            "b": "B425",
-            "w": 30
-        },
-        {
-            "a": "B425",
-            "b": "B426",
-            "w": 30
-        },
-        {
-            "a": "S_ST1_F5",
-            "b": "B501",
-            "w": 8
-        },
-        {
-            "a": "B501",
-            "b": "B502",
-            "w": 30
-        },
-        {
-            "a": "B502",
-            "b": "S_ST2_F5",
-            "w": 8
-        },
-        {
-            "a": "S_ST2_F5",
-            "b": "B503",
-            "w": 8
-        },
-        {
-            "a": "B503",
-            "b": "B506",
-            "w": 30
-        },
-        {
-            "a": "B506",
-            "b": "B507",
-            "w": 30
-        },
-        {
-            "a": "B507",
-            "b": "S_ST3_F5",
-            "w": 8
-        },
-        {
-            "a": "S_ST3_F5",
-            "b": "B509",
-            "w": 8
-        },
-        {
-            "a": "B509",
-            "b": "B510",
-            "w": 30
-        },
-        {
-            "a": "B510",
-            "b": "S_ST4_F5",
-            "w": 8
-        },
-        {
-            "a": "S_ST4_F5",
-            "b": "B513",
-            "w": 8
-        },
-        {
-            "a": "B513",
-            "b": "B514",
-            "w": 30
-        },
-        {
-            "a": "B514",
-            "b": "B516",
-            "w": 30
-        },
-        {
-            "a": "B516",
-            "b": "S_ST5_F5",
-            "w": 8
-        },
-        {
-            "a": "S_ST5_F5",
-            "b": "B517",
-            "w": 8
-        },
-        {
-            "a": "B517",
-            "b": "B520",
-            "w": 30
-        },
-        {
-            "a": "B520",
-            "b": "B521",
-            "w": 30
-        },
-        {
-            "a": "S_ST1_F6",
-            "b": "B601",
-            "w": 8
-        },
-        {
-            "a": "B601",
-            "b": "B602",
-            "w": 30
-        },
-        {
-            "a": "B602",
-            "b": "B603",
-            "w": 30
-        },
-        {
-            "a": "B603",
-            "b": "B605",
-            "w": 30
-        },
-        {
-            "a": "B605",
-            "b": "B606",
-            "w": 30
-        },
-        {
-            "a": "B606",
-            "b": "B608",
-            "w": 30
-        },
-        {
-            "a": "B608",
-            "b": "S_ST6_F6",
-            "w": 8
-        },
-        {
-            "a": "S_ST6_F6",
-            "b": "B609",
-            "w": 8
-        },
-        {
-            "a": "B609",
-            "b": "B612",
-            "w": 30
-        },
-        {
-            "a": "B612",
-            "b": "B613",
-            "w": 30
-        },
-        {
-            "a": "S_ST1_F7",
-            "b": "B701",
-            "w": 8
-        },
-        {
-            "a": "B701",
-            "b": "S_ST2_F7",
-            "w": 8
-        },
-        {
-            "a": "B703",
-            "b": "B706",
-            "w": 30
-        },
-        {
-            "a": "B706",
-            "b": "B707",
-            "w": 30
-        },
-        {
-            "a": "B703",
-            "b": "S_ST6_F7",
-            "w": 8
-        },
-        {
-            "a": "S_ST1_F1",
-            "b": "S_ST1_F2",
-            "w": 20
-        },
-        {
-            "a": "S_ST1_F2",
-            "b": "S_ST1_F3",
-            "w": 20
-        },
-        {
-            "a": "S_ST1_F3",
-            "b": "S_ST1_F4",
-            "w": 20
-        },
-        {
-            "a": "S_ST1_F4",
-            "b": "S_ST1_F5",
-            "w": 20
-        },
-        {
-            "a": "S_ST1_F5",
-            "b": "S_ST1_F6",
-            "w": 20
-        },
-        {
-            "a": "S_ST1_F6",
-            "b": "S_ST1_F7",
-            "w": 20
-        },
-        {
-            "a": "S_ST2_F1",
-            "b": "S_ST2_F2",
-            "w": 20
-        },
-        {
-            "a": "S_ST2_F2",
-            "b": "S_ST2_F3",
-            "w": 20
-        },
-        {
-            "a": "S_ST2_F3",
-            "b": "S_ST2_F4",
-            "w": 20
-        },
-        {
-            "a": "S_ST2_F4",
-            "b": "S_ST2_F5",
-            "w": 20
-        },
-        {
-            "a": "S_ST2_F5",
-            "b": "S_ST2_F6",
-            "w": 20
-        },
-        {
-            "a": "S_ST2_F6",
-            "b": "S_ST2_F7",
-            "w": 20
-        },
-        {
-            "a": "S_ST3_F1",
-            "b": "S_ST3_F2",
-            "w": 20
-        },
-        {
-            "a": "S_ST3_F2",
-            "b": "S_ST3_F3",
-            "w": 20
-        },
-        {
-            "a": "S_ST3_F3",
-            "b": "S_ST3_F4",
-            "w": 20
-        },
-        {
-            "a": "S_ST3_F4",
-            "b": "S_ST3_F5",
-            "w": 20
-        },
-        {
-            "a": "S_ST3_F5",
-            "b": "S_ST3_F6",
-            "w": 20
-        },
-        {
-            "a": "S_ST3_F6",
-            "b": "S_ST3_F7",
-            "w": 20
-        },
-        {
-            "a": "S_ST4_F1",
-            "b": "S_ST4_F2",
-            "w": 20
-        },
-        {
-            "a": "S_ST4_F2",
-            "b": "S_ST4_F3",
-            "w": 20
-        },
-        {
-            "a": "S_ST4_F3",
-            "b": "S_ST4_F4",
-            "w": 20
-        },
-        {
-            "a": "S_ST4_F4",
-            "b": "S_ST4_F5",
-            "w": 20
-        },
-        {
-            "a": "S_ST4_F5",
-            "b": "S_ST4_F6",
-            "w": 20
-        },
-        {
-            "a": "S_ST4_F6",
-            "b": "S_ST4_F7",
-            "w": 20
-        },
-        {
-            "a": "S_ST5_F1",
-            "b": "S_ST5_F2",
-            "w": 20
-        },
-        {
-            "a": "S_ST5_F2",
-            "b": "S_ST5_F3",
-            "w": 20
-        },
-        {
-            "a": "S_ST5_F3",
-            "b": "S_ST5_F4",
-            "w": 20
-        },
-        {
-            "a": "S_ST5_F4",
-            "b": "S_ST5_F5",
-            "w": 20
-        },
-        {
-            "a": "S_ST5_F5",
-            "b": "S_ST5_F6",
-            "w": 20
-        },
-        {
-            "a": "S_ST5_F6",
-            "b": "S_ST5_F7",
-            "w": 20
-        },
-        {
-            "a": "S_ST6_F1",
-            "b": "S_ST6_F2",
-            "w": 20
-        },
-        {
-            "a": "S_ST6_F2",
-            "b": "S_ST6_F3",
-            "w": 20
-        },
-        {
-            "a": "S_ST6_F3",
-            "b": "S_ST6_F4",
-            "w": 20
-        },
-        {
-            "a": "S_ST6_F4",
-            "b": "S_ST6_F5",
-            "w": 20
-        },
-        {
-            "a": "S_ST6_F5",
-            "b": "S_ST6_F6",
-            "w": 20
-        },
-        {
-            "a": "S_ST6_F6",
-            "b": "S_ST6_F7",
-            "w": 20
-        }
-    ]
+  "nodes": [
+    {
+      "id": "F5",
+      "type": "room",
+      "floor": 5,
+      "label": "5楼平台"
+    },
+    {
+      "id": "F7-1",
+      "type": "room",
+      "floor": 7,
+      "label": "7楼平台1"
+    },
+    {
+      "id": "F7-2",
+      "type": "room",
+      "floor": 7,
+      "label": "7楼平台2"
+    },
+    {
+      "id": "F6",
+      "type": "room",
+      "floor": 6,
+      "label": "6楼平台"
+    },
+    {
+      "id": "E1",
+      "type": "entrance",
+      "floor": 1,
+      "label": "通道间出口"
+    },
+    {
+      "id": "E2",
+      "type": "entrance",
+      "floor": 1,
+      "label": "大楼梯出口"
+    },
+    {
+      "id": "ST-N-4-1",
+      "type": "stair",
+      "floor": 4,
+      "label": "北楼四楼楼梯1"
+    },
+    {
+      "id": "ST-N-4-2",
+      "type": "stair",
+      "floor": 4,
+      "label": "北楼四楼楼梯2"
+    },
+    {
+      "id": "ST-N-4-3",
+      "type": "stair",
+      "floor": 4,
+      "label": "北楼四楼楼梯3"
+    },
+    {
+      "id": "ST-N-5-1",
+      "type": "stair",
+      "floor": 5,
+      "label": "北楼五楼楼梯1"
+    },
+    {
+      "id": "ST-N-5-2",
+      "type": "stair",
+      "floor": 5,
+      "label": "北楼五楼楼梯2"
+    },
+    {
+      "id": "ST-N-5-3",
+      "type": "stair",
+      "floor": 5,
+      "label": "北楼五楼楼梯3"
+    },
+    {
+      "id": "E-E-1",
+      "type": "entrance",
+      "floor": 1,
+      "label": "东端出口1"
+    },
+    {
+      "id": "E-E-2",
+      "type": "entrance",
+      "floor": 1,
+      "label": "东端出口2"
+    },
+    {
+      "id": "E-E-3",
+      "type": "entrance",
+      "floor": 1,
+      "label": "东端出口3"
+    },
+    {
+      "id": "E-M-1",
+      "type": "entrance",
+      "floor": 1,
+      "label": "中端出口1"
+    },
+    {
+      "id": "E-M-2",
+      "type": "entrance",
+      "floor": 1,
+      "label": "中端出口2"
+    },
+    {
+      "id": "E-M-3",
+      "type": "entrance",
+      "floor": 1,
+      "label": "中端出口3"
+    },
+    {
+      "id": "E-W-1",
+      "type": "entrance",
+      "floor": 1,
+      "label": "西端出口1"
+    },
+    {
+      "id": "E-W-2",
+      "type": "entrance",
+      "floor": 1,
+      "label": "西端出口2"
+    },
+    {
+      "id": "E-W-3",
+      "type": "entrance",
+      "floor": 1,
+      "label": "西端出口3"
+    },
+    {
+      "id": "ST-1-1",
+      "type": "stair",
+      "floor": 1,
+      "label": "一楼楼梯1"
+    },
+    {
+      "id": "ST-1-2",
+      "type": "stair",
+      "floor": 1,
+      "label": "一楼楼梯2"
+    },
+    {
+      "id": "ST-1-3",
+      "type": "stair",
+      "floor": 1,
+      "label": "一楼楼梯3"
+    },
+    {
+      "id": "ST-1-4",
+      "type": "stair",
+      "floor": 1,
+      "label": "一楼楼梯4"
+    },
+    {
+      "id": "ST-2-1",
+      "type": "stair",
+      "floor": 2,
+      "label": "二楼楼梯1"
+    },
+    {
+      "id": "ST-2-2",
+      "type": "stair",
+      "floor": 2,
+      "label": "二楼楼梯2"
+    },
+    {
+      "id": "ST-2-3",
+      "type": "stair",
+      "floor": 2,
+      "label": "二楼楼梯3"
+    },
+    {
+      "id": "ST-2-4",
+      "type": "stair",
+      "floor": 2,
+      "label": "二楼楼梯4"
+    },
+    {
+      "id": "ST-2-5",
+      "type": "stair",
+      "floor": 2,
+      "label": "二楼楼梯5"
+    },
+    {
+      "id": "ST-2-6",
+      "type": "stair",
+      "floor": 2,
+      "label": "二楼楼梯6"
+    },
+    {
+      "id": "ST-3-1",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯1"
+    },
+    {
+      "id": "ST-3-2",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯2"
+    },
+    {
+      "id": "ST-3-3",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯3"
+    },
+    {
+      "id": "ST-3-4",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯4"
+    },
+    {
+      "id": "ST-3-5",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯5"
+    },
+    {
+      "id": "ST-3-6",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯6"
+    },
+    {
+      "id": "ST-3-7",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯7"
+    },
+    {
+      "id": "ST-3-8",
+      "type": "stair",
+      "floor": 3,
+      "label": "三楼楼梯8"
+    },
+    {
+      "id": "ST-4-1",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯1"
+    },
+    {
+      "id": "ST-4-2",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯2"
+    },
+    {
+      "id": "ST-4-3",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯3"
+    },
+    {
+      "id": "ST-4-4",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯4"
+    },
+    {
+      "id": "ST-4-5",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯5"
+    },
+    {
+      "id": "ST-4-6",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯6"
+    },
+    {
+      "id": "ST-4-7",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯7"
+    },
+    {
+      "id": "ST-4-8",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯8"
+    },
+    {
+      "id": "ST-4-9",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯9"
+    },
+    {
+      "id": "ST-4-10",
+      "type": "stair",
+      "floor": 4,
+      "label": "四楼楼梯10"
+    },
+    {
+      "id": "ST-5-1",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯1"
+    },
+    {
+      "id": "ST-5-2",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯2"
+    },
+    {
+      "id": "ST-5-3",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯3"
+    },
+    {
+      "id": "ST-5-4",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯4"
+    },
+    {
+      "id": "ST-5-5",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯5"
+    },
+    {
+      "id": "ST-5-6",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯6"
+    },
+    {
+      "id": "ST-5-7",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯7"
+    },
+    {
+      "id": "ST-5-8",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯8"
+    },
+    {
+      "id": "ST-5-9",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯9"
+    },
+    {
+      "id": "ST-5-10",
+      "type": "stair",
+      "floor": 5,
+      "label": "五楼楼梯10"
+    },
+    {
+      "id": "ST-6-1",
+      "type": "stair",
+      "floor": 6,
+      "label": "六楼楼梯1"
+    },
+    {
+      "id": "ST-6-2",
+      "type": "stair",
+      "floor": 6,
+      "label": "六楼楼梯2"
+    },
+    {
+      "id": "ST-6-3",
+      "type": "stair",
+      "floor": 6,
+      "label": "六楼楼梯3"
+    },
+    {
+      "id": "ST-6-4",
+      "type": "stair",
+      "floor": 6,
+      "label": "六楼楼梯4"
+    },
+    {
+      "id": "ST-6-5",
+      "type": "stair",
+      "floor": 6,
+      "label": "六楼楼梯5"
+    },
+    {
+      "id": "ST-6-6",
+      "type": "stair",
+      "floor": 6,
+      "label": "六楼楼梯6"
+    },
+    {
+      "id": "ST-7-1",
+      "type": "stair",
+      "floor": 7,
+      "label": "七楼楼梯1"
+    },
+    {
+      "id": "ST-7-2",
+      "type": "stair",
+      "floor": 7,
+      "label": "七楼楼梯2"
+    },
+    {
+      "id": "ST-7-3",
+      "type": "stair",
+      "floor": 7,
+      "label": "七楼楼梯3"
+    },
+    {
+      "id": "ST-S-1-1",
+      "type": "sidestair",
+      "floor": 1,
+      "label": "一楼侧梯1"
+    },
+    {
+      "id": "ST-S-1-2",
+      "type": "sidestair",
+      "floor": 1,
+      "label": "一楼侧梯2"
+    },
+    {
+      "id": "ST-S-2-1",
+      "type": "sidestair",
+      "floor": 2,
+      "label": "二楼侧梯1"
+    },
+    {
+      "id": "ST-S-2-2",
+      "type": "sidestair",
+      "floor": 2,
+      "label": "二楼侧梯2"
+    },
+    {
+      "id": "ST-S-2-3",
+      "type": "sidestair",
+      "floor": 2,
+      "label": "二楼侧梯3"
+    },
+    {
+      "id": "ST-S-2-4",
+      "type": "sidestair",
+      "floor": 2,
+      "label": "二楼侧梯4"
+    },
+    {
+      "id": "ST-S-3-1",
+      "type": "sidestair",
+      "floor": 3,
+      "label": "三楼侧梯1"
+    },
+    {
+      "id": "ST-S-3-2",
+      "type": "sidestair",
+      "floor": 3,
+      "label": "三楼侧梯2"
+    },
+    {
+      "id": "ST-S-3-3",
+      "type": "sidestair",
+      "floor": 3,
+      "label": "三楼侧梯3"
+    },
+    {
+      "id": "ST-S-3-4",
+      "type": "sidestair",
+      "floor": 3,
+      "label": "三楼侧梯4"
+    },
+    {
+      "id": "ST-S-3-5",
+      "type": "sidestair",
+      "floor": 3,
+      "label": "三楼侧梯5"
+    },
+    {
+      "id": "ST-S-3-6",
+      "type": "sidestair",
+      "floor": 3,
+      "label": "三楼侧梯6"
+    },
+    {
+      "id": "ST-S-4-1",
+      "type": "sidestair",
+      "floor": 4,
+      "label": "四楼侧梯1"
+    },
+    {
+      "id": "ST-S-4-2",
+      "type": "sidestair",
+      "floor": 4,
+      "label": "四楼侧梯2"
+    },
+    {
+      "id": "ST-S-4-3",
+      "type": "sidestair",
+      "floor": 4,
+      "label": "四楼侧梯3"
+    },
+    {
+      "id": "ST-S-4-4",
+      "type": "sidestair",
+      "floor": 4,
+      "label": "四楼侧梯4"
+    },
+    {
+      "id": "ST-S-4-5",
+      "type": "sidestair",
+      "floor": 4,
+      "label": "四楼侧梯5"
+    },
+    {
+      "id": "ST-S-4-6",
+      "type": "sidestair",
+      "floor": 4,
+      "label": "四楼侧梯6"
+    },
+    {
+      "id": "ST-S-5-1",
+      "type": "sidestair",
+      "floor": 5,
+      "label": "五楼侧梯1"
+    },
+    {
+      "id": "ST-S-5-2",
+      "type": "sidestair",
+      "floor": 5,
+      "label": "五楼侧梯2"
+    },
+    {
+      "id": "ST-S-5-3",
+      "type": "sidestair",
+      "floor": 5,
+      "label": "五楼侧梯3"
+    },
+    {
+      "id": "ST-S-5-4",
+      "type": "sidestair",
+      "floor": 5,
+      "label": "五楼侧梯4"
+    },
+    {
+      "id": "ST-S-5-5",
+      "type": "sidestair",
+      "floor": 5,
+      "label": "五楼侧梯5"
+    },
+    {
+      "id": "ST-S-5-6",
+      "type": "sidestair",
+      "floor": 5,
+      "label": "五楼侧梯6"
+    },
+    {
+      "id": "ST-S-6-1",
+      "type": "sidestair",
+      "floor": 6,
+      "label": "六楼侧梯1"
+    },
+    {
+      "id": "ST-S-6-2",
+      "type": "sidestair",
+      "floor": 6,
+      "label": "六楼侧梯2"
+    },
+    {
+      "id": "ST-S-6-3",
+      "type": "sidestair",
+      "floor": 6,
+      "label": "六楼侧梯3"
+    },
+    {
+      "id": "ST-S-6-4",
+      "type": "sidestair",
+      "floor": 6,
+      "label": "六楼侧梯4"
+    },
+    {
+      "id": "ST-S-7-1",
+      "type": "sidestair",
+      "floor": 7,
+      "label": "七楼侧梯1"
+    },
+    {
+      "id": "ST-S-7-2",
+      "type": "sidestair",
+      "floor": 7,
+      "label": "七楼侧梯2"
+    },
+    {
+      "id": "B101",
+      "type": "room",
+      "floor": 1,
+      "label": "B101教室"
+    },
+    {
+      "id": "B105",
+      "type": "room",
+      "floor": 1,
+      "label": "B105教室"
+    },
+    {
+      "id": "B106",
+      "type": "room",
+      "floor": 1,
+      "label": "B106教室"
+    },
+    {
+      "id": "B107",
+      "type": "room",
+      "floor": 1,
+      "label": "B107教室"
+    },
+    {
+      "id": "B201",
+      "type": "room",
+      "floor": 2,
+      "label": "B201教室"
+    },
+    {
+      "id": "B203",
+      "type": "room",
+      "floor": 2,
+      "label": "B203教室"
+    },
+    {
+      "id": "B206",
+      "type": "room",
+      "floor": 2,
+      "label": "B206教室"
+    },
+    {
+      "id": "B207",
+      "type": "room",
+      "floor": 2,
+      "label": "B207教室"
+    },
+    {
+      "id": "B208",
+      "type": "room",
+      "floor": 2,
+      "label": "B208教室"
+    },
+    {
+      "id": "B211",
+      "type": "room",
+      "floor": 2,
+      "label": "B211教室"
+    },
+    {
+      "id": "B216",
+      "type": "room",
+      "floor": 2,
+      "label": "B216教室"
+    },
+    {
+      "id": "B217",
+      "type": "room",
+      "floor": 2,
+      "label": "B217教室"
+    },
+    {
+      "id": "B301",
+      "type": "room",
+      "floor": 3,
+      "label": "B301教室"
+    },
+    {
+      "id": "B303",
+      "type": "room",
+      "floor": 3,
+      "label": "B303教室"
+    },
+    {
+      "id": "B306",
+      "type": "room",
+      "floor": 3,
+      "label": "B306教室"
+    },
+    {
+      "id": "B307",
+      "type": "room",
+      "floor": 3,
+      "label": "B307教室"
+    },
+    {
+      "id": "B308",
+      "type": "room",
+      "floor": 3,
+      "label": "B308教室"
+    },
+    {
+      "id": "B311",
+      "type": "room",
+      "floor": 3,
+      "label": "B311教室"
+    },
+    {
+      "id": "B312",
+      "type": "room",
+      "floor": 3,
+      "label": "B312教室"
+    },
+    {
+      "id": "B314",
+      "type": "room",
+      "floor": 3,
+      "label": "B314教室"
+    },
+    {
+      "id": "B315",
+      "type": "room",
+      "floor": 3,
+      "label": "B315教室"
+    },
+    {
+      "id": "B316",
+      "type": "room",
+      "floor": 3,
+      "label": "B316教室"
+    },
+    {
+      "id": "B318",
+      "type": "room",
+      "floor": 3,
+      "label": "B318教室"
+    },
+    {
+      "id": "B320",
+      "type": "room",
+      "floor": 3,
+      "label": "B320教室"
+    },
+    {
+      "id": "B321",
+      "type": "room",
+      "floor": 3,
+      "label": "B321教室"
+    },
+    {
+      "id": "B401",
+      "type": "room",
+      "floor": 4,
+      "label": "B401教室"
+    },
+    {
+      "id": "B403",
+      "type": "room",
+      "floor": 4,
+      "label": "B403教室"
+    },
+    {
+      "id": "B406",
+      "type": "room",
+      "floor": 4,
+      "label": "B406教室"
+    },
+    {
+      "id": "B407",
+      "type": "room",
+      "floor": 4,
+      "label": "B407教室"
+    },
+    {
+      "id": "B408",
+      "type": "room",
+      "floor": 4,
+      "label": "B408教室"
+    },
+    {
+      "id": "B411",
+      "type": "room",
+      "floor": 4,
+      "label": "B411教室"
+    },
+    {
+      "id": "B412",
+      "type": "room",
+      "floor": 4,
+      "label": "B412教室"
+    },
+    {
+      "id": "B414",
+      "type": "room",
+      "floor": 4,
+      "label": "B414教室"
+    },
+    {
+      "id": "B415",
+      "type": "room",
+      "floor": 4,
+      "label": "B415教室"
+    },
+    {
+      "id": "B416",
+      "type": "room",
+      "floor": 4,
+      "label": "B416教室"
+    },
+    {
+      "id": "B418",
+      "type": "room",
+      "floor": 4,
+      "label": "B418教室"
+    },
+    {
+      "id": "B421",
+      "type": "room",
+      "floor": 4,
+      "label": "B421教室"
+    },
+    {
+      "id": "B422",
+      "type": "room",
+      "floor": 4,
+      "label": "B422教室"
+    },
+    {
+      "id": "B425",
+      "type": "room",
+      "floor": 4,
+      "label": "B425教室"
+    },
+    {
+      "id": "B426",
+      "type": "room",
+      "floor": 4,
+      "label": "B426教室"
+    },
+    {
+      "id": "B442",
+      "type": "room",
+      "floor": 4,
+      "label": "B442教室"
+    },
+    {
+      "id": "B443",
+      "type": "room",
+      "floor": 4,
+      "label": "B443教室"
+    },
+    {
+      "id": "B437",
+      "type": "room",
+      "floor": 4,
+      "label": "B437教室"
+    },
+    {
+      "id": "B434",
+      "type": "room",
+      "floor": 4,
+      "label": "B434教室"
+    },
+    {
+      "id": "B433",
+      "type": "room",
+      "floor": 4,
+      "label": "B433教室"
+    },
+    {
+      "id": "B501",
+      "type": "room",
+      "floor": 5,
+      "label": "B501教室"
+    },
+    {
+      "id": "B502",
+      "type": "room",
+      "floor": 5,
+      "label": "B502教室"
+    },
+    {
+      "id": "B503",
+      "type": "room",
+      "floor": 5,
+      "label": "B503教室"
+    },
+    {
+      "id": "B506",
+      "type": "room",
+      "floor": 5,
+      "label": "B506教室"
+    },
+    {
+      "id": "B507",
+      "type": "room",
+      "floor": 5,
+      "label": "B507教室"
+    },
+    {
+      "id": "B509",
+      "type": "room",
+      "floor": 5,
+      "label": "B509教室"
+    },
+    {
+      "id": "B510",
+      "type": "room",
+      "floor": 5,
+      "label": "B510教室"
+    },
+    {
+      "id": "B511",
+      "type": "room",
+      "floor": 5,
+      "label": "B511教室"
+    },
+    {
+      "id": "B513",
+      "type": "room",
+      "floor": 5,
+      "label": "B513教室"
+    },
+    {
+      "id": "B514",
+      "type": "room",
+      "floor": 5,
+      "label": "B514教室"
+    },
+    {
+      "id": "B516",
+      "type": "room",
+      "floor": 5,
+      "label": "B516教室"
+    },
+    {
+      "id": "B517",
+      "type": "room",
+      "floor": 5,
+      "label": "B517教室"
+    },
+    {
+      "id": "B520",
+      "type": "room",
+      "floor": 5,
+      "label": "B520教室"
+    },
+    {
+      "id": "B521",
+      "type": "room",
+      "floor": 5,
+      "label": "B521教室"
+    },
+    {
+      "id": "B601",
+      "type": "room",
+      "floor": 6,
+      "label": "B601教室"
+    },
+    {
+      "id": "B602",
+      "type": "room",
+      "floor": 6,
+      "label": "B602教室"
+    },
+    {
+      "id": "B603",
+      "type": "room",
+      "floor": 6,
+      "label": "B603教室"
+    },
+    {
+      "id": "B605",
+      "type": "room",
+      "floor": 6,
+      "label": "B605教室"
+    },
+    {
+      "id": "B606",
+      "type": "room",
+      "floor": 6,
+      "label": "B606教室"
+    },
+    {
+      "id": "B608",
+      "type": "room",
+      "floor": 6,
+      "label": "B608教室"
+    },
+    {
+      "id": "B609",
+      "type": "room",
+      "floor": 6,
+      "label": "B609教室"
+    },
+    {
+      "id": "B612",
+      "type": "room",
+      "floor": 6,
+      "label": "B612教室"
+    },
+    {
+      "id": "B613",
+      "type": "room",
+      "floor": 6,
+      "label": "B613教室"
+    },
+    {
+      "id": "B701",
+      "type": "room",
+      "floor": 7,
+      "label": "B701教室"
+    },
+    {
+      "id": "B703",
+      "type": "room",
+      "floor": 7,
+      "label": "B703教室"
+    },
+    {
+      "id": "B706",
+      "type": "room",
+      "floor": 7,
+      "label": "B706教室"
+    },
+    {
+      "id": "B707",
+      "type": "room",
+      "floor": 7,
+      "label": "B707教室"
+    },
+    {
+      "id": "B538",
+      "type": "room",
+      "floor": 5,
+      "label": "B538教室"
+    },
+    {
+      "id": "B537",
+      "type": "room",
+      "floor": 5,
+      "label": "B537教室"
+    },
+    {
+      "id": "B532",
+      "type": "room",
+      "floor": 5,
+      "label": "B532教室"
+    },
+    {
+      "id": "B529",
+      "type": "room",
+      "floor": 5,
+      "label": "B529教室"
+    },
+    {
+      "id": "B528",
+      "type": "room",
+      "floor": 5,
+      "label": "B528教室"
+    }
+  ],
+  "edges": [
+    {
+      "a": "ST-1-1",
+      "b": "B107",
+      "w": 2
+    },
+    {
+      "a": "B107",
+      "b": "ST-1-2",
+      "w": 4
+    },
+    {
+      "a": "ST-1-2",
+      "b": "B106",
+      "w": 2
+    },
+    {
+      "a": "B106",
+      "b": "ST-1-3",
+      "w": 2
+    },
+    {
+      "a": "ST-1-3",
+      "b": "B105",
+      "w": 2
+    },
+    {
+      "a": "B105",
+      "b": "B101",
+      "w": 4
+    },
+    {
+      "a": "B101",
+      "b": "ST-1-4",
+      "w": 2
+    },
+    {
+      "a": "ST-2-1",
+      "b": "B217",
+      "w": 2
+    },
+    {
+      "a": "B217",
+      "b": "ST-2-2",
+      "w": 2
+    },
+    {
+      "a": "ST-2-2",
+      "b": "B216",
+      "w": 2
+    },
+    {
+      "a": "ST-2-3",
+      "b": "B211",
+      "w": 2
+    },
+    {
+      "a": "B211",
+      "b": "B208",
+      "w": 2
+    },
+    {
+      "a": "B208",
+      "b": "ST-2-4",
+      "w": 2
+    },
+    {
+      "a": "ST-2-4",
+      "b": "B207",
+      "w": 2
+    },
+    {
+      "a": "B207",
+      "b": "ST-2-5",
+      "w": 2
+    },
+    {
+      "a": "ST-2-5",
+      "b": "B206",
+      "w": 2
+    },
+    {
+      "a": "B206",
+      "b": "B203",
+      "w": 2
+    },
+    {
+      "a": "B203",
+      "b": "B201",
+      "w": 2
+    },
+    {
+      "a": "B201",
+      "b": "ST-2-6",
+      "w": 2
+    },
+    {
+      "a": "ST-3-2",
+      "b": "B318",
+      "w": 2
+    },
+    {
+      "a": "B318",
+      "b": "B316",
+      "w": 2
+    },
+    {
+      "a": "B316",
+      "b": "ST-3-3",
+      "w": 2
+    },
+    {
+      "a": "ST-3-3",
+      "b": "B315",
+      "w": 2
+    },
+    {
+      "a": "B315",
+      "b": "ST-3-4",
+      "w": 2
+    },
+    {
+      "a": "ST-3-4",
+      "b": "B314",
+      "w": 2
+    },
+    {
+      "a": "B314",
+      "b": "B312",
+      "w": 2
+    },
+    {
+      "a": "B312",
+      "b": "ST-3-5",
+      "w": 4
+    },
+    {
+      "a": "ST-3-5",
+      "b": "B311",
+      "w": 2
+    },
+    {
+      "a": "B311",
+      "b": "B308",
+      "w": 2
+    },
+    {
+      "a": "B308",
+      "b": "ST-3-6",
+      "w": 2
+    },
+    {
+      "a": "ST-3-6",
+      "b": "B307",
+      "w": 2
+    },
+    {
+      "a": "B307",
+      "b": "ST-3-7",
+      "w": 2
+    },
+    {
+      "a": "ST-3-7",
+      "b": "B306",
+      "w": 2
+    },
+    {
+      "a": "B306",
+      "b": "B303",
+      "w": 2
+    },
+    {
+      "a": "B303",
+      "b": "B301",
+      "w": 2
+    },
+    {
+      "a": "B301",
+      "b": "ST-3-8",
+      "w": 2
+    },
+    {
+      "a": "ST-4-1",
+      "b": "B426",
+      "w": 2
+    },
+    {
+      "a": "B426",
+      "b": "ST-4-2",
+      "w": 2
+    },
+    {
+      "a": "ST-4-2",
+      "b": "B425",
+      "w": 2
+    },
+    {
+      "a": "B425",
+      "b": "B422",
+      "w": 2
+    },
+    {
+      "a": "B422",
+      "b": "ST-4-3",
+      "w": 2
+    },
+    {
+      "a": "ST-4-3",
+      "b": "B421",
+      "w": 2
+    },
+    {
+      "a": "B421",
+      "b": "ST-4-4",
+      "w": 4
+    },
+    {
+      "a": "ST-4-4",
+      "b": "B418",
+      "w": 2
+    },
+    {
+      "a": "B418",
+      "b": "B416",
+      "w": 2
+    },
+    {
+      "a": "B416",
+      "b": "ST-4-5",
+      "w": 2
+    },
+    {
+      "a": "ST-4-5",
+      "b": "B415",
+      "w": 2
+    },
+    {
+      "a": "B415",
+      "b": "ST-4-6",
+      "w": 2
+    },
+    {
+      "a": "ST-4-6",
+      "b": "B414",
+      "w": 2
+    },
+    {
+      "a": "B414",
+      "b": "B412",
+      "w": 2
+    },
+    {
+      "a": "B412",
+      "b": "ST-4-7",
+      "w": 4
+    },
+    {
+      "a": "ST-4-7",
+      "b": "B411",
+      "w": 2
+    },
+    {
+      "a": "B411",
+      "b": "B408",
+      "w": 2
+    },
+    {
+      "a": "B408",
+      "b": "ST-4-8",
+      "w": 2
+    },
+    {
+      "a": "ST-4-8",
+      "b": "B407",
+      "w": 2
+    },
+    {
+      "a": "B407",
+      "b": "ST-4-9",
+      "w": 2
+    },
+    {
+      "a": "ST-4-9",
+      "b": "B406",
+      "w": 2
+    },
+    {
+      "a": "B406",
+      "b": "B403",
+      "w": 2
+    },
+    {
+      "a": "B403",
+      "b": "B401",
+      "w": 2
+    },
+    {
+      "a": "B401",
+      "b": "ST-4-10",
+      "w": 2
+    },
+    {
+      "a": "ST-5-1",
+      "b": "B521",
+      "w": 2
+    },
+    {
+      "a": "B521",
+      "b": "ST-5-2",
+      "w": 2
+    },
+    {
+      "a": "ST-5-2",
+      "b": "B520",
+      "w": 2
+    },
+    {
+      "a": "B520",
+      "b": "B517",
+      "w": 2
+    },
+    {
+      "a": "B517",
+      "b": "ST-5-3",
+      "w": 2
+    },
+    {
+      "a": "ST-5-3",
+      "b": "B516",
+      "w": 2
+    },
+    {
+      "a": "B516",
+      "b": "B514",
+      "w": 2
+    },
+    {
+      "a": "B514",
+      "b": "ST-5-4",
+      "w": 2
+    },
+    {
+      "a": "ST-5-4",
+      "b": "B513",
+      "w": 2
+    },
+    {
+      "a": "B513",
+      "b": "B511",
+      "w": 2
+    },
+    {
+      "a": "B511",
+      "b": "ST-5-5",
+      "w": 2
+    },
+    {
+      "a": "ST-5-5",
+      "b": "B510",
+      "w": 2
+    },
+    {
+      "a": "B510",
+      "b": "ST-5-6",
+      "w": 2
+    },
+    {
+      "a": "ST-5-6",
+      "b": "B509",
+      "w": 2
+    },
+    {
+      "a": "B509",
+      "b": "B507",
+      "w": 2
+    },
+    {
+      "a": "B507",
+      "b": "ST-5-7",
+      "w": 4
+    },
+    {
+      "a": "ST-5-7",
+      "b": "B506",
+      "w": 2
+    },
+    {
+      "a": "B506",
+      "b": "B503",
+      "w": 2
+    },
+    {
+      "a": "B503",
+      "b": "ST-5-8",
+      "w": 2
+    },
+    {
+      "a": "ST-5-8",
+      "b": "B502",
+      "w": 2
+    },
+    {
+      "a": "B502",
+      "b": "ST-5-9",
+      "w": 2
+    },
+    {
+      "a": "ST-5-9",
+      "b": "B501",
+      "w": 2
+    },
+    {
+      "a": "B501",
+      "b": "F5",
+      "w": 4
+    },
+    {
+      "a": "F5",
+      "b": "ST-5-10",
+      "w": 2
+    },
+    {
+      "a": "ST-6-1",
+      "b": "B613",
+      "w": 2
+    },
+    {
+      "a": "B613",
+      "b": "ST-6-2",
+      "w": 2
+    },
+    {
+      "a": "ST-6-2",
+      "b": "B612",
+      "w": 2
+    },
+    {
+      "a": "B612",
+      "b": "B609",
+      "w": 2
+    },
+    {
+      "a": "B609",
+      "b": "ST-6-3",
+      "w": 2
+    },
+    {
+      "a": "ST-6-3",
+      "b": "B608",
+      "w": 2
+    },
+    {
+      "a": "B608",
+      "b": "B606",
+      "w": 2
+    },
+    {
+      "a": "B606",
+      "b": "ST-6-4",
+      "w": 2
+    },
+    {
+      "a": "ST-6-4",
+      "b": "B603",
+      "w": 2
+    },
+    {
+      "a": "B603",
+      "b": "B605",
+      "w": 2
+    },
+    {
+      "a": "B605",
+      "b": "ST-6-5",
+      "w": 2
+    },
+    {
+      "a": "ST-6-5",
+      "b": "B602",
+      "w": 2
+    },
+    {
+      "a": "B602",
+      "b": "ST-6-6",
+      "w": 2
+    },
+    {
+      "a": "ST-6-6",
+      "b": "B601",
+      "w": 4
+    },
+    {
+      "a": "B601",
+      "b": "F6",
+      "w": 8
+    },
+    {
+      "a": "ST-7-1",
+      "b": "B707",
+      "w": 2
+    },
+    {
+      "a": "B707",
+      "b": "ST-7-2",
+      "w": 2
+    },
+    {
+      "a": "ST-7-2",
+      "b": "B706",
+      "w": 2
+    },
+    {
+      "a": "B706",
+      "b": "B703",
+      "w": 2
+    },
+    {
+      "a": "B703",
+      "b": "ST-7-3",
+      "w": 2
+    },
+    {
+      "a": "ST-7-3",
+      "b": "F7-1",
+      "w": 2
+    },
+    {
+      "a": "F7-1",
+      "b": "B701",
+      "w": 4
+    },
+    {
+      "a": "B701",
+      "b": "F7-2",
+      "w": 4
+    },
+    {
+      "a": "B106",
+      "b": "E-E-3",
+      "w": 1
+    },
+    {
+      "a": "ST-2-3",
+      "b": "E-E-1",
+      "w": 1
+    },
+    {
+      "a": "ST-S-2-2",
+      "b": "E-E-2",
+      "w": 1
+    },
+    {
+      "a": "B216",
+      "b": "E-M-3",
+      "w": 1
+    },
+    {
+      "a": "ST-2-1",
+      "b": "E-M-2",
+      "w": 1
+    },
+    {
+      "a": "B318",
+      "b": "E-M-1",
+      "w": 1
+    },
+    {
+      "a": "B320",
+      "b": "E-W-3",
+      "w": 1
+    },
+    {
+      "a": "B425",
+      "b": "E-W-2",
+      "w": 1
+    },
+    {
+      "a": "B426",
+      "b": "E-W-1",
+      "w": 1
+    },
+    {
+      "a": "E-E-1",
+      "b": "E-M-3",
+      "w": 4
+    },
+    {
+      "a": "E-M-1",
+      "b": "E-W-3",
+      "w": 4
+    },
+    {
+      "a": "B101",
+      "b": "ST-S-1-2",
+      "w": 2
+    },
+    {
+      "a": "B201",
+      "b": "ST-S-2-4",
+      "w": 2
+    },
+    {
+      "a": "B301",
+      "b": "ST-S-3-6",
+      "w": 2
+    },
+    {
+      "a": "B401",
+      "b": "ST-S-4-6",
+      "w": 2
+    },
+    {
+      "a": "F5",
+      "b": "ST-S-5-6",
+      "w": 2
+    },
+    {
+      "a": "B101",
+      "b": "ST-S-1-1",
+      "w": 2
+    },
+    {
+      "a": "B206",
+      "b": "ST-S-2-3",
+      "w": 2
+    },
+    {
+      "a": "B306",
+      "b": "ST-S-3-5",
+      "w": 2
+    },
+    {
+      "a": "B406",
+      "b": "ST-S-4-5",
+      "w": 2
+    },
+    {
+      "a": "B501",
+      "b": "ST-S-5-5",
+      "w": 2
+    },
+    {
+      "a": "B208",
+      "b": "ST-S-2-2",
+      "w": 2
+    },
+    {
+      "a": "B308",
+      "b": "ST-S-3-4",
+      "w": 2
+    },
+    {
+      "a": "B408",
+      "b": "ST-S-4-4",
+      "w": 2
+    },
+    {
+      "a": "B503",
+      "b": "ST-S-5-4",
+      "w": 2
+    },
+    {
+      "a": "F6",
+      "b": "ST-S-6-4",
+      "w": 2
+    },
+    {
+      "a": "B216",
+      "b": "ST-S-2-1",
+      "w": 2
+    },
+    {
+      "a": "B312",
+      "b": "ST-S-3-3",
+      "w": 2
+    },
+    {
+      "a": "B412",
+      "b": "ST-S-4-3",
+      "w": 2
+    },
+    {
+      "a": "B507",
+      "b": "ST-S-5-3",
+      "w": 2
+    },
+    {
+      "a": "B601",
+      "b": "ST-S-6-3",
+      "w": 2
+    },
+    {
+      "a": "B316",
+      "b": "ST-S-3-2",
+      "w": 2
+    },
+    {
+      "a": "B416",
+      "b": "ST-S-4-2",
+      "w": 2
+    },
+    {
+      "a": "B511",
+      "b": "ST-S-5-2",
+      "w": 2
+    },
+    {
+      "a": "B605",
+      "b": "ST-S-6-2",
+      "w": 2
+    },
+    {
+      "a": "F7-2",
+      "b": "ST-S-7-2",
+      "w": 2
+    },
+    {
+      "a": "B321",
+      "b": "ST-S-3-1",
+      "w": 2
+    },
+    {
+      "a": "B422",
+      "b": "ST-S-4-1",
+      "w": 2
+    },
+    {
+      "a": "B517",
+      "b": "ST-S-5-1",
+      "w": 2
+    },
+    {
+      "a": "B609",
+      "b": "ST-S-6-1",
+      "w": 2
+    },
+    {
+      "a": "B703",
+      "b": "ST-S-7-1",
+      "w": 2
+    },
+    {
+      "a": "ST-S-1-2",
+      "b": "ST-S-2-4",
+      "w": 3
+    },
+    {
+      "a": "ST-S-2-4",
+      "b": "ST-S-3-6",
+      "w": 3
+    },
+    {
+      "a": "ST-S-3-6",
+      "b": "ST-S-4-6",
+      "w": 3
+    },
+    {
+      "a": "ST-S-4-6",
+      "b": "ST-S-5-6",
+      "w": 3
+    },
+    {
+      "a": "ST-S-1-1",
+      "b": "ST-S-2-3",
+      "w": 3
+    },
+    {
+      "a": "ST-S-2-3",
+      "b": "ST-S-3-5",
+      "w": 3
+    },
+    {
+      "a": "ST-S-3-5",
+      "b": "ST-S-4-5",
+      "w": 3
+    },
+    {
+      "a": "ST-S-4-5",
+      "b": "ST-S-5-5",
+      "w": 3
+    },
+    {
+      "a": "ST-S-2-2",
+      "b": "ST-S-3-4",
+      "w": 3
+    },
+    {
+      "a": "ST-S-3-4",
+      "b": "ST-S-4-4",
+      "w": 3
+    },
+    {
+      "a": "ST-S-4-4",
+      "b": "ST-S-5-4",
+      "w": 3
+    },
+    {
+      "a": "ST-S-2-1",
+      "b": "ST-S-3-3",
+      "w": 3
+    },
+    {
+      "a": "ST-S-3-3",
+      "b": "ST-S-4-3",
+      "w": 3
+    },
+    {
+      "a": "ST-S-4-3",
+      "b": "ST-S-5-3",
+      "w": 3
+    },
+    {
+      "a": "ST-S-5-3",
+      "b": "ST-S-6-3",
+      "w": 3
+    },
+    {
+      "a": "ST-S-3-2",
+      "b": "ST-S-4-2",
+      "w": 3
+    },
+    {
+      "a": "ST-S-4-2",
+      "b": "ST-S-5-2",
+      "w": 3
+    },
+    {
+      "a": "ST-S-5-2",
+      "b": "ST-S-6-2",
+      "w": 3
+    },
+    {
+      "a": "ST-S-6-2",
+      "b": "ST-S-7-2",
+      "w": 3
+    },
+    {
+      "a": "ST-S-3-1",
+      "b": "ST-S-4-1",
+      "w": 3
+    },
+    {
+      "a": "ST-S-4-1",
+      "b": "ST-S-5-1",
+      "w": 3
+    },
+    {
+      "a": "ST-S-5-1",
+      "b": "ST-S-6-1",
+      "w": 3
+    },
+    {
+      "a": "ST-S-6-1",
+      "b": "ST-S-7-1",
+      "w": 3
+    },
+    {
+      "a": "B312",
+      "b": "ST-N-4-2",
+      "w": 2
+    },
+    {
+      "a": "ST-N-4-3",
+      "b": "E-E-2",
+      "w": 2
+    },
+    {
+      "a": "ST-N-4-2",
+      "b": "E1",
+      "w": 3
+    },
+    {
+      "a": "ST-N-4-1",
+      "b": "E-E-3",
+      "w": 2
+    },
+    {
+      "a": "B433",
+      "b": "E2",
+      "w": 5
+    },
+    {
+      "a": "B437",
+      "b": "B314",
+      "w": 2
+    },
+    {
+      "a": "B513",
+      "b": "B528",
+      "w": 2
+    },
+    {
+      "a": "B433",
+      "b": "ST-N-4-1",
+      "w": 3
+    },
+    {
+      "a": "ST-N-4-1",
+      "b": "B434",
+      "w": 3
+    },
+    {
+      "a": "B434",
+      "b": "B437",
+      "w": 3
+    },
+    {
+      "a": "B437",
+      "b": "ST-N-4-2",
+      "w": 3
+    },
+    {
+      "a": "ST-N-4-2",
+      "b": "B443",
+      "w": 3
+    },
+    {
+      "a": "B443",
+      "b": "ST-N-4-1",
+      "w": 3
+    },
+    {
+      "a": "ST-N-4-1",
+      "b": "B442",
+      "w": 3
+    },
+    {
+      "a": "B528",
+      "b": "ST-N-5-1",
+      "w": 3
+    },
+    {
+      "a": "ST-N-5-1",
+      "b": "B529",
+      "w": 3
+    },
+    {
+      "a": "B529",
+      "b": "B532",
+      "w": 3
+    },
+    {
+      "a": "B532",
+      "b": "ST-N-5-2",
+      "w": 3
+    },
+    {
+      "a": "ST-N-5-2",
+      "b": "B537",
+      "w": 3
+    },
+    {
+      "a": "B537",
+      "b": "ST-N-5-3",
+      "w": 3
+    },
+    {
+      "a": "ST-N-5-3",
+      "b": "B538",
+      "w": 3
+    },
+    {
+      "a": "ST-N-4-1",
+      "b": "ST-N-5-1",
+      "w": 6
+    },
+    {
+      "a": "ST-N-4-2",
+      "b": "ST-N-5-2",
+      "w": 6
+    },
+    {
+      "a": "ST-N-4-3",
+      "b": "ST-N-5-3",
+      "w": 6
+    },
+    {
+      "a": "ST-1-4",
+      "b": "ST-2-6",
+      "w": 3
+    },
+    {
+      "a": "ST-2-6",
+      "b": "ST-3-8",
+      "w": 3
+    },
+    {
+      "a": "ST-3-8",
+      "b": "ST-4-10",
+      "w": 3
+    },
+    {
+      "a": "ST-4-10",
+      "b": "ST-5-10",
+      "w": 3
+    },
+    {
+      "a": "ST-1-3",
+      "b": "ST-2-5",
+      "w": 3
+    },
+    {
+      "a": "ST-2-5",
+      "b": "ST-3-7",
+      "w": 3
+    },
+    {
+      "a": "ST-3-7",
+      "b": "ST-4-9",
+      "w": 3
+    },
+    {
+      "a": "ST-4-9",
+      "b": "ST-5-9",
+      "w": 3
+    },
+    {
+      "a": "ST-1-2",
+      "b": "ST-2-4",
+      "w": 3
+    },
+    {
+      "a": "ST-2-4",
+      "b": "ST-3-6",
+      "w": 3
+    },
+    {
+      "a": "ST-3-6",
+      "b": "ST-4-8",
+      "w": 3
+    },
+    {
+      "a": "ST-4-8",
+      "b": "ST-5-8",
+      "w": 3
+    },
+    {
+      "a": "ST-1-1",
+      "b": "ST-2-3",
+      "w": 3
+    },
+    {
+      "a": "ST-2-3",
+      "b": "ST-3-5",
+      "w": 3
+    },
+    {
+      "a": "ST-3-5",
+      "b": "ST-4-7",
+      "w": 3
+    },
+    {
+      "a": "ST-4-7",
+      "b": "ST-5-7",
+      "w": 3
+    },
+    {
+      "a": "ST-2-2",
+      "b": "ST-3-4",
+      "w": 3
+    },
+    {
+      "a": "ST-3-4",
+      "b": "ST-4-6",
+      "w": 3
+    },
+    {
+      "a": "ST-4-6",
+      "b": "ST-5-6",
+      "w": 3
+    },
+    {
+      "a": "ST-5-6",
+      "b": "ST-6-6",
+      "w": 3
+    },
+    {
+      "a": "ST-2-1",
+      "b": "ST-3-3",
+      "w": 3
+    },
+    {
+      "a": "ST-3-3",
+      "b": "ST-4-5",
+      "w": 3
+    },
+    {
+      "a": "ST-4-5",
+      "b": "ST-5-5",
+      "w": 3
+    },
+    {
+      "a": "ST-5-5",
+      "b": "ST-6-5",
+      "w": 3
+    },
+    {
+      "a": "ST-3-2",
+      "b": "ST-4-4",
+      "w": 3
+    },
+    {
+      "a": "ST-4-4",
+      "b": "ST-5-4",
+      "w": 3
+    },
+    {
+      "a": "ST-5-4",
+      "b": "ST-6-4",
+      "w": 3
+    },
+    {
+      "a": "ST-3-1",
+      "b": "ST-4-3",
+      "w": 3
+    },
+    {
+      "a": "ST-4-3",
+      "b": "ST-5-3",
+      "w": 3
+    },
+    {
+      "a": "ST-5-3",
+      "b": "ST-6-3",
+      "w": 3
+    },
+    {
+      "a": "ST-6-3",
+      "b": "ST-7-3",
+      "w": 3
+    },
+    {
+      "a": "ST-4-2",
+      "b": "ST-5-2",
+      "w": 3
+    },
+    {
+      "a": "ST-5-2",
+      "b": "ST-6-2",
+      "w": 3
+    },
+    {
+      "a": "ST-6-2",
+      "b": "ST-7-2",
+      "w": 3
+    },
+    {
+      "a": "ST-4-1",
+      "b": "ST-5-1",
+      "w": 3
+    },
+    {
+      "a": "ST-5-1",
+      "b": "ST-6-1",
+      "w": 3
+    },
+    {
+      "a": "ST-6-1",
+      "b": "ST-7-1",
+      "w": 3
+    }
+  ]
 }

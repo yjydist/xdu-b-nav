@@ -86,7 +86,7 @@ flowchart LR
 ### 关键结论
 - 先读 `main -> handler -> navigation -> graph/amap`，再读前端 `App -> RouteForm/RouteResult`。
 - 配置文件和测试文件是理解设计意图的捷径，不是附属品。
-- 命令入口以 `justfile` 为主，前端命令在 `frontend/package.json`。
+- 命令入口以 `mise.toml` 为主，前端命令在 `frontend/package.json`。
 
 ### 细节展开
 
@@ -107,10 +107,10 @@ flowchart LR
 | P2 | `internal/navigation/navigation_test.go` | 核心算法最小可验证样例 |
 
 **构建与测试命令（来自仓库）**
-- 后端运行：`just run`（`justfile:10`）或 `go run ./cmd/server`（`justfile:12`）。
-- 后端测试：`just test`（`justfile:15`）或 `go test ./... -v`（`justfile:17`）。
-- 前端开发：`bun run dev`（`frontend/package.json:8`）。
-- 前端构建：`bun run build`（`frontend/package.json:9`）。
+- 后端运行：`mise run start`（`mise.toml`）或 `go run ./cmd/server`。
+- 后端测试：`mise run test`（`mise.toml`）或 `go test ./... -v`。
+- 前端开发：`pnpm dev`（`frontend/package.json:8`）。
+- 前端构建：`pnpm build`（`frontend/package.json:9`）。
 - 已验证：当前仓库执行 `go test ./... -v` 通过。
 
 ### 本章小结
@@ -325,7 +325,7 @@ flowchart TD
    **答**：遍历所有 `Graph.GetExits()`，对每个入口跑 `FindShortestPath`，选 `weight` 最小的路径；见 `internal/navigation/navigation.go:178` 到 `internal/navigation/navigation.go:193`。
 
 2. **问**：为什么要在启动时执行 `godotenv.Load()`？
-   **答**：为了让 `go run/just run` 直接读取本地 `.env`，同时不覆盖系统环境变量；见注释 `cmd/server/main.go:21` 到 `cmd/server/main.go:25`。
+   **答**：为了让 `go run/mise run start` 直接读取本地 `.env`，同时不覆盖系统环境变量；见注释 `cmd/server/main.go:21` 到 `cmd/server/main.go:25`。
 
 3. **问**：如果没配置 `AMAP_API_KEY`，系统会完全不可用吗？
    **答**：不会。`WalkingRoute` 会回退为基于 haversine 的估算距离和耗时；见 `internal/amap/amap.go:294` 到 `internal/amap/amap.go:313`。
@@ -362,7 +362,7 @@ flowchart TD
 
 | 天数 | 每天目标 | 建议阅读文件 | 验收标准 |
 |---|---|---|---|
-| Day 1 | 跑通后端与前端，记住入口命令 | `justfile`、`cmd/server/main.go`、`frontend/vite.config.js` | 可独立启动前后端并解释端口/代理关系 |
+| Day 1 | 跑通后端与前端，记住入口命令 | `mise.toml`、`cmd/server/main.go`、`frontend/vite.config.js` | 可独立启动前后端并解释端口/代理关系 |
 | Day 2 | 吃透 API 契约与错误处理 | `internal/handler/handler.go`、`frontend/src/api/index.js` | 能手写一份 `/api/route` 请求与响应示例并说明错误分支 |
 | Day 3 | 理解图模型与数据契约 | `internal/graph/graph.go`、`config/b_graph.jsonc` | 能解释节点类型、边权重含义，并定位任意房间邻接关系 |
 | Day 4 | 理解 Dijkstra 与路径组装 | `internal/navigation/navigation.go`、`internal/navigation/navigation_test.go` | 能口述 FindShortestPath 的关键步骤并通过测试 |

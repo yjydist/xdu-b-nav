@@ -23,10 +23,10 @@
 - 若未来新增上述 Cursor/Copilot 规则文件，必须先更新本文件再执行开发任务。
 
 ## 2. 项目范围与技术栈
-- 后端：Go 1.21（模块 `xdu-b-nav`）
+- 后端：Go 1.21+（模块 `xdu-b-nav`，当前 `mise` 默认 Go 1.25）
 - 前端：Vite 5 + React 18 + MUI
-- 包管理器：Bun（前端）
-- 命令入口：`justfile`
+- 包管理器：pnpm（前端，运行于 Node.js）
+- 命令入口：`mise.toml`
 - 地图服务：高德 API（可选，未配置时有降级逻辑）
 - 图配置：`config/b_graph.jsonc`
 
@@ -49,8 +49,9 @@ go mod tidy
 
 前端依赖：
 ```bash
+mise install
 cd frontend
-bun install
+pnpm install
 ```
 
 可选环境变量：
@@ -59,14 +60,16 @@ cp .env.example .env
 ```
 
 ## 5. 构建 / 运行 / 格式化 / 测试命令基线
-优先使用 `just`：
+优先使用 `mise`：
 ```bash
-just build      # go build -o server ./cmd/server
-just run        # go run ./cmd/server
-just test       # go test ./... -v
-just fmt        # go fmt ./...
-just dev        # air 存在时用 air，否则 go run
-just api-test   # 启动服务并执行 API 烟测 + 回归检查
+mise install           # 安装并激活项目工具链
+mise run build         # go build -o server ./cmd/server
+mise run start         # go run ./cmd/server
+mise run test          # go test ./... -v
+mise run fmt           # go fmt ./...
+mise run dev           # air 存在时用 air，否则 go run
+mise run api-test      # 启动服务并执行 API 烟测 + 回归检查
+mise tasks ls          # 查看可用任务
 ```
 
 直接命令：
@@ -80,9 +83,9 @@ go test ./... -v
 前端命令：
 ```bash
 cd frontend
-bun run dev
-bun run build
-bun run preview
+pnpm dev
+pnpm build
+pnpm preview
 ```
 
 ## 6. 单元测试命令（重点）
@@ -159,26 +162,21 @@ go test ./internal/graph -run "TestLoadGraph|TestGetFloor" -v
 
 ## 10. Git 分支与发布规范（内置版）
 长期分支：
-- `main`：生产稳定分支
-- `dev`：开发主线分支
+- `main`：受保护的稳定分支（stable），仅用于合并其他分支与打 release tag。
 
-常规分支（必须从 `dev` 拉取并回合到 `dev`）：
-- `feature/*`
-- `fix/*`
-- `refactor/*`
-- `chore/*`
-- `docs/*`
+常规分支：
+- 所有开发、修复、注释、文档、重构、配置调整等修改，都必须从 `main` 拉出新分支进行。
+- 允许使用的分支前缀：`feature/*`、`fix/*`、`refactor/*`、`chore/*`、`docs/*`、`hotfix/*`。
 
-紧急分支：
-- `hotfix/*` 必须从 `main` 创建，并同时合并回 `main` 和 `dev`。
-
-发布流程：
-- `dev` 合并到 `main` 后，在 `main` 打版本 tag。
+合并与发布流程：
+- 日常开发完成后，通过分支合并回 `main`。
+- `main` 只承载稳定代码、合并结果和 release tag。
+- 需要发版时，仅在 `main` 上打版本 tag。
 
 明确禁止：
-- 直接在 `main` 上进行功能开发提交。
-- 将 `feature/*` 或 `fix/*` 直接合并到 `main`。
-- 从 `dev` 创建 `hotfix/*`。
+- 直接在 `main` 上进行任何文件修改或开发提交。
+- 在 `main` 工作区直接开发功能、修复问题、补注释或调整配置。
+- 未创建对应分支就开始编码。
 - 未经明确授权的强制推送。
 
 ## 11. AGENTS 强制重读与更新机制（必须执行）
@@ -213,9 +211,9 @@ go test ./internal/graph -run "TestLoadGraph|TestGetFloor" -v
 
 提交前：
 - 重读 `AGENTS.md`（强制）。
-- 确认分支类型与来源分支符合 Git 工作流规范。
+- 确认当前不在 `main` 上开发，且分支类型与来源分支符合 Git 工作流规范。
 - 确认提交内容聚焦、无敏感信息（如 `.env`、密钥、凭证）。
 
 ## 13. 一致性维护说明
-- 当 README、justfile、代码行为发生变化且影响开发流程时，需同步更新本文件。
+- 当 README、`mise.toml`、代码行为发生变化且影响开发流程时，需同步更新本文件。
 - 若本文件与实际不一致，以“先修正文档再执行”作为默认策略。

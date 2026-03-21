@@ -73,6 +73,10 @@ func LoadGraph(path string) (*Graph, error) {
 	}
 
 	for _, node := range data.Nodes {
+		if _, exists := g.NodeMap[node.ID]; exists {
+			return nil, fmt.Errorf("发现重复节点 ID：%s", node.ID)
+		}
+
 		g.NodeMap[node.ID] = node
 		g.AdjList[node.ID] = make(map[string]int)
 
@@ -92,6 +96,13 @@ func LoadGraph(path string) (*Graph, error) {
 	}
 
 	for _, edge := range data.Edges {
+		if _, ok := g.AdjList[edge.A]; !ok {
+			return nil, fmt.Errorf("边引用了不存在的节点：%s", edge.A)
+		}
+		if _, ok := g.AdjList[edge.B]; !ok {
+			return nil, fmt.Errorf("边引用了不存在的节点：%s", edge.B)
+		}
+
 		g.AdjList[edge.A][edge.B] = edge.W
 		g.AdjList[edge.B][edge.A] = edge.W
 	}

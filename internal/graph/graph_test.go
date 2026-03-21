@@ -3,6 +3,7 @@ package graph
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -63,6 +64,33 @@ func TestLoadGraphFileNotFound(t *testing.T) {
 	_, err := LoadGraph("/nonexistent/path/graph.jsonc")
 	if err == nil {
 		t.Error("期望错误，得到 nil")
+	}
+}
+
+func TestLoadGraphMissingEdgeNode(t *testing.T) {
+	tmpDir := t.TempDir()
+	testFile := filepath.Join(tmpDir, "test_graph_missing_node.jsonc")
+
+	testContent := `{
+		"nodes": [
+			{"id": "E1", "type": "entrance", "floor": 1, "label": "Exit 1"}
+		],
+		"edges": [
+			{"a": "E1", "b": "B101", "w": 8}
+		]
+	}`
+
+	if err := os.WriteFile(testFile, []byte(testContent), 0644); err != nil {
+		t.Fatalf("创建测试文件失败：%v", err)
+	}
+
+	_, err := LoadGraph(testFile)
+	if err == nil {
+		t.Fatal("期望返回缺失节点错误，得到 nil")
+	}
+
+	if !strings.Contains(err.Error(), "边引用了不存在的节点") {
+		t.Fatalf("期望缺失节点错误，得到：%v", err)
 	}
 }
 

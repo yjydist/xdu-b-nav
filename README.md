@@ -26,7 +26,7 @@ xdu-b-nav/
 ├── config/              # 配置文件
 │   ├── b_graph.jsonc    # 室内拓扑图数据
 │   └── locations.json   # 地点坐标配置
-├── justfile             # 命令工具配置
+├── mise.toml            # mise 工具链与任务配置
 └── go.mod
 ```
 
@@ -92,17 +92,24 @@ cp .env.example .env
 }
 ```
 
-### 2. 运行服务器
+### 2. 安装项目工具链
 
-**使用 just（推荐）:**
 ```bash
-just run     # 开发模式运行
-just build   # 构建项目
-just test    # 运行测试
-just --list  # 查看所有可用命令
+mise install
 ```
 
-**不使用 just:**
+### 3. 运行服务器
+
+**使用 mise（推荐）:**
+```bash
+mise run start  # 直接运行后端
+mise run dev    # 开发模式运行（有 air 则优先使用）
+mise run build  # 构建项目
+mise run test   # 运行测试
+mise tasks ls   # 查看所有可用命令
+```
+
+**不使用 mise:**
 ```bash
 # 开发模式
 go run ./cmd/server
@@ -112,26 +119,30 @@ go build -o server ./cmd/server
 ./server
 ```
 
-### 3. 运行前端（可选）
+### 4. 运行前端（可选）
 
-前端使用 Bun + Vite 开发：
+前端使用 Node.js + pnpm + Vite 开发：
 
 ```bash
+mise run frontend-dev      # 开发模式运行
+mise run frontend-build    # 构建生产版本
+
+# 或直接使用 pnpm
 cd frontend
-bun install      # 安装依赖
-bun run dev     # 开发模式运行
-bun run build   # 构建生产版本
+pnpm install
+pnpm dev
+pnpm build
 ```
 
 前端默认在 http://localhost:5173，它会自动代理 API 请求到后端（8080 端口）。
 
-### 4. 部署接入说明（生产）
+### 5. 部署接入说明（生产）
 
 - 默认推荐：前端与 API 走同域，前端继续使用相对路径 `/api`。
 - 若采用反向代理（Nginx/Caddy 等），只需把 `/api` 转发到 Go 服务（如 `127.0.0.1:8080`）。
 - 若采用前后端分域直连，需要把 `frontend/src/api/index.js` 的 `API_BASE` 改为后端完整域名，并同步配置 CORS 白名单。
 
-### 5. 访问应用
+### 6. 访问应用
 
 打开浏览器访问：http://localhost:8080（后端）或 http://localhost:5173（前端开发服务器）
 
@@ -197,35 +208,34 @@ bun run build   # 构建生产版本
 
 ## 技术栈
 
-- **后端**：Go 1.21+
+- **后端**：Go 1.21+（当前 `mise` 默认安装 Go 1.25）
 - **前端**：Vite 5 + React 18 + MUI (Material UI)
-- **包管理器**：Bun
+- **包管理器**：pnpm（运行于 Node.js）
 - **地图服务**：高德地图 API (可选)
 - **算法**：Dijkstra 最短路径算法
-- **命令工具**：just
+- **命令工具**：mise
 
-## 安装 just (可选)
+## 安装 mise (推荐)
 
-just 是一个命令运行工具，可以简化常用命令的输入。
+mise 同时负责工具版本管理和项目任务编排，用来统一 Go、Node.js、pnpm、Python 以及常用开发命令。
 
 **macOS:**
 ```bash
-brew install just
+brew install mise
 ```
 
-**Linux:**
+**通用安装方式:**
 ```bash
-sudo apt install just
-# 或
-cargo install just
+curl https://mise.run | sh
 ```
 
 **使用后:**
 ```bash
-just run      # 运行服务器
-just build    # 构建项目
-just test     # 运行测试
-just --list   # 查看所有命令
+mise install        # 安装项目工具链
+mise run start      # 运行服务器
+mise run build      # 构建项目
+mise run test       # 运行测试
+mise tasks ls       # 查看所有命令
 ```
 
 ## 测试
@@ -239,7 +249,7 @@ go test ./... -v
 导航回归（推荐每次改动后执行）：
 
 ```bash
-just api-test
+mise run api-test
 ```
 
 该回归会自动校验：

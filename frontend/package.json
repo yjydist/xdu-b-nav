@@ -3,11 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "packageManager": "bun@1.0.0",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
-    "dev": "bun run --hot vite",
-    "build": "bun run vite build",
-    "preview": "bun run vite preview"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
