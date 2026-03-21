@@ -20,6 +20,9 @@ frontend/.vite/
 # 测试覆盖率
 *.out
 
+# 本地学习文档
+docs/
+
 # IDE
 .idea/
 .vscode/
