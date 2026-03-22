@@ -67,9 +67,7 @@ mise run build         # go build -o server ./cmd/server
 mise run start         # go run ./cmd/server
 mise run test          # go test ./... -v
 mise run fmt           # go fmt ./...
-mise run dev           # air 存在时用 air，否则 go run
 mise run dev-all       # 一键启动后端与前端开发服务器
-mise run api-test      # 启动服务并执行 API 烟测 + 回归检查
 mise tasks ls          # 查看可用任务
 ```
 
