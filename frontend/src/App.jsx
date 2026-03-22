@@ -10,8 +10,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
-import ScheduleRoundedIcon from '@mui/icons-material/ScheduleRounded';
 import Header from './components/Header';
 import RouteForm from './components/RouteForm';
 import RouteResult from './components/RouteResult';
@@ -151,86 +149,17 @@ function App() {
               </Alert>
             )}
 
-            <Box
-              sx={{
-                display: 'grid',
-                gap: 3,
-                gridTemplateColumns: { xs: '1fr', xl: '1.05fr 0.95fr' },
-                alignItems: 'start',
-              }}
-            >
-              <Card>
-                <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
-                  <RouteForm
-                    starts={starts}
-                    rooms={rooms}
-                    roomCount={roomCount}
-                    onNavigate={handleNavigate}
-                    disabled={isNavigating}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
-                  <Typography variant="overline" color="text.secondary">
-                    Quick overview
-                  </Typography>
-                  <Typography variant="h3" sx={{ mt: 0.5, mb: 2.5 }}>
-                    选择前你可以先了解这些信息
-                  </Typography>
-
-                  <Stack spacing={1.75}>
-                    {[
-                      {
-                        title: '起点列表已经分区整理',
-                        description: `当前共提供 ${starts.reduce((sum, group) => sum + group.items.length, 0)} 个宿舍起点，优先覆盖丁香、海棠和竹园。`,
-                        icon: <AutoStoriesRoundedIcon fontSize="small" />,
-                      },
-                      {
-                        title: '教室按楼层聚合展示',
-                        description: `当前共收录 ${roomCount} 间 B 楼教室，选择时更容易按楼层定位。`,
-                        icon: <ScheduleRoundedIcon fontSize="small" />,
-                      },
-                    ].map((item) => (
-                      <Box
-                        key={item.title}
-                        sx={{
-                          p: 2,
-                          borderRadius: 2.5,
-                          bgcolor: 'rgba(247, 242, 250, 0.9)',
-                          border: '1px solid rgba(122, 117, 127, 0.12)',
-                        }}
-                      >
-                        <Stack direction="row" spacing={1.25} alignItems="flex-start">
-                          <Box
-                            sx={{
-                              mt: 0.2,
-                              width: 36,
-                              height: 36,
-                              borderRadius: 2,
-                              bgcolor: 'primary.light',
-                              color: 'primary.main',
-                              display: 'grid',
-                              placeItems: 'center',
-                              flexShrink: 0,
-                            }}
-                          >
-                            {item.icon}
-                          </Box>
-                          <Box>
-                            <Typography variant="h5">{item.title}</Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                              {item.description}
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-                    ))}
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Box>
+            <Card>
+              <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
+                <RouteForm
+                  starts={starts}
+                  rooms={rooms}
+                  roomCount={roomCount}
+                  onNavigate={handleNavigate}
+                  disabled={isNavigating}
+                />
+              </CardContent>
+            </Card>
 
             {isNavigating && (
               <Card>

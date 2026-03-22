@@ -1,6 +1,4 @@
-import { Box, Chip, Stack, Typography } from '@mui/material';
-import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import ExploreRoundedIcon from '@mui/icons-material/ExploreRounded';
+import { Box, Stack, Typography } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 
 function Header() {
@@ -30,9 +28,6 @@ function Header() {
         >
           <SchoolIcon sx={{ fontSize: 28 }} />
         </Box>
-        <Typography variant="overline" sx={{ color: 'text.secondary' }}>
-          XDU CAMPUS ROUTE ASSISTANT
-        </Typography>
       </Stack>
 
       <Typography
@@ -47,26 +42,9 @@ function Header() {
         B 楼导航系统
       </Typography>
 
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={1.25}
-        useFlexGap
-        flexWrap="wrap"
-        sx={{ mt: 0.5 }}
-      >
-        <Chip
-          icon={<ExploreRoundedIcon />}
-          label="宿舍到教室路线规划"
-          color="primary"
-          variant="filled"
-        />
-        <Chip
-          icon={<AutoAwesomeRoundedIcon />}
-          label="室外步行 + 室内节点联动"
-          variant="outlined"
-          sx={{ bgcolor: 'rgba(255,255,255,0.75)' }}
-        />
-      </Stack>
+      <Typography variant="subtitle1" color="text.secondary">
+        从宿舍到教室的路线规划
+      </Typography>
     </Box>
   );
 }

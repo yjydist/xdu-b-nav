@@ -48,14 +48,8 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
         sx={{ mb: 3 }}
       >
         <Box>
-          <Typography variant="overline" color="text.secondary">
-            Route setup
-          </Typography>
-          <Typography variant="h2" component="h2" sx={{ mt: 0.5 }}>
+          <Typography variant="h2" component="h2">
             规划路线
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1, maxWidth: 520 }}>
-            选择宿舍起点与教室编号，系统会自动组合室外步行路线和楼内最短路径。
           </Typography>
         </Box>
 
@@ -96,9 +90,6 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
             </Box>
             <Box>
               <Typography variant="h4">起点（宿舍楼号）</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                按宿舍区组织列表，优先选择你当前所在的宿舍楼。
-              </Typography>
             </Box>
           </Stack>
 
@@ -149,9 +140,6 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
             </Box>
             <Box>
               <Typography variant="h4">目的地（B 楼教室号）</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                教室按楼层整理，你可以直接滚动到目标楼层选择对应房间。
-              </Typography>
             </Box>
           </Stack>
 
@@ -196,13 +184,6 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
         {disabled ? '正在生成推荐路线...' : '规划路径'}
       </Button>
 
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ mt: 1.5, textAlign: 'center' }}
-      >
-        提交后会显示室外步行、楼内节点路径和完整步骤说明。
-      </Typography>
     </Box>
   );
 }

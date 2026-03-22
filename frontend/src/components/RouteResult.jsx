@@ -20,7 +20,6 @@ import {
 } from '@mui/icons-material';
 import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 import RouteRoundedIcon from '@mui/icons-material/RouteRounded';
-import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import ScheduleRoundedIcon from '@mui/icons-material/ScheduleRounded';
 import StraightenRoundedIcon from '@mui/icons-material/StraightenRounded';
 import { fetchConfig, fetchCoordinates } from '../api';
@@ -161,23 +160,10 @@ function RouteResult({ result }) {
               spacing={2}
             >
               <Box>
-                <Typography variant="overline" color="text.secondary">
-                  Route summary
-                </Typography>
-                <Typography variant="h2" sx={{ mt: 0.5 }}>
+                <Typography variant="h2">
                   已生成推荐路径
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  室外路线与楼内导航已经组合完成，可以直接按步骤前往目标教室。
-                </Typography>
               </Box>
-
-              <Chip
-                icon={<ApartmentRoundedIcon />}
-                label={`总权重 ${result.total_weight}`}
-                color="primary"
-                sx={{ alignSelf: { xs: 'flex-start', md: 'center' } }}
-              />
             </Stack>
 
             <Box
@@ -219,10 +205,7 @@ function RouteResult({ result }) {
           <CardContent>
             <Stack spacing={2.5}>
               <Box>
-                <Typography variant="overline" color="text.secondary">
-                  Outdoor route
-                </Typography>
-                <Typography variant="h3" sx={{ mt: 0.5 }}>
+                <Typography variant="h3">
                   室外步行段
                 </Typography>
               </Box>
@@ -248,11 +231,9 @@ function RouteResult({ result }) {
                 )}
               </Box>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25} useFlexGap flexWrap="wrap">
-                <Chip label={`从 ${result.outdoor.from} 出发`} />
-                <Chip label="目标：B 楼南楼" variant="outlined" />
-                <Chip label={`步行 ${Math.ceil(result.outdoor.duration / 60)} 分钟`} variant="outlined" />
-              </Stack>
+              <Typography variant="body2" color="text.secondary">
+                {result.outdoor.from} {'->'} B 楼南楼
+              </Typography>
             </Stack>
           </CardContent>
         </Card>
@@ -263,10 +244,7 @@ function RouteResult({ result }) {
           <CardContent>
             <Stack spacing={2.5}>
               <Box>
-                <Typography variant="overline" color="text.secondary">
-                  Indoor route
-                </Typography>
-                <Typography variant="h3" sx={{ mt: 0.5 }}>
+                <Typography variant="h3">
                   室内导航
                 </Typography>
               </Box>
