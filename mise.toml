@@ -22,108 +22,11 @@ run = "go test ./... -v"
 description = "执行 Go 格式化"
 run = "go fmt ./..."
 
-[tasks.deps]
-description = "整理 Go 与前端依赖"
-run = ["go mod tidy", "cd frontend && pnpm install"]
-
-[tasks.clean]
-description = "清理后端与前端构建产物"
-run = ["rm -f server", "rm -rf frontend/dist"]
-
-[tasks.stop]
-description = "停止本地服务进程"
-run = "pkill -f './server' 2>/dev/null || true"
-
-[tasks.dev]
-description = "开发模式运行后端"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-
-if command -v air >/dev/null 2>&1; then
-  air
-else
-  echo "未安装 air，使用 go run..."
-  go run ./cmd/server
-fi
-'''
-
-[tasks."api-test"]
-description = "启动服务并执行 API 烟测与回归检查"
-depends = ["build"]
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-
-cleanup() {
-  pkill -f "./server" >/dev/null 2>&1 || true
-}
-
-trap cleanup EXIT
-
-./server > /tmp/xd-api-test.log 2>&1 &
-
-for _ in {1..20}; do
-  if curl -sf http://localhost:8080/api/rooms >/dev/null; then
-    break
-  fi
-  sleep 0.5
-done
-
-if ! curl -sf http://localhost:8080/api/rooms >/dev/null; then
-  echo "服务未成功启动，日志如下:"
-  cat /tmp/xd-api-test.log
-  exit 1
-fi
-
-echo
-echo "=== API 测试 ==="
-echo
-echo "1. 教室列表 /api/rooms:"
-curl -sf http://localhost:8080/api/rooms | python3 -c "import sys,json;d=json.load(sys.stdin);r=d.get('rooms',[]);print(f'  {len(r)} 个教室')"
-echo
-echo "2. 出口列表 /api/exits:"
-curl -sf http://localhost:8080/api/exits | python3 -c "import sys,json;d=json.load(sys.stdin);r=d.get('exits',[]);print(f'  {len(r)} 个出口')"
-echo
-echo "3. 起点列表 /api/starts:"
-curl -sf http://localhost:8080/api/starts | python3 -c "import sys,json;d=json.load(sys.stdin);r=d.get('starts',[]);print(f'  {len(r)} 个起点')"
-echo
-echo "4. 前端配置 /api/config:"
-curl -sf http://localhost:8080/api/config | python3 -c "import sys,json;d=json.load(sys.stdin);state='已配置' if d.get('amap_js_api_key') else '未配置'; print(f'  js_api_key: {state}')"
-echo
-echo "5. 坐标映射 /api/coordinates:"
-curl -sf http://localhost:8080/api/coordinates | python3 -c "import sys,json;d=json.load(sys.stdin);r=d.get('coordinates',[]);print(f'  {len(r)} 个坐标点')"
-echo
-echo "6. 导航测试 /api/route (丁香公寓 11 号楼 -> B301):"
-curl -sf -X POST http://localhost:8080/api/route -H "Content-Type: application/json" -d '{"start":"丁香公寓 11 号楼","destination":"B301"}' > /tmp/xd-route-regression.json
-python3 -c "import json,sys; data=json.load(open('/tmp/xd-route-regression.json','r',encoding='utf-8')); out=data.get('outdoor',{}); dist=out.get('distance',0); dur=out.get('duration',0); path=data.get('path',[]); ok=data.get('success') and 50<=dist<=3000 and 60<=dur<=2400 and len(path)>=2; print(('✓ 回归通过: 距离 %s 米, 耗时 %s 秒, 节点数 %s' % (dist,dur,len(path))) if ok else ('✗ 回归失败: success=%s distance=%s duration=%s path_nodes=%s error=%s' % (data.get('success'),dist,dur,len(path),data.get('error_message')))); sys.exit(0 if ok else 1)"
-echo "✓ API 测试完成"
-'''
-
-[tasks."frontend-dev"]
-description = "运行前端开发服务器"
-run = "cd frontend && pnpm dev"
-
-[tasks."frontend-build"]
-description = "构建前端"
-run = "cd frontend && pnpm build"
-
-[tasks."frontend-preview"]
-description = "预览前端构建产物"
-run = "cd frontend && pnpm preview"
-
 [tasks."dev-all"]
 description = "一键启动后端与前端开发服务器"
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
-
-release_port() {
-  local port="$1"
-  if pids=$(lsof -ti tcp:"$port" 2>/dev/null); then
-    kill $pids >/dev/null 2>&1 || true
-  fi
-}
 
 cleanup() {
   if [[ -n "${backend_pid:-}" ]]; then
@@ -132,25 +35,11 @@ cleanup() {
   if [[ -n "${frontend_pid:-}" ]]; then
     kill "$frontend_pid" >/dev/null 2>&1 || true
   fi
-
-  pkill -f "go run ./cmd/server" >/dev/null 2>&1 || true
-  pkill -f "air" >/dev/null 2>&1 || true
-  pkill -f "vite --host 127.0.0.1" >/dev/null 2>&1 || true
 }
 
 trap cleanup EXIT INT TERM
 
-cleanup
-release_port 8080
-release_port 5173
-
-(
-  if command -v air >/dev/null 2>&1; then
-    air
-  else
-    go run ./cmd/server
-  fi
-) &
+go run ./cmd/server &
 backend_pid=$!
 
 (cd frontend && pnpm dev --host 127.0.0.1 --strictPort) &

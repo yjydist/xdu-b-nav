@@ -103,10 +103,10 @@ mise install
 **使用 mise（推荐）:**
 ```bash
 mise run start  # 直接运行后端
-mise run dev    # 开发模式运行（有 air 则优先使用）
 mise run dev-all # 一键启动后端与前端开发服务器
 mise run build  # 构建项目
 mise run test   # 运行测试
+mise run fmt    # 格式化 Go 代码
 mise tasks ls   # 查看所有可用命令
 ```
 
@@ -125,14 +125,11 @@ go build -o server ./cmd/server
 前端使用 Node.js + pnpm + Vite 开发：
 
 ```bash
-mise run frontend-dev      # 开发模式运行
-mise run frontend-build    # 构建生产版本
-
-# 或直接使用 pnpm
 cd frontend
 pnpm install
 pnpm dev
 pnpm build
+pnpm preview
 ```
 
 前端默认在 http://localhost:5173，它会自动代理 API 请求到后端（8080 端口）。
@@ -240,6 +237,7 @@ mise run start      # 运行服务器
 mise run dev-all    # 一键启动前后端开发环境
 mise run build      # 构建项目
 mise run test       # 运行测试
+mise run fmt        # 格式化 Go 代码
 mise tasks ls       # 查看所有命令
 ```
 
@@ -251,17 +249,12 @@ mise tasks ls       # 查看所有命令
 go test ./... -v
 ```
 
-导航回归（推荐每次改动后执行）：
+推荐的基础验证：
 
 ```bash
-mise run api-test
+go test ./... -v
+curl http://localhost:8080/api/rooms
 ```
-
-该回归会自动校验：
-
-- 室外距离是否落在校园内合理区间（防止回归到异常量级）
-- 室外耗时是否落在可接受区间
-- 室内路径节点链是否完整（避免“跳点”现象）
 
 ## 代码质量保证
 

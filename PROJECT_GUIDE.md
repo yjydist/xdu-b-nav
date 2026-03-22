@@ -110,6 +110,7 @@ flowchart LR
 - 后端运行：`mise run start`（`mise.toml`）或 `go run ./cmd/server`。
 - 联合开发：`mise run dev-all`（`mise.toml`），同时启动后端 `8080` 与前端 `5173`。
 - 后端测试：`mise run test`（`mise.toml`）或 `go test ./... -v`。
+- 后端格式化：`mise run fmt`（`mise.toml`）或 `go fmt ./...`。
 - 前端开发：`pnpm dev`（`frontend/package.json:8`）。
 - 前端构建：`pnpm build`（`frontend/package.json:9`）。
 - 已验证：当前仓库执行 `go test ./... -v` 通过。
