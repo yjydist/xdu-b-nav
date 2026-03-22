@@ -111,3 +111,53 @@ run = "cd frontend && pnpm build"
 [tasks."frontend-preview"]
 description = "预览前端构建产物"
 run = "cd frontend && pnpm preview"
+
+[tasks."dev-all"]
+description = "一键启动后端与前端开发服务器"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+release_port() {
+  local port="$1"
+  if pids=$(lsof -ti tcp:"$port" 2>/dev/null); then
+    kill $pids >/dev/null 2>&1 || true
+  fi
+}
+
+cleanup() {
+  if [[ -n "${backend_pid:-}" ]]; then
+    kill "$backend_pid" >/dev/null 2>&1 || true
+  fi
+  if [[ -n "${frontend_pid:-}" ]]; then
+    kill "$frontend_pid" >/dev/null 2>&1 || true
+  fi
+
+  pkill -f "go run ./cmd/server" >/dev/null 2>&1 || true
+  pkill -f "air" >/dev/null 2>&1 || true
+  pkill -f "vite --host 127.0.0.1" >/dev/null 2>&1 || true
+}
+
+trap cleanup EXIT INT TERM
+
+cleanup
+release_port 8080
+release_port 5173
+
+(
+  if command -v air >/dev/null 2>&1; then
+    air
+  else
+    go run ./cmd/server
+  fi
+) &
+backend_pid=$!
+
+(cd frontend && pnpm dev --host 127.0.0.1 --strictPort) &
+frontend_pid=$!
+
+echo "后端: http://localhost:8080"
+echo "前端: http://127.0.0.1:5173"
+
+wait "$backend_pid" "$frontend_pid"
+'''

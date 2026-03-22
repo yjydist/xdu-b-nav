@@ -108,6 +108,7 @@ flowchart LR
 
 **构建与测试命令（来自仓库）**
 - 后端运行：`mise run start`（`mise.toml`）或 `go run ./cmd/server`。
+- 联合开发：`mise run dev-all`（`mise.toml`），同时启动后端 `8080` 与前端 `5173`。
 - 后端测试：`mise run test`（`mise.toml`）或 `go test ./... -v`。
 - 前端开发：`pnpm dev`（`frontend/package.json:8`）。
 - 前端构建：`pnpm build`（`frontend/package.json:9`）。

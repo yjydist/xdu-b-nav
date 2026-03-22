@@ -104,6 +104,7 @@ mise install
 ```bash
 mise run start  # 直接运行后端
 mise run dev    # 开发模式运行（有 air 则优先使用）
+mise run dev-all # 一键启动后端与前端开发服务器
 mise run build  # 构建项目
 mise run test   # 运行测试
 mise tasks ls   # 查看所有可用命令
@@ -138,13 +139,16 @@ pnpm build
 
 ### 5. 部署接入说明（生产）
 
-- 默认推荐：前端与 API 走同域，前端继续使用相对路径 `/api`。
-- 若采用反向代理（Nginx/Caddy 等），只需把 `/api` 转发到 Go 服务（如 `127.0.0.1:8080`）。
+- 当前项目按前后端分离运行：前端开发服务器默认 `http://127.0.0.1:5173`，后端 API 默认 `http://127.0.0.1:8080`。
+- 开发环境下，Vite 已代理 `/api` 到后端服务。
+- 生产环境若采用反向代理（Nginx/Caddy 等），只需把 `/api` 转发到 Go 服务（如 `127.0.0.1:8080`），前端静态资源由独立站点托管。
 - 若采用前后端分域直连，需要把 `frontend/src/api/index.js` 的 `API_BASE` 改为后端完整域名，并同步配置 CORS 白名单。
 
 ### 6. 访问应用
 
-打开浏览器访问：http://localhost:8080（后端）或 http://localhost:5173（前端开发服务器）
+打开浏览器访问：http://127.0.0.1:5173（前端开发服务器）
+
+后端 API 默认提供在：http://127.0.0.1:8080
 
 ## API 接口
 
@@ -233,6 +237,7 @@ curl https://mise.run | sh
 ```bash
 mise install        # 安装项目工具链
 mise run start      # 运行服务器
+mise run dev-all    # 一键启动前后端开发环境
 mise run build      # 构建项目
 mise run test       # 运行测试
 mise tasks ls       # 查看所有命令
