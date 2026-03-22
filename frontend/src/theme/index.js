@@ -1,17 +1,12 @@
 import { createTheme } from '@mui/material/styles';
 
-/**
- * Material Design 3 紫色系主题配置
- * 使用 MUI 默认的紫色调，营造现代、专业的视觉效果
- * 符合校园导航系统的定位
- */
 const theme = createTheme({
-  // 调色板：使用 MUI 标准的紫色系
   palette: {
+    mode: 'light',
     primary: {
-      main: '#6750A4', // MUI 标准紫色
-      light: '#EADDFF',
-      dark: '#4F378B',
+      main: '#65558F',
+      light: '#E9DDFF',
+      dark: '#4D3D75',
       contrastText: '#FFFFFF',
     },
     secondary: {
@@ -20,77 +15,208 @@ const theme = createTheme({
       dark: '#4A4458',
       contrastText: '#FFFFFF',
     },
+    tertiary: {
+      main: '#7D5260',
+      light: '#FFD8E4',
+      dark: '#633B48',
+      contrastText: '#FFFFFF',
+    },
+    error: {
+      main: '#BA1A1A',
+      light: '#FFDAD6',
+      dark: '#93000A',
+    },
     background: {
       default: '#FFFBFE',
-      paper: '#FFFFFF',
+      paper: '#FEF7FF',
     },
     text: {
       primary: '#1C1B1F',
       secondary: '#49454F',
     },
+    divider: '#CAC4D0',
+    outline: '#7A757F',
+    surfaceTint: '#65558F',
+    surfaceVariant: '#E7E0EB',
+    surfaceContainerLowest: '#FFFFFF',
+    surfaceContainerLow: '#F7F2FA',
+    surfaceContainer: '#F3EDF7',
+    surfaceContainerHigh: '#ECE6F0',
+    surfaceContainerHighest: '#E6E0E9',
   },
-  // 字体排版：使用本地 JetBrains Maple Mono 字体
-  // 该字体同时支持中英文，默认字重 600
   typography: {
     fontFamily: '"JetBrains Maple Mono", monospace',
     h1: {
-      fontSize: '2rem',
-      fontWeight: 600,
+      fontSize: 'clamp(2.4rem, 4vw, 4rem)',
+      lineHeight: 1.05,
+      letterSpacing: '-0.04em',
+      fontWeight: 700,
     },
     h2: {
-      fontSize: '1.5rem',
+      fontSize: 'clamp(1.6rem, 2.4vw, 2.2rem)',
+      lineHeight: 1.15,
       fontWeight: 600,
     },
     h3: {
       fontSize: '1.25rem',
+      lineHeight: 1.2,
       fontWeight: 600,
     },
     h4: {
-      fontSize: '1.125rem',
+      fontSize: '1rem',
+      lineHeight: 1.25,
       fontWeight: 600,
     },
+    h5: {
+      fontSize: '0.95rem',
+      lineHeight: 1.35,
+      fontWeight: 600,
+    },
+    subtitle1: {
+      fontSize: '1rem',
+      lineHeight: 1.65,
+      color: '#49454F',
+    },
+    body1: {
+      lineHeight: 1.7,
+    },
+    body2: {
+      lineHeight: 1.6,
+    },
+    button: {
+      fontSize: '0.95rem',
+      fontWeight: 700,
+      letterSpacing: '0.01em',
+    },
+    overline: {
+      fontSize: '0.72rem',
+      fontWeight: 700,
+      letterSpacing: '0.12em',
+      textTransform: 'uppercase',
+    },
   },
-  // 组件样式圆角
   shape: {
-    borderRadius: 12,
+    borderRadius: 10,
   },
-  // 组件默认样式覆盖
   components: {
-    // 按钮样式
-    MuiButton: {
+    MuiCssBaseline: {
       styleOverrides: {
-        root: {
-          textTransform: 'none', // 不转换为大写，保持自然
-          fontWeight: 600,
-          borderRadius: 20, // 圆角按钮
-          padding: '10px 24px',
+        body: {
+          background: [
+            'radial-gradient(circle at top left, rgba(233, 221, 255, 0.96), transparent 30%)',
+            'radial-gradient(circle at top right, rgba(255, 216, 228, 0.78), transparent 26%)',
+            'linear-gradient(180deg, #FFFBFE 0%, #F6F0FA 100%)',
+          ].join(','),
+          backgroundAttachment: 'fixed',
+        },
+        '#root': {
+          minHeight: '100vh',
         },
       },
     },
-    // 输入框样式
-    MuiTextField: {
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
       styleOverrides: {
         root: {
-          '& .MuiOutlinedInput-root': {
-            borderRadius: 12,
+          minHeight: 48,
+          textTransform: 'none',
+          borderRadius: 999,
+          paddingInline: 24,
+        },
+        contained: {
+          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(101, 85, 143, 0.22)',
+          '&:hover': {
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2), 0 6px 16px rgba(101, 85, 143, 0.2)',
+          },
+        },
+        outlined: {
+          borderColor: '#7A757F',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 999,
+          height: 34,
+        },
+        filled: {
+          backgroundColor: '#E8DEF8',
+          color: '#4A4458',
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          backgroundColor: 'rgba(254, 247, 255, 0.92)',
+          border: '1px solid rgba(122, 117, 127, 0.14)',
+          boxShadow: '0 1px 2px rgba(28, 27, 31, 0.08), 0 12px 32px rgba(103, 80, 164, 0.08)',
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 24,
+          '&:last-child': {
+            paddingBottom: 24,
           },
         },
       },
     },
-    // 卡片样式
-    MuiCard: {
+    MuiAlert: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+          borderRadius: 10,
         },
       },
     },
-    // 选择框样式
-    MuiSelect: {
+    MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
+          borderRadius: 10,
+          backgroundColor: 'rgba(247, 242, 250, 0.92)',
+          transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(122, 117, 127, 0.36)',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#65558F',
+          },
+          '&.Mui-focused': {
+            backgroundColor: '#FFFFFF',
+            boxShadow: '0 0 0 4px rgba(101, 85, 143, 0.12)',
+          },
+        },
+        input: {
+          paddingBlock: 16,
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused': {
+            color: '#65558F',
+          },
+        },
+      },
+    },
+    MuiStepper: {
+      styleOverrides: {
+        root: {
+          gap: 8,
+        },
+      },
+    },
+    MuiStepContent: {
+      styleOverrides: {
+        root: {
+          borderLeftColor: 'rgba(101, 85, 143, 0.28)',
         },
       },
     },

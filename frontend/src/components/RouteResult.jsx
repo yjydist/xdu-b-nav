@@ -1,29 +1,30 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Box,
-  Typography,
   Card,
   CardContent,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
   Chip,
   Divider,
+  Stack,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
 } from '@mui/material';
 import {
-  DirectionsWalk,
-  Stairs,
-  DoorFront,
   ArrowForward,
+  DirectionsWalk,
+  DoorFront,
+  Stairs,
 } from '@mui/icons-material';
+import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
+import RouteRoundedIcon from '@mui/icons-material/RouteRounded';
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
+import ScheduleRoundedIcon from '@mui/icons-material/ScheduleRounded';
+import StraightenRoundedIcon from '@mui/icons-material/StraightenRounded';
 import { fetchConfig, fetchCoordinates } from '../api';
 
-/**
- * 获取步骤图标组件（模块级别定义）
- * @param {string} action - 动作描述
- * @returns {Component} 图标组件
- */
 const getStepIcon = (action) => {
   if (action.includes('进入') || action.includes('出')) return DoorFront;
   if (action.includes('上楼')) return Stairs;
@@ -32,11 +33,6 @@ const getStepIcon = (action) => {
   return DirectionsWalk;
 };
 
-/**
- * 路线结果组件
- * 显示室外路线（地图）和室内导航步骤
- * @param {Object} result - 导航结果数据
- */
 function RouteResult({ result }) {
   const [config, setConfig] = useState(null);
   const [coordinates, setCoordinates] = useState({});
@@ -44,24 +40,20 @@ function RouteResult({ result }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
-  // 加载地图配置和坐标映射
   useEffect(() => {
     async function loadConfig() {
       try {
-        // 并行加载配置和坐标
         const [configData, coordsData] = await Promise.all([
           fetchConfig(),
           fetchCoordinates(),
         ]);
         setConfig(configData);
         setCoordinates(coordsData.coordinates || {});
-        
-        // 配置安全密钥
+
         if (configData.amap_js_api_key && configData.amap_js_api_key !== '你的 JS_API_Key_填在这里') {
           window._AMapSecurityConfig = {
             securityJsCode: configData.amap_security_code || '',
           };
-          // 动态加载高德地图脚本
           loadAMapScript(configData.amap_js_api_key);
         }
       } catch (err) {
@@ -71,7 +63,6 @@ function RouteResult({ result }) {
     loadConfig();
   }, []);
 
-  // 加载高德地图脚本
   function loadAMapScript(key) {
     const script = document.getElementById('amap-script');
     if (!script) return;
@@ -82,23 +73,19 @@ function RouteResult({ result }) {
     };
   }
 
-  // 初始化地图
   useEffect(() => {
     if (!isAMapReady || !mapRef.current || !result.outdoor) return;
 
     const initMap = () => {
-      // 从 API 获取的坐标中查找 B 楼中心坐标
       const bBuildingCoords = Object.entries(coordinates).find(([name]) => name.includes('B 楼'));
       const center = bBuildingCoords ? bBuildingCoords[1] : [108.831946, 34.126019];
-      
-      // 创建地图实例
+
       mapInstanceRef.current = new window.AMap.Map(mapRef.current, {
         zoom: 16,
         center,
         viewMode: '2D',
       });
 
-      // 添加起点和终点标记
       const startCoord = coordinates[result.outdoor.from];
       if (startCoord) {
         new window.AMap.Marker({
@@ -121,7 +108,6 @@ function RouteResult({ result }) {
         });
       }
 
-      // 规划步行路线
       if (startCoord && bBuildingCoords) {
         const walking = new window.AMap.Walking({
           map: mapInstanceRef.current,
@@ -136,141 +122,218 @@ function RouteResult({ result }) {
       }
     };
 
-    // 等待 AMap 加载完成
     if (window.AMap) {
       initMap();
     }
   }, [isAMapReady, result, coordinates]);
 
+  const statItems = [
+    {
+      label: '室外距离',
+      value: result.outdoor ? `${result.outdoor.distance} 米` : 'N/A',
+      icon: <StraightenRoundedIcon fontSize="small" />,
+    },
+    {
+      label: '预计时长',
+      value: result.outdoor ? `${Math.ceil(result.outdoor.duration / 60)} 分钟` : 'N/A',
+      icon: <ScheduleRoundedIcon fontSize="small" />,
+    },
+    {
+      label: '推荐入口',
+      value: result.outdoor?.nearest_exit || 'N/A',
+      icon: <PinDropRoundedIcon fontSize="small" />,
+    },
+    {
+      label: '经过节点',
+      value: `${(result.path || []).length} 个`,
+      icon: <RouteRoundedIcon fontSize="small" />,
+    },
+  ];
+
   return (
-    <Box>
-      {/* 室外路线 - 地图 */}
-      {result.outdoor && (
-        <Card sx={{ mb: 3 }}>
-          <CardContent sx={{ p: 0 }}>
-            <Box sx={{ p: 2, pb: 0 }}>
-              <Typography variant="h3" component="h3" sx={{ mb: 1 }}>
-                🚶 室外路线
-              </Typography>
-            </Box>
-            
-            {/* 地图容器 */}
+    <Stack spacing={3}>
+      <Card>
+        <CardContent>
+          <Stack spacing={2.5}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              justifyContent="space-between"
+              spacing={2}
+            >
+              <Box>
+                <Typography variant="overline" color="text.secondary">
+                  Route summary
+                </Typography>
+                <Typography variant="h2" sx={{ mt: 0.5 }}>
+                  已生成推荐路径
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  室外路线与楼内导航已经组合完成，可以直接按步骤前往目标教室。
+                </Typography>
+              </Box>
+
+              <Chip
+                icon={<ApartmentRoundedIcon />}
+                label={`总权重 ${result.total_weight}`}
+                color="primary"
+                sx={{ alignSelf: { xs: 'flex-start', md: 'center' } }}
+              />
+            </Stack>
+
             <Box
-              ref={mapRef}
               sx={{
-                width: '100%',
-                height: 300,
-                backgroundColor: '#f5f5f5',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                display: 'grid',
+                gap: 1.5,
+                gridTemplateColumns: {
+                  xs: '1fr 1fr',
+                  md: 'repeat(4, minmax(0, 1fr))',
+                },
               }}
             >
-              {!config?.amap_js_api_key && (
-                <Typography color="text.secondary">
-                  未配置地图 API，仅显示文字路线
-                </Typography>
-              )}
-            </Box>
-
-            {/* 室外路线摘要 */}
-            <Box sx={{ p: 2 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <Chip label={`距离: ${result.outdoor.distance}米`} color="primary" variant="outlined" />
-                <Chip label={`预计: ${Math.ceil(result.outdoor.duration / 60)}分钟`} color="primary" variant="outlined" />
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                从 {result.outdoor.from} 步行前往 B 楼南楼
-              </Typography>
-            </Box>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* 室内路线 */}
-      {result.indoor && result.indoor.length > 0 && (
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
-            <Typography variant="h3" component="h3" sx={{ mb: 2 }}>
-              🏢 室内导航
-            </Typography>
-
-            {/* 导航步骤 */}
-            <Stepper orientation="vertical">
-              {result.indoor.map((step, index) => {
-                const StepIcon = getStepIcon(step.action);
-                return (
-                  <Step key={index} active>
-                    <StepLabel
-                      StepIconComponent={() => (
-                        <Box
-                          sx={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: '50%',
-                            bgcolor: 'primary.main',
-                            color: 'white',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <StepIcon fontSize="small" />
-                        </Box>
-                      )}
-                    >
-                      <Typography variant="body1" fontWeight={600}>
-                        {step.action}
-                      </Typography>
-                    </StepLabel>
-                    <StepContent>
-                      <Typography variant="body2" color="text.secondary">
-                        {step.description}
-                      </Typography>
-                    </StepContent>
-                  </Step>
-                );
-              })}
-            </Stepper>
-
-            {/* 完整节点序列 */}
-            {result.path && result.path.length > 0 && (
-              <>
-                <Divider sx={{ my: 2 }} />
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                  完整经过节点
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {result.path.map((node, index) => (
-                    <Chip
-                      key={index}
-                      label={`${index + 1}. ${node}`}
-                      size="small"
-                      variant="outlined"
-                    />
-                  ))}
+              {statItems.map((item) => (
+                <Box
+                  key={item.label}
+                  sx={{
+                    p: 2,
+                    borderRadius: 2.5,
+                    bgcolor: 'rgba(247, 242, 250, 0.92)',
+                    border: '1px solid rgba(122, 117, 127, 0.12)',
+                  }}
+                >
+                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                    <Box sx={{ color: 'primary.main', display: 'flex' }}>{item.icon}</Box>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.label}
+                    </Typography>
+                  </Stack>
+                  <Typography variant="h4">{item.value}</Typography>
                 </Box>
-              </>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* 路径摘要 */}
-      <Card sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-        <CardContent sx={{ textAlign: 'center', py: 3 }}>
-          <Typography variant="h4" sx={{ mb: 1 }}>
-            总权重
-          </Typography>
-          <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 1 }}>
-            {result.total_weight}
-          </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.9 }}>
-            入口：{result.outdoor?.nearest_exit || 'N/A'} | 节点数：{(result.path || []).length}
-          </Typography>
+              ))}
+            </Box>
+          </Stack>
         </CardContent>
       </Card>
-    </Box>
+
+      {result.outdoor && (
+        <Card>
+          <CardContent>
+            <Stack spacing={2.5}>
+              <Box>
+                <Typography variant="overline" color="text.secondary">
+                  Outdoor route
+                </Typography>
+                <Typography variant="h3" sx={{ mt: 0.5 }}>
+                  室外步行段
+                </Typography>
+              </Box>
+
+              <Box
+                ref={mapRef}
+                sx={{
+                  width: '100%',
+                  height: { xs: 260, md: 320 },
+                  borderRadius: 2.5,
+                  overflow: 'hidden',
+                  bgcolor: 'rgba(231, 224, 235, 0.92)',
+                  border: '1px solid rgba(122, 117, 127, 0.14)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {!config?.amap_js_api_key && (
+                  <Typography color="text.secondary">
+                    未配置地图 API，仅显示文字路线
+                  </Typography>
+                )}
+              </Box>
+
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25} useFlexGap flexWrap="wrap">
+                <Chip label={`从 ${result.outdoor.from} 出发`} />
+                <Chip label="目标：B 楼南楼" variant="outlined" />
+                <Chip label={`步行 ${Math.ceil(result.outdoor.duration / 60)} 分钟`} variant="outlined" />
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
+
+      {result.indoor && result.indoor.length > 0 && (
+        <Card>
+          <CardContent>
+            <Stack spacing={2.5}>
+              <Box>
+                <Typography variant="overline" color="text.secondary">
+                  Indoor route
+                </Typography>
+                <Typography variant="h3" sx={{ mt: 0.5 }}>
+                  室内导航
+                </Typography>
+              </Box>
+
+              <Stepper orientation="vertical">
+                {result.indoor.map((step, index) => {
+                  const StepIcon = getStepIcon(step.action);
+                  return (
+                    <Step key={index} active>
+                      <StepLabel
+                        StepIconComponent={() => (
+                          <Box
+                            sx={{
+                              width: 36,
+                              height: 36,
+                              borderRadius: '50%',
+                              bgcolor: 'primary.main',
+                              color: 'white',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              boxShadow: '0 8px 18px rgba(101, 85, 143, 0.2)',
+                            }}
+                          >
+                            <StepIcon fontSize="small" />
+                          </Box>
+                        )}
+                      >
+                        <Typography variant="body1" fontWeight={700}>
+                          {step.action}
+                        </Typography>
+                      </StepLabel>
+                      <StepContent>
+                        <Typography variant="body2" color="text.secondary">
+                          {step.description}
+                        </Typography>
+                      </StepContent>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+
+              {result.path && result.path.length > 0 && (
+                <>
+                  <Divider />
+                  <Box>
+                    <Typography variant="h5" sx={{ mb: 1.25 }}>
+                      完整经过节点
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {result.path.map((node, index) => (
+                        <Chip
+                          key={index}
+                          label={`${index + 1}. ${node}`}
+                          size="small"
+                          variant="outlined"
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
+    </Stack>
   );
 }
 

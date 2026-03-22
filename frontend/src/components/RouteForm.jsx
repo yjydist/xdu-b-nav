@@ -1,36 +1,31 @@
 import { useState } from 'react';
 import {
+  Alert,
   Box,
+  Button,
+  Chip,
+  CircularProgress,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
-  Button,
+  Select,
+  Stack,
   Typography,
-  CircularProgress,
-  Alert,
 } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
+import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
+import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 
-/**
- * 导航表单组件
- * 用于选择起点和目的地
- * @param {Array} starts - 起点列表（已按区域分组）
- * @param {Array} rooms - 教室列表（已按楼层分组）
- * @param {Function} onNavigate - 导航回调函数
- * @param {boolean} disabled - 是否禁用表单
- */
-function RouteForm({ starts, rooms, onNavigate, disabled }) {
+function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
   const [start, setStart] = useState('');
   const [destination, setDestination] = useState('');
   const [error, setError] = useState('');
 
-  // 表单提交处理
+  const startCount = starts.reduce((count, group) => count + group.items.length, 0);
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    // 验证输入
     if (!start) {
       setError('请选择起点');
       return;
@@ -40,76 +35,150 @@ function RouteForm({ starts, rooms, onNavigate, disabled }) {
       return;
     }
 
-    // 调用导航回调
     onNavigate(start, destination);
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
-        规划路线
-      </Typography>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ xs: 'flex-start', md: 'center' }}
+        spacing={2}
+        sx={{ mb: 3 }}
+      >
+        <Box>
+          <Typography variant="overline" color="text.secondary">
+            Route setup
+          </Typography>
+          <Typography variant="h2" component="h2" sx={{ mt: 0.5 }}>
+            规划路线
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1, maxWidth: 520 }}>
+            选择宿舍起点与教室编号，系统会自动组合室外步行路线和楼内最短路径。
+          </Typography>
+        </Box>
 
-      {/* 错误提示 */}
+        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          <Chip label={`${startCount} 个起点`} color="primary" />
+          <Chip label={`${roomCount} 间教室`} variant="outlined" />
+        </Stack>
+      </Stack>
+
       {error && (
-        <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setError('')}>
+        <Alert severity="warning" sx={{ mb: 2.5 }} onClose={() => setError('')}>
           {error}
         </Alert>
       )}
 
-      {/* 起点选择 */}
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel id="start-label">起点（宿舍楼号）</InputLabel>
-        <Select
-          labelId="start-label"
-          id="start"
-          name="start"
-          value={start}
-          label="起点（宿舍楼号）"
-          onChange={(e) => setStart(e.target.value)}
-          disabled={disabled}
-          autoComplete="address-level1"
+      <Stack spacing={2.25} sx={{ mb: 3 }}>
+        <Box
+          sx={{
+            p: { xs: 2, md: 2.5 },
+            borderRadius: 2.5,
+            bgcolor: 'rgba(247, 242, 250, 0.9)',
+            border: '1px solid rgba(122, 117, 127, 0.12)',
+          }}
         >
-          {starts.flatMap((group) =>
-            group.items.map((loc) => (
-              <MenuItem key={loc.name} value={loc.name}>
-                {loc.name}
-              </MenuItem>
-            ))
-          )}
-        </Select>
-        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, ml: 1.5 }}>
-          请选择您的出发地点
-        </Typography>
-      </FormControl>
+          <Stack direction="row" spacing={1.25} alignItems="flex-start" sx={{ mb: 2 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 2,
+                bgcolor: 'primary.light',
+                color: 'primary.main',
+                display: 'grid',
+                placeItems: 'center',
+              }}
+            >
+              <PlaceRoundedIcon fontSize="small" />
+            </Box>
+            <Box>
+              <Typography variant="h4">起点（宿舍楼号）</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                按宿舍区组织列表，优先选择你当前所在的宿舍楼。
+              </Typography>
+            </Box>
+          </Stack>
 
-      {/* 目的地选择 */}
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel id="destination-label">目的地（B 楼教室号）</InputLabel>
-        <Select
-          labelId="destination-label"
-          id="destination"
-          name="destination"
-          value={destination}
-          label="目的地（B 楼教室号）"
-          onChange={(e) => setDestination(e.target.value)}
-          disabled={disabled}
-          autoComplete="off"
+          <FormControl fullWidth>
+            <InputLabel id="start-label">起点（宿舍楼号）</InputLabel>
+            <Select
+              labelId="start-label"
+              id="start"
+              name="start"
+              value={start}
+              label="起点（宿舍楼号）"
+              onChange={(e) => setStart(e.target.value)}
+              disabled={disabled}
+              autoComplete="address-level1"
+            >
+              {starts.flatMap((group) =>
+                group.items.map((loc) => (
+                  <MenuItem key={loc.name} value={loc.name}>
+                    {loc.name}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Box
+          sx={{
+            p: { xs: 2, md: 2.5 },
+            borderRadius: 2.5,
+            bgcolor: 'rgba(247, 242, 250, 0.9)',
+            border: '1px solid rgba(122, 117, 127, 0.12)',
+          }}
         >
-          {rooms.flatMap((group) =>
-            group.items.map((room) => (
-              <MenuItem key={room} value={room}>
-                {room}
-              </MenuItem>
-            ))
-          )}
-        </Select>
-        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, ml: 1.5 }}>
-          请选择您要去的教室
-        </Typography>
-      </FormControl>
+          <Stack direction="row" spacing={1.25} alignItems="flex-start" sx={{ mb: 2 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 2,
+                bgcolor: 'secondary.light',
+                color: 'secondary.dark',
+                display: 'grid',
+                placeItems: 'center',
+              }}
+            >
+              <MeetingRoomRoundedIcon fontSize="small" />
+            </Box>
+            <Box>
+              <Typography variant="h4">目的地（B 楼教室号）</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                教室按楼层整理，你可以直接滚动到目标楼层选择对应房间。
+              </Typography>
+            </Box>
+          </Stack>
 
-      {/* 提交按钮 */}
+          <FormControl fullWidth>
+            <InputLabel id="destination-label">目的地（B 楼教室号）</InputLabel>
+            <Select
+              labelId="destination-label"
+              id="destination"
+              name="destination"
+              value={destination}
+              label="目的地（B 楼教室号）"
+              onChange={(e) => setDestination(e.target.value)}
+              disabled={disabled}
+              autoComplete="off"
+            >
+              {rooms.flatMap((group) =>
+                group.items.map((room) => (
+                  <MenuItem key={room} value={room}>
+                    {room}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+          </FormControl>
+        </Box>
+      </Stack>
+
       <Button
         type="submit"
         variant="contained"
@@ -120,12 +189,20 @@ function RouteForm({ starts, rooms, onNavigate, disabled }) {
           disabled ? <CircularProgress size={20} color="inherit" /> : <NavigationIcon />
         }
         sx={{
-          py: 1.5,
-          fontSize: '1.1rem',
+          py: 1.8,
+          fontSize: '1rem',
         }}
       >
-        {disabled ? '规划中...' : '规划路径'}
+        {disabled ? '正在生成推荐路线...' : '规划路径'}
       </Button>
+
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mt: 1.5, textAlign: 'center' }}
+      >
+        提交后会显示室外步行、楼内节点路径和完整步骤说明。
+      </Typography>
     </Box>
   );
 }
