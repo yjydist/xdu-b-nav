@@ -1,0 +1,48 @@
+version: '3'
+
+silent: true
+
+tasks:
+  start:
+    desc: 运行 Go 服务
+    cmd: go run ./cmd/server
+
+  build:
+    desc: 构建后端二进制
+    cmd: go build -o server ./cmd/server
+
+  test:
+    desc: 运行 Go 单元测试
+    cmd: go test ./... -v
+
+  fmt:
+    desc: 执行 Go 格式化
+    cmd: go fmt ./...
+
+  dev-all:
+    desc: 一键启动后端与前端开发服务器
+    cmds:
+      - |
+        set -euo pipefail
+
+        cleanup() {
+          if [[ -n "${backend_pid:-}" ]]; then
+            kill "$backend_pid" >/dev/null 2>&1 || true
+          fi
+          if [[ -n "${frontend_pid:-}" ]]; then
+            kill "$frontend_pid" >/dev/null 2>&1 || true
+          fi
+        }
+
+        trap cleanup EXIT INT TERM
+
+        go run ./cmd/server &
+        backend_pid=$!
+
+        (cd frontend && pnpm dev --host 127.0.0.1 --strictPort) &
+        frontend_pid=$!
+
+        echo "后端: http://localhost:8080"
+        echo "前端: http://127.0.0.1:5173"
+
+        wait "$backend_pid" "$frontend_pid"
