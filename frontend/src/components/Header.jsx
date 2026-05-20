@@ -12,21 +12,21 @@ function Header() {
       <Stack
         direction="row"
         alignItems="center"
-        spacing={1.25}
-        sx={{ mb: 2, color: 'primary.main' }}
+        spacing={1.5}
+        sx={{ mb: 2 }}
       >
         <Box
           sx={{
             width: 52,
             height: 52,
-            borderRadius: 3.5,
+            borderRadius: '10px',
             display: 'grid',
             placeItems: 'center',
-            bgcolor: 'rgba(233, 221, 255, 0.92)',
-            boxShadow: '0 10px 20px rgba(101, 85, 143, 0.12)',
+            bgcolor: '#F5F0E8',
+            border: '2px solid #1F2937',
           }}
         >
-          <SchoolIcon sx={{ fontSize: 28 }} />
+          <SchoolIcon sx={{ fontSize: 28, color: '#6366F1' }} />
         </Box>
       </Stack>
 
@@ -35,14 +35,14 @@ function Header() {
         component="h1"
         sx={{
           maxWidth: 780,
-          color: 'text.primary',
-          mb: 2,
+          color: '#1F2937',
+          mb: 1.5,
         }}
       >
         B 楼导航系统
       </Typography>
 
-      <Typography variant="subtitle1" color="text.secondary">
+      <Typography variant="subtitle1" sx={{ color: '#6B7280' }}>
         从宿舍到教室的路线规划
       </Typography>
     </Box>

@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-  Alert,
   Box,
   Card,
   CardContent,
@@ -13,6 +12,8 @@ import {
 import Header from './components/Header';
 import RouteForm from './components/RouteForm';
 import RouteResult from './components/RouteResult';
+import LoadingState from './components/LoadingState';
+import ErrorAlert from './components/ErrorAlert';
 import { fetchStarts, fetchRooms, fetchRoute } from './api';
 
 function extractFloorFromRoom(roomId) {
@@ -113,40 +114,25 @@ function App() {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'grid',
-          placeItems: 'center',
-          px: 3,
-        }}
-      >
-        <Card sx={{ width: 'min(420px, 100%)' }}>
-          <CardContent sx={{ textAlign: 'center', py: 5 }}>
-            <CircularProgress sx={{ mb: 2 }} />
-            <Typography variant="h3" sx={{ mb: 1 }}>
-              正在准备导航数据
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              正在读取宿舍起点、楼内节点与教室列表，请稍候片刻。
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
+      <LoadingState
+        title="正在准备导航数据"
+        subtitle="正在读取宿舍起点、楼内节点与教室列表，请稍候片刻。"
+      />
     );
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', py: { xs: 3, md: 5 } }}>
+    <Box sx={{ minHeight: '100vh', py: { xs: 3, md: 5 }, bgcolor: '#FFFDF5' }}>
       <Container maxWidth="lg">
         <Header />
 
         <Fade in timeout={500}>
-          <Stack spacing={3.5}>
+          <Stack spacing={3}>
             {error && (
-              <Alert severity="error" sx={{ borderRadius: 6 }} onClose={() => setError(null)}>
-                {error}
-              </Alert>
+              <ErrorAlert
+                message={error}
+                onClose={() => setError(null)}
+              />
             )}
 
             <Card>
@@ -164,11 +150,11 @@ function App() {
             {isNavigating && (
               <Card>
                 <CardContent sx={{ p: 4, textAlign: 'center' }}>
-                  <CircularProgress size={40} sx={{ mb: 2 }} />
-                  <Typography variant="h4" sx={{ mb: 1 }}>
+                  <CircularProgress size={40} sx={{ mb: 2, color: '#6366F1' }} />
+                  <Typography variant="h4" sx={{ mb: 1, color: '#1F2937' }}>
                     正在规划路径
                   </Typography>
-                  <Typography color="text.secondary">
+                  <Typography sx={{ color: '#6B7280' }}>
                     系统正在组合室外步行路线与楼内最短节点路径，请稍候。
                   </Typography>
                 </CardContent>

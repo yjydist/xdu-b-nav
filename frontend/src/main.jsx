@@ -9,12 +9,12 @@ import theme from './theme';
  * React 应用入口文件
  * 作用：
  * 1. 创建 React 根节点
- * 2. 应用 MUI 主题和 CSS 重置
+ * 2. 应用 retro-dashboard-ui 主题和 CSS 重置
  * 3. 渲染 App 根组件
  */
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* ThemeProvider: 提供 Material Design 3 主题 */}
+    {/* ThemeProvider: 提供 retro-dashboard-ui 主题 */}
     <ThemeProvider theme={theme}>
       {/* CssBaseline: 重置 CSS，确保跨浏览器一致性 */}
       <CssBaseline />
