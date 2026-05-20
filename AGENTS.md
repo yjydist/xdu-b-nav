@@ -26,7 +26,7 @@
 - 后端：Go 1.21+（模块 `xdu-b-nav`，当前 `mise` 默认 Go 1.25）
 - 前端：Vite 5 + React 18 + MUI
 - 包管理器：pnpm（前端，运行于 Node.js）
-- 命令入口：`mise.toml`
+- 命令入口：`Taskfile.yml`（原 `mise.toml` 已迁移）
 - 地图服务：高德 API（可选，未配置时有降级逻辑）
 - 图配置：`config/b_graph.jsonc`
 
@@ -49,7 +49,6 @@ go mod tidy
 
 前端依赖：
 ```bash
-mise install
 cd frontend
 pnpm install
 ```
@@ -60,15 +59,14 @@ cp .env.example .env
 ```
 
 ## 5. 构建 / 运行 / 格式化 / 测试命令基线
-优先使用 `mise`：
+优先使用 `task`（需先安装 [go-task](https://taskfile.dev)）：
 ```bash
-mise install           # 安装并激活项目工具链
-mise run build         # go build -o server ./cmd/server
-mise run start         # go run ./cmd/server
-mise run test          # go test ./... -v
-mise run fmt           # go fmt ./...
-mise run dev-all       # 一键启动后端与前端开发服务器
-mise tasks ls          # 查看可用任务
+task build         # go build -o server ./cmd/server
+task start         # go run ./cmd/server
+task test          # go test ./... -v
+task fmt           # go fmt ./...
+task dev-all       # 一键启动后端与前端开发服务器
+task --list-all    # 查看可用任务
 ```
 
 直接命令：
