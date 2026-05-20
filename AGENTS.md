@@ -23,10 +23,10 @@
 - 若未来新增上述 Cursor/Copilot 规则文件，必须先更新本文件再执行开发任务。
 
 ## 2. 项目范围与技术栈
-- 后端：Go 1.21+（模块 `xdu-b-nav`，当前 `mise` 默认 Go 1.25）
+- 后端：Go 1.21+（模块 `xdu-b-nav`，由 `go.mod` 声明）
 - 前端：Vite 5 + React 18 + MUI
 - 包管理器：pnpm（前端，运行于 Node.js）
-- 命令入口：`Taskfile.yml`（原 `mise.toml` 已迁移）
+- 命令入口：`Taskfile.yml`（使用 go-task）
 - 地图服务：高德 API（可选，未配置时有降级逻辑）
 - 图配置：`config/b_graph.jsonc`
 
@@ -212,5 +212,5 @@ go test ./internal/graph -run "TestLoadGraph|TestGetFloor" -v
 - 确认提交内容聚焦、无敏感信息（如 `.env`、密钥、凭证）。
 
 ## 13. 一致性维护说明
-- 当 README、`mise.toml`、代码行为发生变化且影响开发流程时，需同步更新本文件。
+- 当 README、`Taskfile.yml`、代码行为发生变化且影响开发流程时，需同步更新本文件。
 - 若本文件与实际不一致，以“先修正文档再执行”作为默认策略。
