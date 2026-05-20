@@ -227,15 +227,15 @@ const theme = createTheme({
         root: {
           borderRadius: 8,
           backgroundColor: '#FFFFFF',
-          border: '2px solid #1F2937',
           transition: 'box-shadow 150ms ease, border-color 150ms ease',
           '& .MuiOutlinedInput-notchedOutline': {
-            border: 'none',
+            border: '2px solid #1F2937',
+            transition: 'border-color 150ms ease',
           },
-          '&:hover': {
+          '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: '#6366F1',
           },
-          '&.Mui-focused': {
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: '#6366F1',
             boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.12)',
           },
