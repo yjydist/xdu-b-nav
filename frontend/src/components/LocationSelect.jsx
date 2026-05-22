@@ -14,36 +14,36 @@ function LocationSelect({
 }) {
   return (
     <div className={styles.box}>
-      <div className={styles.header}>
-        <div className={styles.iconBox}>
-          {icon || <MapPin size={18} />}
-        </div>
-        <span className={styles.label}>{label}</span>
-      </div>
+      <label className={styles.label} htmlFor={inputId} id={labelId}>
+        <span className={styles.labelIcon}>{icon || <MapPin size={16} />}</span>
+        <span className={styles.labelText}>{label}</span>
+      </label>
 
-      <select
-        id={inputId}
-        name={inputId}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        autoComplete={autoComplete}
-        className={styles.select}
-        aria-labelledby={labelId}
-      >
-        <option value="" disabled>
-          -- 请选择 --
-        </option>
-        {options.map((group) => (
-          <optgroup key={group.region || group.floor} label={group.region ? `${group.region}` : `${group.floor} 层`}>
-            {group.items.map((item) => (
-              <option key={item.name || item} value={item.name || item}>
-                {item.name || item}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-      </select>
+      <div className={styles.selectWrap}>
+        <select
+          id={inputId}
+          name={inputId}
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          autoComplete={autoComplete}
+          className={styles.select}
+          aria-labelledby={labelId}
+        >
+          <option value="" disabled>
+            -- 请选择 --
+          </option>
+          {options.map((group) => (
+            <optgroup key={group.region || group.floor} label={group.region ? `${group.region}` : `${group.floor} 层`}>
+              {group.items.map((item) => (
+                <option key={item.name || item} value={item.name || item}>
+                  {item.name || item}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

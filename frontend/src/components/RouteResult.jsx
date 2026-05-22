@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Pin, Route, Clock, Ruler } from 'lucide-react';
+import { Pin, Route, Clock, Ruler, CheckCircle2 } from 'lucide-react';
 import { fetchConfig, fetchCoordinates } from '../api';
 import StatCard from './StatCard';
 import OutdoorMapCard from './OutdoorMapCard';
@@ -127,7 +127,16 @@ function RouteResult({ result }) {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.cardContent}>
-          <h2 className={styles.heading}>已生成推荐路径</h2>
+          <div className={styles.headerRow}>
+            <div className={styles.headingGroup}>
+              <span className={styles.eyebrow}>STEP 02 · RESULT</span>
+              <h2 className={styles.heading}>已生成推荐路径</h2>
+            </div>
+            <span className={styles.successBadge} aria-label="规划成功">
+              <CheckCircle2 size={12} />
+              <span>SUCCESS</span>
+            </span>
+          </div>
           <div className={styles.statsGrid}>
             {statItems.map((item) => (
               <StatCard
