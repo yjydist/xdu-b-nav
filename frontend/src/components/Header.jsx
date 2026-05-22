@@ -1,5 +1,4 @@
 import { School, Cpu } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
 import styles from './Header.module.css';
 
 function Header() {
@@ -21,7 +20,6 @@ function Header() {
         <Cpu size={12} />
         <span>ONLINE</span>
       </span>
-      <ThemeToggle />
     </header>
   );
 }

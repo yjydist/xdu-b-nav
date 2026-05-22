@@ -32,17 +32,6 @@
   --radius-button: 8px;
 }
 
-[data-theme="dark"] {
-  --bg-base: #1A1A2E;
-  --bg-surface: #16213E;
-  --bg-inset: #0F3460;
-  --text-primary: #E2E8F0;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --border-default: #334155;
-  --border-light: #1E293B;
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -67,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-family: var(--font-pixel);
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 p {
@@ -84,6 +73,7 @@ select,
 input,
 textarea {
   font-family: var(--font-body);
+  line-height: 1.5;
 }
 
 @keyframes spin {

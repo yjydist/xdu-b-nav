@@ -9,16 +9,6 @@
   border: 2px solid var(--border-default);
   border-radius: var(--radius-card);
   overflow: hidden;
-  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="dark"] .card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .cardContent {
