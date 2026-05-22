@@ -1,19 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-  Box,
-} from '@mui/material';
-import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
-import RouteRoundedIcon from '@mui/icons-material/RouteRounded';
-import ScheduleRoundedIcon from '@mui/icons-material/ScheduleRounded';
-import StraightenRoundedIcon from '@mui/icons-material/StraightenRounded';
+import { Pin, Route, Clock, Ruler } from 'lucide-react';
 import { fetchConfig, fetchCoordinates } from '../api';
 import StatCard from './StatCard';
 import OutdoorMapCard from './OutdoorMapCard';
 import IndoorStepper from './IndoorStepper';
+import styles from './RouteResult.module.css';
 
 function RouteResult({ result }) {
   const [config, setConfig] = useState(null);
@@ -113,85 +104,63 @@ function RouteResult({ result }) {
     {
       label: '室外距离',
       value: result.outdoor ? `${result.outdoor.distance} 米` : 'N/A',
-      icon: <StraightenRoundedIcon fontSize="small" />,
+      icon: <Ruler size={16} />,
     },
     {
       label: '预计时长',
       value: result.outdoor ? `${Math.ceil(result.outdoor.duration / 60)} 分钟` : 'N/A',
-      icon: <ScheduleRoundedIcon fontSize="small" />,
+      icon: <Clock size={16} />,
     },
     {
       label: '推荐入口',
       value: result.outdoor?.nearest_exit || 'N/A',
-      icon: <PinDropRoundedIcon fontSize="small" />,
+      icon: <Pin size={16} />,
     },
     {
       label: '经过节点',
       value: `${(result.path || []).length} 个`,
-      icon: <RouteRoundedIcon fontSize="small" />,
+      icon: <Route size={16} />,
     },
   ];
 
   return (
-    <Stack spacing={3}>
-      <Card>
-        <CardContent>
-          <Stack spacing={2.5}>
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              justifyContent="space-between"
-              spacing={2}
-            >
-              <Box>
-                <Typography variant="h2" sx={{ color: '#1F2937' }}>
-                  已生成推荐路径
-                </Typography>
-              </Box>
-            </Stack>
-
-            <Box
-              sx={{
-                display: 'grid',
-                gap: 1.5,
-                gridTemplateColumns: {
-                  xs: '1fr 1fr',
-                  md: 'repeat(4, minmax(0, 1fr))',
-                },
-              }}
-            >
-              {statItems.map((item) => (
-                <StatCard
-                  key={item.label}
-                  icon={item.icon}
-                  label={item.label}
-                  value={item.value}
-                />
-              ))}
-            </Box>
-          </Stack>
-        </CardContent>
-      </Card>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.cardContent}>
+          <h2 className={styles.heading}>已生成推荐路径</h2>
+          <div className={styles.statsGrid}>
+            {statItems.map((item) => (
+              <StatCard
+                key={item.label}
+                icon={item.icon}
+                label={item.label}
+                value={item.value}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
 
       {result.outdoor && (
-        <Card>
-          <CardContent>
+        <div className={styles.card}>
+          <div className={styles.cardContent}>
             <OutdoorMapCard
               ref={mapRef}
               resultFrom={result.outdoor.from}
               config={config}
             />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {result.indoor && result.indoor.length > 0 && (
-        <Card>
-          <CardContent>
+        <div className={styles.card}>
+          <div className={styles.cardContent}>
             <IndoorStepper indoor={result.indoor} path={result.path} />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }
 

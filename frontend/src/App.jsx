@@ -1,20 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-  Box,
-  Card,
-  CardContent,
-  CircularProgress,
-  Container,
-  Fade,
-  Stack,
-  Typography,
-} from '@mui/material';
 import Header from './components/Header';
 import RouteForm from './components/RouteForm';
 import RouteResult from './components/RouteResult';
 import LoadingState from './components/LoadingState';
 import ErrorAlert from './components/ErrorAlert';
 import { fetchStarts, fetchRooms, fetchRoute } from './api';
+import styles from './App.module.css';
 
 function extractFloorFromRoom(roomId) {
   const match = /^B(\d+)$/.exec(roomId);
@@ -122,50 +113,46 @@ function App() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', py: { xs: 3, md: 5 }, bgcolor: '#FFFDF5' }}>
-      <Container maxWidth="lg">
+    <div className={styles.page}>
+      <main className={styles.main}>
         <Header />
 
-        <Fade in timeout={500}>
-          <Stack spacing={3}>
-            {error && (
-              <ErrorAlert
-                message={error}
-                onClose={() => setError(null)}
+        <div className={styles.content}>
+          {error && (
+            <ErrorAlert
+              message={error}
+              onClose={() => setError(null)}
+            />
+          )}
+
+          <div className={styles.card}>
+            <div className={styles.cardBody}>
+              <RouteForm
+                starts={starts}
+                rooms={rooms}
+                roomCount={roomCount}
+                onNavigate={handleNavigate}
+                disabled={isNavigating}
               />
-            )}
+            </div>
+          </div>
 
-            <Card>
-              <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
-                <RouteForm
-                  starts={starts}
-                  rooms={rooms}
-                  roomCount={roomCount}
-                  onNavigate={handleNavigate}
-                  disabled={isNavigating}
-                />
-              </CardContent>
-            </Card>
+          {isNavigating && (
+            <div className={styles.card}>
+              <div className={`${styles.cardBody} ${styles.center}`}>
+                <div className={styles.spinner} />
+                <h4 className={styles.navTitle}>正在规划路径</h4>
+                <p className={styles.navDesc}>
+                  系统正在组合室外步行路线与楼内最短节点路径，请稍候。
+                </p>
+              </div>
+            </div>
+          )}
 
-            {isNavigating && (
-              <Card>
-                <CardContent sx={{ p: 4, textAlign: 'center' }}>
-                  <CircularProgress size={40} sx={{ mb: 2, color: '#6366F1' }} />
-                  <Typography variant="h4" sx={{ mb: 1, color: '#1F2937' }}>
-                    正在规划路径
-                  </Typography>
-                  <Typography sx={{ color: '#6B7280' }}>
-                    系统正在组合室外步行路线与楼内最短节点路径，请稍候。
-                  </Typography>
-                </CardContent>
-              </Card>
-            )}
-
-            {routeResult && <RouteResult result={routeResult} />}
-          </Stack>
-        </Fade>
-      </Container>
-    </Box>
+          {routeResult && <RouteResult result={routeResult} />}
+        </div>
+      </main>
+    </div>
   );
 }
 

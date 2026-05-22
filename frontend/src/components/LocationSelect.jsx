@@ -1,12 +1,5 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { MapPin } from 'lucide-react';
+import styles from './LocationSelect.module.css';
 
 function LocationSelect({
   label,
@@ -20,57 +13,38 @@ function LocationSelect({
   autoComplete,
 }) {
   return (
-    <Box
-      sx={{
-        p: { xs: 2, md: 2.5 },
-        borderRadius: '10px',
-        bgcolor: '#F5F0E8',
-        border: '2px solid #1F2937',
-      }}
-    >
-      <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 2 }}>
-        <Box
-          sx={{
-            width: 40,
-            height: 40,
-            borderRadius: '8px',
-            bgcolor: '#FFFFFF',
-            color: '#6366F1',
-            display: 'grid',
-            placeItems: 'center',
-            border: '2px solid #1F2937',
-            flexShrink: 0,
-          }}
-        >
-          {icon}
-        </Box>
-        <Box>
-          <Typography variant="h4">{label}</Typography>
-        </Box>
-      </Stack>
+    <div className={styles.box}>
+      <div className={styles.header}>
+        <div className={styles.iconBox}>
+          {icon || <MapPin size={18} />}
+        </div>
+        <span className={styles.label}>{label}</span>
+      </div>
 
-      <FormControl fullWidth>
-        <InputLabel id={labelId}>{label}</InputLabel>
-        <Select
-          labelId={labelId}
-          id={inputId}
-          name={inputId}
-          value={value}
-          label={label}
-          onChange={onChange}
-          disabled={disabled}
-          autoComplete={autoComplete}
-        >
-          {options.flatMap((group) =>
-            group.items.map((item) => (
-              <MenuItem key={item.name || item} value={item.name || item}>
+      <select
+        id={inputId}
+        name={inputId}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        autoComplete={autoComplete}
+        className={styles.select}
+        aria-labelledby={labelId}
+      >
+        <option value="" disabled>
+          -- 请选择 --
+        </option>
+        {options.map((group) => (
+          <optgroup key={group.region || group.floor} label={group.region ? `${group.region}` : `${group.floor} 层`}>
+            {group.items.map((item) => (
+              <option key={item.name || item} value={item.name || item}>
                 {item.name || item}
-              </MenuItem>
-            ))
-          )}
-        </Select>
-      </FormControl>
-    </Box>
+              </option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+    </div>
   );
 }
 

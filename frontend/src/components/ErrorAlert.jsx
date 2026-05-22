@@ -1,20 +1,21 @@
-import { Alert } from '@mui/material';
+import { X } from 'lucide-react';
+import styles from './ErrorAlert.module.css';
 
 function ErrorAlert({ message, onClose }) {
   return (
-    <Alert
-      severity="error"
-      sx={{
-        borderRadius: '10px',
-        border: '2px solid #EF4444',
-        bgcolor: '#FEE2E2',
-        color: '#991B1B',
-        fontWeight: 500,
-      }}
-      onClose={onClose}
-    >
-      {message}
-    </Alert>
+    <div className={styles.alert} role="alert">
+      <span className={styles.text}>{message}</span>
+      {onClose && (
+        <button
+          type="button"
+          className={styles.close}
+          onClick={onClose}
+          aria-label="关闭"
+        >
+          <X size={16} />
+        </button>
+      )}
+    </div>
   );
 }
 
