@@ -159,7 +159,7 @@ function App() {
         <footer className={styles.footer}>
           <span>XDU · B-BLDG NAV</span>
           <span className={styles.footerDot}>·</span>
-          <span>v1.1.1</span>
+          <span>v1.1.2</span>
         </footer>
       </main>
     </div>
