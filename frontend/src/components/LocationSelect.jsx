@@ -34,15 +34,15 @@ function LocationSelect({
         <option value="" disabled>
           -- 请选择 --
         </option>
-        {options.flatMap((group) => [
+        {options.map((group) => (
           <optgroup key={group.region || group.floor} label={group.region ? `${group.region}` : `${group.floor} 层`}>
             {group.items.map((item) => (
               <option key={item.name || item} value={item.name || item}>
                 {item.name || item}
               </option>
             ))}
-          </optgroup>,
-        ])}
+          </optgroup>
+        ))}
       </select>
     </div>
   );

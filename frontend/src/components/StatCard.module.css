@@ -18,7 +18,7 @@
   align-items: center;
 }
 
-.icon :global(svg) {
+.icon svg {
   width: 16px;
   height: 16px;
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigation, MapPin, DoorOpen, Loader2 } from 'lucide-react';
+import { Navigation, MapPin, DoorOpen, Loader2, X } from 'lucide-react';
 import LocationSelect from './LocationSelect';
 import styles from './RouteForm.module.css';
 
@@ -42,7 +42,15 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
 
       {error && (
         <div className={styles.error} role="alert">
-          {error}
+          <span className={styles.errorText}>{error}</span>
+          <button
+            type="button"
+            className={styles.errorClose}
+            onClick={() => setError('')}
+            aria-label="关闭"
+          >
+            <X size={14} />
+          </button>
         </div>
       )}
 
