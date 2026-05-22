@@ -67,7 +67,6 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
           onChange={(e) => setStart(e.target.value)}
           options={starts}
           disabled={disabled}
-          labelId="start-label"
           inputId="start"
           autoComplete="address-level1"
         />
@@ -79,7 +78,6 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
           onChange={(e) => setDestination(e.target.value)}
           options={rooms}
           disabled={disabled}
-          labelId="destination-label"
           inputId="destination"
           autoComplete="off"
         />

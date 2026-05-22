@@ -8,13 +8,12 @@ function LocationSelect({
   onChange,
   options,
   disabled,
-  labelId,
   inputId,
   autoComplete,
 }) {
   return (
     <div className={styles.box}>
-      <label className={styles.label} htmlFor={inputId} id={labelId}>
+      <label className={styles.label} htmlFor={inputId}>
         <span className={styles.labelIcon}>{icon || <MapPin size={16} />}</span>
         <span className={styles.labelText}>{label}</span>
       </label>
@@ -28,7 +27,6 @@ function LocationSelect({
           disabled={disabled}
           autoComplete={autoComplete}
           className={styles.select}
-          aria-labelledby={labelId}
         >
           <option value="" disabled>
             -- 请选择 --

@@ -150,7 +150,8 @@
 .submitBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  box-shadow: 0 3px 0 0 var(--border-default);
+  box-shadow: none;
+  transform: none;
 }
 
 .submitBtn:focus-visible {
