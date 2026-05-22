@@ -1,0 +1,47 @@
+.card {
+  background: var(--bg-inset);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-card);
+  padding: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.icon {
+  color: var(--accent-primary);
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon :global(svg) {
+  width: 16px;
+  height: 16px;
+}
+
+.label {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.value {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+  .value {
+    font-size: 32px;
+  }
+}
