@@ -21,7 +21,12 @@ cleanup_ports() {
 }
 
 # 退出时清理
+cleaned_up=false
 cleanup() {
+  if [[ "$cleaned_up" == true ]]; then
+    return
+  fi
+  cleaned_up=true
   echo ""
   echo "正在关闭服务..."
   cleanup_ports
