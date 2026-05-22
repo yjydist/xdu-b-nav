@@ -1,9 +1,10 @@
-import { X } from 'lucide-react';
+import { X, XCircle } from 'lucide-react';
 import styles from './ErrorAlert.module.css';
 
 function ErrorAlert({ message, onClose }) {
   return (
     <div className={styles.alert} role="alert">
+      <XCircle size={16} className={styles.icon} />
       <span className={styles.text}>{message}</span>
       {onClose && (
         <button

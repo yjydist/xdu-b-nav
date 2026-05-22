@@ -1,4 +1,4 @@
-import { ArrowRight, Footprints, DoorOpen, ArrowUpDown } from 'lucide-react';
+import { ArrowRight, Footprints, DoorOpen, ArrowUpDown, Navigation } from 'lucide-react';
 import styles from './IndoorStepper.module.css';
 
 const getStepIcon = (action) => {
@@ -11,7 +11,12 @@ const getStepIcon = (action) => {
 function IndoorStepper({ indoor, path }) {
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>室内导航</h3>
+      <div className={styles.titleRow}>
+        <span className={styles.titleIcon}>
+          <Navigation size={14} />
+        </span>
+        <h3 className={styles.title}>室内导航</h3>
+      </div>
 
       <div className={styles.steps}>
         {indoor.map((step, index) => {
@@ -32,13 +37,16 @@ function IndoorStepper({ indoor, path }) {
 
       {path && path.length > 0 && (
         <>
-          <div className={styles.divider} />
+          <div className={styles.divider}>
+            <span className={styles.dividerLabel}>FULL PATH</span>
+          </div>
           <div>
             <p className={styles.nodesTitle}>完整经过节点</p>
             <div className={styles.nodes}>
               {path.map((node, index) => (
                 <span key={index} className={styles.node}>
-                  {index + 1}. {node}
+                  <span className={styles.nodeIndex}>{String(index + 1).padStart(2, '0')}</span>
+                  {node}
                 </span>
               ))}
             </div>

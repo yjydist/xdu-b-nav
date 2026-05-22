@@ -2,6 +2,9 @@
   min-height: 100vh;
   padding: 16px 0;
   background: var(--bg-base);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(31, 41, 55, 0.06) 1px, transparent 0);
+  background-size: 24px 24px;
 }
 
 @media (min-width: 768px) {
@@ -11,7 +14,7 @@
 }
 
 .main {
-  max-width: 1024px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -26,7 +29,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  animation: fadeIn 500ms ease-out;
+  animation: fadeIn 400ms ease-out;
 }
 
 .card {
@@ -34,20 +37,10 @@
   border: 2px solid var(--border-default);
   border-radius: var(--radius-card);
   overflow: hidden;
-  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="dark"] .card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .cardBody {
-  padding: 16px;
+  padding: 20px;
 }
 
 @media (min-width: 768px) {
@@ -56,34 +49,71 @@
   }
 }
 
-.center {
+.navigatingBody {
   text-align: center;
+  padding: 32px 20px;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
+.navIconBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-button);
+  background: var(--bg-inset);
+  border: 2px solid var(--border-default);
+  color: var(--accent-primary);
   margin: 0 auto 16px;
-  border: 3px solid var(--border-light);
-  border-top-color: var(--accent-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+}
+
+.navIcon {
+  animation: spin 2s linear infinite;
+}
+
+.navEyebrow {
+  display: block;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  margin-bottom: 6px;
 }
 
 .navTitle {
   font-family: var(--font-pixel);
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1.4;
   color: var(--text-primary);
   margin: 0 0 8px;
 }
 
 .navDesc {
-  font-size: 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
   line-height: 1.6;
   color: var(--text-secondary);
   margin: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding: 16px 0;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.footerDot {
+  color: var(--accent-primary);
 }
 
 @keyframes spin {

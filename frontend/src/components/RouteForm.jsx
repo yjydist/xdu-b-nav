@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigation, MapPin, DoorOpen, Loader2, X } from 'lucide-react';
+import { Navigation, MapPin, DoorOpen, Loader2, X, Route, Building2 } from 'lucide-react';
 import LocationSelect from './LocationSelect';
 import styles from './RouteForm.module.css';
 
@@ -29,13 +29,18 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className={styles.formHeader}>
-        <h2 className={styles.heading}>规划路线</h2>
+        <div className={styles.headingGroup}>
+          <span className={styles.eyebrow}>STEP 01</span>
+          <h2 className={styles.heading}>规划路线</h2>
+        </div>
         <div className={styles.badges}>
-          <span className={`${styles.badge} ${styles.badgePrimary}`}>
-            {startCount} 个起点
+          <span className={styles.badge}>
+            <Route size={12} />
+            <span>{startCount} 个起点</span>
           </span>
-          <span className={`${styles.badge} ${styles.badgeOutlined}`}>
-            {roomCount} 间教室
+          <span className={styles.badge}>
+            <Building2 size={12} />
+            <span>{roomCount} 间教室</span>
           </span>
         </div>
       </div>
@@ -57,24 +62,22 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
       <div className={styles.selects}>
         <LocationSelect
           label="起点（宿舍楼号）"
-          icon={<MapPin size={18} />}
+          icon={<MapPin size={16} />}
           value={start}
           onChange={(e) => setStart(e.target.value)}
           options={starts}
           disabled={disabled}
-          labelId="start-label"
           inputId="start"
           autoComplete="address-level1"
         />
 
         <LocationSelect
           label="目的地（B 楼教室号）"
-          icon={<DoorOpen size={18} />}
+          icon={<DoorOpen size={16} />}
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
           options={rooms}
           disabled={disabled}
-          labelId="destination-label"
           inputId="destination"
           autoComplete="off"
         />
@@ -88,12 +91,12 @@ function RouteForm({ starts, rooms, roomCount, onNavigate, disabled }) {
         {disabled ? (
           <>
             <Loader2 size={16} className={styles.spinIcon} />
-            正在生成推荐路线...
+            <span>正在生成推荐路线</span>
           </>
         ) : (
           <>
             <Navigation size={16} />
-            规划路径
+            <span>规划路径</span>
           </>
         )}
       </button>

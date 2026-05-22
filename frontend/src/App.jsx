@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Compass } from 'lucide-react';
 import Header from './components/Header';
 import RouteForm from './components/RouteForm';
 import RouteResult from './components/RouteResult';
@@ -125,7 +126,7 @@ function App() {
             />
           )}
 
-          <div className={styles.card}>
+          <section className={styles.card}>
             <div className={styles.cardBody}>
               <RouteForm
                 starts={starts}
@@ -135,22 +136,31 @@ function App() {
                 disabled={isNavigating}
               />
             </div>
-          </div>
+          </section>
 
           {isNavigating && (
-            <div className={styles.card}>
-              <div className={`${styles.cardBody} ${styles.center}`}>
-                <div className={styles.spinner} />
+            <section className={styles.card}>
+              <div className={`${styles.cardBody} ${styles.navigatingBody}`}>
+                <div className={styles.navIconBox}>
+                  <Compass size={22} className={styles.navIcon} />
+                </div>
+                <span className={styles.navEyebrow}>ROUTING</span>
                 <h4 className={styles.navTitle}>正在规划路径</h4>
                 <p className={styles.navDesc}>
                   系统正在组合室外步行路线与楼内最短节点路径，请稍候。
                 </p>
               </div>
-            </div>
+            </section>
           )}
 
           {routeResult && <RouteResult result={routeResult} />}
         </div>
+
+        <footer className={styles.footer}>
+          <span>XDU · B-BLDG NAV</span>
+          <span className={styles.footerDot}>·</span>
+          <span>v1.1.1</span>
+        </footer>
       </main>
     </div>
   );

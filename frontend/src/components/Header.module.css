@@ -1,16 +1,25 @@
 .header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 0 0 16px;
-  margin-bottom: 16px;
-  border-bottom: 2px solid var(--border-default);
+  gap: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-card);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 .iconBox {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-card);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-button);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,21 +32,72 @@
   color: var(--accent-primary);
 }
 
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .title {
   font-family: var(--font-pixel);
-  font-size: 14px;
-  font-weight: 400;
-  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
   color: var(--text-primary);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subtitle {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  font-weight: 400;
   line-height: 1.4;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .spacer {
   flex: 1;
 }
 
-@media (max-width: 480px) {
-  .title {
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
+}
+
+@media (max-width: 540px) {
+  .subtitle {
+    display: none;
+  }
+  .statusPill span {
+    display: none;
+  }
+  .statusPill {
+    padding: 4px;
+  }
+}
+
+@media (max-width: 380px) {
+  .titleGroup {
     display: none;
   }
 }
