@@ -28,3 +28,6 @@ docs/
 .vscode/
 *.swp
 *.swo
+
+# Claude
+.claude/worktrees
